@@ -128,7 +128,7 @@ public class Generator {
 				meta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
 			this.generatorItem.setItemMeta(meta);
 			if (glow)
-				this.generatorItem.addUnsafeEnchantment(Enchantment.LOOT_BONUS_BLOCKS, 1);
+				this.generatorItem.addUnsafeEnchantment(Enchantment.FORTUNE, 1);
 		} else {
 			Logger.error("Generator " + generatorID + " is lacking generator-item configuration");
 			error = true;

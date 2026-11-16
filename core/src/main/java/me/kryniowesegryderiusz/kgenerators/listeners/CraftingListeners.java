@@ -1,4 +1,5 @@
 package me.kryniowesegryderiusz.kgenerators.listeners;
+import me.kryniowesegryderiusz.kgenerators.utils.Sched;
 
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -67,12 +68,7 @@ public class CraftingListeners implements Listener {
 	}
 
 	private void closeInv(Player p) {
-		Main.getInstance().getServer().getScheduler().scheduleSyncDelayedTask(Main.getInstance(), new Runnable() {
-			@Override
-			public void run() {
-				p.closeInventory();
-			}
-		});
+		Sched.entity(p, p::closeInventory);
 	}
 	
 	@EventHandler(priority = EventPriority.MONITOR)

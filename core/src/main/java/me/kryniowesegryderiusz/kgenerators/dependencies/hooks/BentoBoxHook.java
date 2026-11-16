@@ -1,4 +1,5 @@
 package me.kryniowesegryderiusz.kgenerators.dependencies.hooks;
+import me.kryniowesegryderiusz.kgenerators.utils.Sched;
 
 import java.io.File;
 import java.io.IOException;
@@ -56,7 +57,7 @@ public class BentoBoxHook implements Listener {
 		KGENERATORS_OPEN_MENU_FLAG = new Flag.Builder("KGENERATORS_OPEN_MENU_FLAG", Material.ITEM_FRAME)
 				.type(Flag.Type.PROTECTION).defaultRank(KGENERATORS_OPEN_MENU_FLAG_RANK).build();
 
-		Bukkit.getScheduler().runTask(Main.getInstance(), () -> {
+		Sched.global(() -> {
 			Config locale = new Config(new File("plugins/BentoBox/locales/BentoBox/en-US.yml"));
 			try {
 				locale.loadConfig();

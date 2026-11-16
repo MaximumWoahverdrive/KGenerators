@@ -1,4 +1,5 @@
 package me.kryniowesegryderiusz.kgenerators.listeners;
+import me.kryniowesegryderiusz.kgenerators.utils.Sched;
 
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -46,13 +47,7 @@ public class InventoryClickListener implements Listener {
 				Lang.getMessageStorage().send(e.getWhoClicked(),
 						Message.GENERATOR_PROTECTION_CANT_CHANGE_GENERATOR_ITEM);
 				e.setCancelled(true);
-				Main.getInstance().getServer().getScheduler().scheduleSyncDelayedTask(Main.getInstance(),
-						new Runnable() {
-							@Override
-							public void run() {
-								p.closeInventory();
-							}
-						});
+				Sched.entity(p, p::closeInventory);
 			}
 
 			/*

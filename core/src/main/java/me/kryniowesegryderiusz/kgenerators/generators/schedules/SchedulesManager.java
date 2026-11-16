@@ -1,4 +1,5 @@
 package me.kryniowesegryderiusz.kgenerators.generators.schedules;
+import me.kryniowesegryderiusz.kgenerators.utils.Sched;
 
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
@@ -25,7 +26,7 @@ public class SchedulesManager {
 		
 		Logger.debugPluginLoad("SchedulesManager: Setting up manager");
 		
-		Bukkit.getScheduler().scheduleSyncRepeatingTask(Main.getInstance(), new Runnable() {
+		Sched.globalTimer(new Runnable() {
 		    @Override
 		    public void run() {
 		    	try {
@@ -42,10 +43,13 @@ public class SchedulesManager {
 					
 					for (GeneratorLocation gl : readyForRegeneration) {
 						remove(gl);
-						if (Main.getPlacedGenerators().isLoaded(gl)) {
-							Logger.debugSchedulesManager("SchedulesManager: Regenerating " + gl.getId());
-							gl.regenerateGenerator();
-						}
+						// SWU (Folia): regenerate on the region that owns the generator
+						Sched.at(gl.getLocation(), () -> {
+							if (Main.getPlacedGenerators().isLoaded(gl)) {
+								Logger.debugSchedulesManager("SchedulesManager: Regenerating " + gl.getId());
+								gl.regenerateGenerator();
+							}
+						});
 					}
 		    	} catch (Exception e) {
 		    		Logger.error("SchedulesManager: An error occured at scheduler task");
@@ -53,7 +57,7 @@ public class SchedulesManager {
 		    	}
 
 		    }
-		}, 0L, Main.getSettings().getGenerationCheckFrequency()*1L);
+		}, 1L, Main.getSettings().getGenerationCheckFrequency()*1L);
 	}
 	
 	public int getAmount() {
@@ -70,11 +74,11 @@ public class SchedulesManager {
 		
 		if ((place && gLocation.getGenerator().isGenerateImmediatelyAfterPlace()) 
 				|| gLocation.getGenerator().getDelay() <= 0) {
-			Bukkit.getScheduler().runTask(Main.getInstance(), () -> {
+			Sched.at(gLocation.getLocation(), () -> {
 				gLocation.regenerateGenerator();
 			});
 		} else {
-			Bukkit.getScheduler().runTask(Main.getInstance(), () -> {
+			Sched.at(gLocation.getLocation(), () -> {
 				this.generatePlaceholder(gLocation);
 			});
 			

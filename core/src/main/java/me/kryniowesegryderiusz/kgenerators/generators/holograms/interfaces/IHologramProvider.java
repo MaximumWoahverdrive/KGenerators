@@ -1,4 +1,5 @@
 package me.kryniowesegryderiusz.kgenerators.generators.holograms.interfaces;
+import me.kryniowesegryderiusz.kgenerators.utils.Sched;
 
 import java.util.ArrayList;
 
@@ -16,29 +17,14 @@ public abstract class IHologramProvider {
 	protected abstract void providerRemoveHologram(GeneratorLocation gLocation);
 
 	public void createHologram(GeneratorLocation gLocation, ArrayList<String> lines) {
-		if (!Bukkit.isPrimaryThread()) {
-			Bukkit.getScheduler().runTask(Main.getInstance(), () -> {
-				providerCreateHologram(gLocation, lines);
-			});
-		} else
-			providerCreateHologram(gLocation, lines);
+		Sched.atNow(gLocation.getLocation(), () -> providerCreateHologram(gLocation, lines));
 	}
 
 	public void updateHologram(GeneratorLocation gLocation, ArrayList<String> lines) {
-		if (!Bukkit.isPrimaryThread()) {
-			Bukkit.getScheduler().runTask(Main.getInstance(), () -> {
-				providerUpdateHologram(gLocation, lines);
-			});
-		} else
-			providerUpdateHologram(gLocation, lines);
+		Sched.atNow(gLocation.getLocation(), () -> providerUpdateHologram(gLocation, lines));
 	}
 
 	public void removeHologram(GeneratorLocation gLocation) {
-		if (!Bukkit.isPrimaryThread()) {
-			Bukkit.getScheduler().runTask(Main.getInstance(), () -> {
-				providerRemoveHologram(gLocation);
-			});
-		} else
-			providerRemoveHologram(gLocation);
+		Sched.atNow(gLocation.getLocation(), () -> providerRemoveHologram(gLocation));
 	}
 }

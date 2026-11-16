@@ -1,4 +1,5 @@
 package me.kryniowesegryderiusz.kgenerators;
+import me.kryniowesegryderiusz.kgenerators.utils.Sched;
 
 
 import java.util.HashMap;
@@ -75,7 +76,7 @@ public class Main extends JavaPlugin {
     		this.getServer().getPluginManager().registerEvents(new ItemsAdderHook().new ItemsAdderListeners(), this);
     	} else {
     		Logger.warn("KGenerators will be loaded in post init check, check for more informations futher in this log");
-    		this.getServer().getScheduler().runTask(instance, () -> {
+    		Sched.global(() -> {
     			Main.getInstance().enable();
     		});
     	}
@@ -116,7 +117,7 @@ public class Main extends JavaPlugin {
     	if (dependencies != null)
     		dependencies.onDisable();
     	
-    	this.getServer().getScheduler().cancelTasks(this);
+    	Sched.cancelAll();
     }
     
     public void reload() {

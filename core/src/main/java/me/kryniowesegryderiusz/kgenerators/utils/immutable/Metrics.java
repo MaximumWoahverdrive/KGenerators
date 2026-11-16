@@ -194,7 +194,7 @@ public class Metrics {
             }
             // Nevertheless we want our code to run in the Bukkit main thread, so we have to use the Bukkit scheduler
             // Don't be afraid! The connection to the bStats server is still async, only the stats collection is sync ;)
-            Bukkit.getScheduler().runTask(plugin, this::submitData);
+            me.kryniowesegryderiusz.kgenerators.utils.Sched.global(this::submitData);
         };
 
         // Many servers tend to restart at a fixed time at xx:00 which causes an uneven distribution of requests on the

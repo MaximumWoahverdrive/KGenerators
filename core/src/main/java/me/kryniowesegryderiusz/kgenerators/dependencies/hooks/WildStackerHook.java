@@ -1,4 +1,5 @@
 package me.kryniowesegryderiusz.kgenerators.dependencies.hooks;
+import me.kryniowesegryderiusz.kgenerators.utils.Sched;
 
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -34,12 +35,7 @@ public class WildStackerHook implements Listener {
 		if (g != null) {
 			e.setCancelled(true);
 			if (g.getType() == GeneratorType.DOUBLE) {
-				Main.getInstance().getServer().getScheduler().runTaskLater(Main.getInstance(), new Runnable() {
-					@Override
-					public void run() {
-						Main.getMultiVersion().getBlocksUtils().setBlock(e.getBarrel().getLocation(), g.getGeneratorItem());
-					}
-				}, 1);
+				Sched.atLater(e.getBarrel().getLocation(), () -> Main.getMultiVersion().getBlocksUtils().setBlock(e.getBarrel().getLocation(), g.getGeneratorItem()), 1);
 			}
 		}
 	}

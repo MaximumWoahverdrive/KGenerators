@@ -1,4 +1,5 @@
 package me.kryniowesegryderiusz.kgenerators.generators.locations;
+import me.kryniowesegryderiusz.kgenerators.utils.Sched;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -32,7 +33,7 @@ public class PlacedGeneratorsManager {
 	
 	@Getter private ConcurrentHashMap<ChunkInfo, ChunkGeneratorLocations> loadedGenerators = new ConcurrentHashMap<ChunkInfo, ChunkGeneratorLocations>();
 	
-	private BukkitTask managementTask;
+	private io.papermc.paper.threadedregions.scheduler.ScheduledTask managementTask;
 	@Getter private LinkedBlockingQueue<ManagementTask> managementQueue = new LinkedBlockingQueue<ManagementTask>();
 	
 	private boolean stopping = false;
@@ -67,7 +68,7 @@ public class PlacedGeneratorsManager {
 	}
 	
 	private void nextManagementTick() {
-		managementTask = Main.getInstance().getServer().getScheduler().runTaskLaterAsynchronously(Main.getInstance(), () -> {
+		managementTask = Sched.asyncLater(() -> {
 			while(managementQueue.size() > 0) {
 				if (stopping) break;
 				ManagementTask r = managementQueue.poll();
@@ -157,13 +158,16 @@ public class PlacedGeneratorsManager {
 						Main.getHolograms().createRemainingTimeHologram(gl);
 					Main.getDatabases().getDb().removeSchedule(gl);
 				} else {
-					if (gl.isBroken()) {
-						gl.scheduleGeneratorRegeneration();
-						Logger.debugPlacedGeneratorsManager("PlacedGeneratorsManager: Broken generator found on chunk load. Automatically fixing it: " + gl.toString());
-					}
+					// SWU (Folia): reading the block must happen on the owning region, not this async worker
+					Sched.at(gl.getLocation(), () -> {
+						if (gl.isBroken()) {
+							gl.scheduleGeneratorRegeneration();
+							Logger.debugPlacedGeneratorsManager("PlacedGeneratorsManager: Broken generator found on chunk load. Automatically fixing it: " + gl.toString());
+						}
+					});
 				}
 					
-				Main.getInstance().getServer().getScheduler().runTask(Main.getInstance(), () -> {
+				Sched.at(gl.getLocation(), () -> {
 					Main.getInstance().getServer().getPluginManager().callEvent(new GeneratorLoadEvent(gl));
 				});
 
@@ -227,7 +231,7 @@ public class PlacedGeneratorsManager {
 				if (schedule != null)
 					Main.getSchedules().remove(gl);
 					
-				Main.getInstance().getServer().getScheduler().runTask(Main.getInstance(), () -> {
+				Sched.at(gl.getLocation(), () -> {
 					Main.getInstance().getServer().getPluginManager().callEvent(new GeneratorUnloadEvent(gl));
 				});
 				
@@ -325,19 +329,16 @@ public class PlacedGeneratorsManager {
 	 */
 	
 	public void bulkRemoveGenerators(World world, int minX, int minY, int minZ, int maxX, int maxY, int maxZ, boolean dropGenerator) {
-		Main.getInstance().getServer().getScheduler().runTaskAsynchronously(Main.getInstance(), new Runnable() {
+		Sched.async(new Runnable() {
 			@Override
 			public void run() {
 				ArrayList<GeneratorLocation> generatorLocationsToRemove = Main.getDatabases().getDb().getGenerators(world, minX, minY, minZ, maxX, maxY, maxZ);
-				Main.getInstance().getServer().getScheduler().runTask(Main.getInstance(), new Runnable() {
-					@Override
-					public void run() {
-						for (GeneratorLocation gloc : generatorLocationsToRemove) {
-							Logger.info("Bulk generator removal: " + gloc.toString());
-							gloc.removeGenerator(dropGenerator, null);
-						}
-					}
-				});
+				for (GeneratorLocation gloc : generatorLocationsToRemove) {
+					Sched.at(gloc.getLocation(), () -> {
+						Logger.info("Bulk generator removal: " + gloc.toString());
+						gloc.removeGenerator(dropGenerator, null);
+					});
+				}
 			}
 		});
 	}

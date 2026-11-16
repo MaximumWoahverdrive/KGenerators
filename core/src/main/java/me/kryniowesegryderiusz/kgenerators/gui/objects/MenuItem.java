@@ -150,7 +150,7 @@ public class MenuItem implements Cloneable {
 		item.setItemMeta(meta);
 
 		if (glow)
-			item.addUnsafeEnchantment(Enchantment.LOOT_BONUS_BLOCKS, 1);
+			item.addUnsafeEnchantment(Enchantment.FORTUNE, 1);
 		
 		item = PlaceholderAPIHook.translatePlaceholders(p, item);
 		

@@ -1,4 +1,5 @@
 package me.kryniowesegryderiusz.kgenerators.logger;
+import me.kryniowesegryderiusz.kgenerators.utils.Sched;
 
 import java.io.BufferedReader;
 import java.io.ByteArrayOutputStream;
@@ -170,7 +171,7 @@ public class Logger {
 	}
 
 	public static void debugPaste(CommandSender sender) {
-		Main.getInstance().getServer().getScheduler().runTaskAsynchronously(Main.getInstance(), new Runnable() {
+		Sched.async(new Runnable() {
 			@Override
 			public void run() {
 				String fileString = "";

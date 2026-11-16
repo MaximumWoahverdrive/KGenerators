@@ -1,4 +1,5 @@
 package me.kryniowesegryderiusz.kgenerators.generators.holograms;
+import me.kryniowesegryderiusz.kgenerators.utils.Sched;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -59,7 +60,7 @@ public class HologramsManager {
 		if (hologramProvider == null)
 			return;
 
-		Bukkit.getScheduler().scheduleSyncRepeatingTask(Main.getInstance(), new Runnable() {
+		Sched.globalTimer(new Runnable() {
 			public void run() {
 
 				try {
@@ -90,17 +91,11 @@ public class HologramsManager {
 		    	}
 
 			}
-		}, 0L, Main.getSettings().getHologramUpdateFrequency() * 1L);
+		}, 1L, Main.getSettings().getHologramUpdateFrequency() * 1L);
 	}
 
 	public void createRemainingTimeHologram(GeneratorLocation gLocation) {
-		if (Bukkit.isPrimaryThread()) {
-			this.createHologram(gLocation, this.getHologramRemainingTimeLines(gLocation));
-		} else {
-			Main.getInstance().getServer().getScheduler().runTask(Main.getInstance(), () -> {
-				this.createHologram(gLocation, this.getHologramRemainingTimeLines(gLocation));
-			});
-		}
+		Sched.atNow(gLocation.getLocation(), () -> this.createHologram(gLocation, this.getHologramRemainingTimeLines(gLocation)));
 	}
 
 	private void createHologram(GeneratorLocation gLocation, ArrayList<String> lines) {

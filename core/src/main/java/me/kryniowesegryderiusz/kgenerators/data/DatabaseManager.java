@@ -1,4 +1,5 @@
 package me.kryniowesegryderiusz.kgenerators.data;
+import me.kryniowesegryderiusz.kgenerators.utils.Sched;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -49,7 +50,7 @@ public class DatabaseManager {
 
 	public void changeTo(DatabaseType toDbType) {
 
-		Main.getInstance().getServer().getScheduler().runTaskAsynchronously(Main.getInstance(), new Runnable() {
+		Sched.async(new Runnable() {
 			@Override
 			public void run() {
 				Logger.info("DatabasesHandler: Converting database from " + Main.getSettings().getDbType().name() + " to " + toDbType.name() + ". IT COULD TAKE A WHILE!");
@@ -102,12 +103,12 @@ public class DatabaseManager {
 		
 		int amount;
 		int migratedAmount = 0;
-		int taskId;
+		io.papermc.paper.threadedregions.scheduler.ScheduledTask taskId;
 		
 		public MigratorInfo(int generatorsAmount) {
 			amount = generatorsAmount;
 			
-			taskId = Main.getInstance().getServer().getScheduler().scheduleSyncRepeatingTask(Main.getInstance(), new Runnable() {
+			taskId = Sched.globalTimer(new Runnable() {
 				@Override
 				public void run() {
 					Logger.info("DatabasesHandler: Migrated " + migratedAmount + "/" + amount);
@@ -120,7 +121,7 @@ public class DatabaseManager {
 		}
 		
 		public void end() {
-			Main.getInstance().getServer().getScheduler().cancelTask(taskId);
+			taskId.cancel();
 			Logger.info("DatabasesHandler: Migrated " + this.migratedAmount + "/" + this.amount);
 		}
 		

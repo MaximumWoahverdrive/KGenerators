@@ -1,4 +1,5 @@
 package me.kryniowesegryderiusz.kgenerators.gui;
+import me.kryniowesegryderiusz.kgenerators.utils.Sched;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -30,25 +31,25 @@ import me.kryniowesegryderiusz.kgenerators.logger.Logger;
 
 public class MenusManager implements Listener {
 	
-	private HashMap<Player, MenuPlayer> guis = new HashMap<Player, MenuPlayer>();
+	private java.util.concurrent.ConcurrentHashMap<Player, MenuPlayer> guis = new java.util.concurrent.ConcurrentHashMap<Player, MenuPlayer>();
 	
 	public MenusManager() {
 		
 		Logger.debugPluginLoad("MenusManager: Setting up manager");
 		
 		if (Main.getSettings().getGuiUpdateFrequency() > 0) {
-			Bukkit.getScheduler().scheduleSyncRepeatingTask(Main.getInstance(), new Runnable() {
+			Sched.globalTimer(new Runnable() {
 			    @Override
 			    public void run() {
 			    	try {
-						ArrayList<Player> toRemove = new ArrayList<Player>();
+						// SWU (Folia): each open menu is updated on its player's own scheduler
 						for (Entry<Player, MenuPlayer> e : guis.entrySet()) {
-							if (!e.getValue().update())
-								toRemove.add(e.getKey());
-						}
-
-						for (Player p : toRemove) {
-							guis.remove(p);
+							final Player p = e.getKey();
+							final MenuPlayer mp = e.getValue();
+							Sched.entity(p, () -> {
+								if (!mp.update())
+									guis.remove(p, mp);
+							});
 						}
 			    	} catch (Exception e) {
 			    		Logger.error("MenusManager: An error occured at menus task");
@@ -56,7 +57,7 @@ public class MenusManager implements Listener {
 			    	}
 
 			    }
-			}, 0L, Main.getSettings().getGuiUpdateFrequency()*1L);
+			}, 1L, Main.getSettings().getGuiUpdateFrequency()*1L);
 		}
 		
 	}
@@ -68,12 +69,7 @@ public class MenusManager implements Listener {
 	
 	public void closeInv(Player p)
 	{
-		Main.getInstance().getServer().getScheduler().scheduleSyncDelayedTask(Main.getInstance(), new Runnable() {
-			@Override
-            public void run() {
-				p.closeInventory();
-            }
-		});
+		Sched.entity(p, p::closeInventory);
 	}
 	
 	
