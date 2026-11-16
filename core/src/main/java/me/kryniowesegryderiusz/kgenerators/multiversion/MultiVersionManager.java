@@ -12,6 +12,16 @@ import me.kryniowesegryderiusz.kgenerators.multiversion.interfaces.WorldGuardUti
 
 public class MultiVersionManager {
 
+	/**
+	 * Major version. 1 for every release up to 1.21.x, then 26 and up once
+	 * Minecraft dropped the leading "1." from its version scheme.
+	 */
+	private short major;
+	/**
+	 * Minor version. For 1.x this is the part everything below gates on (the
+	 * "21" of 1.21.7). For 26+ it is a much smaller number (the "2" of 26.2)
+	 * and must not be compared against the 1.x thresholds -- see isHigher.
+	 */
 	private short minor;
 
 	@Getter
@@ -33,8 +43,9 @@ public class MultiVersionManager {
 			serverVersion = serverVersion.split("MC: ")[1];
 			serverVersion = serverVersion.split("\\)")[0];
 			String[] serverVersionSplitted = serverVersion.split("\\.");
-			minor = Short.valueOf(serverVersionSplitted[1]);
-			Logger.debugMultiVersionManager("MultiVersionManager: Found version " + serverVersion + " with minor " + minor);
+			major = Short.valueOf(serverVersionSplitted[0].trim());
+			minor = serverVersionSplitted.length > 1 ? Short.valueOf(serverVersionSplitted[1].trim()) : 0;
+			Logger.debugMultiVersionManager("MultiVersionManager: Found version " + serverVersion + " with major " + major + " and minor " + minor);
 			
 			String packageName = Main.class.getPackage().getName() + ".multiversion";
 
@@ -45,7 +56,16 @@ public class MultiVersionManager {
 			String chatPackage;
 			String skullPackage;
 
-			if (minor == 8) {
+			if (isModern()) {
+				// Minecraft 26+ -- always the newest adapters. Without this the
+				// "2" of 26.2 would fall through the 1.x comparisons below.
+				recipesPackage = packageName + ".RecipesLoader_1_13";
+				blocksPackage = packageName + ".BlocksUtils_1_13";
+				wgPackage = packageName + ".WorldGuardUtils_1_13";
+				actionBarPackage = packageName + ".ActionBar_1_9";
+				chatPackage = packageName + ".ChatUtils_1_16";
+				skullPackage = packageName + ".SkullUtils_1_21";
+			} else if (minor == 8) {
 				recipesPackage = packageName + ".RecipesLoader_1_8";
 				blocksPackage = packageName + ".BlocksUtils_1_8";
 				wgPackage = packageName + ".WorldGuardUtils_1_8";
@@ -115,10 +135,23 @@ public class MultiVersionManager {
 		}
 	}
 
+	/**
+	 * Whether the server is newer than 1.&lt;minorVersion&gt;.
+	 *
+	 * <p>Every caller passes a 1.x minor (9, 11, 12, 13) to gate modern
+	 * behaviour. On Minecraft 26+ the answer is unconditionally yes, and
+	 * comparing the raw minor would get it exactly backwards: 26.2 would report
+	 * "older than 1.9" and silently disable off-hand handling, drop suppression
+	 * and the inventory checks.
+	 */
 	public boolean isHigher(int minorVersion) {
-		if (minor > minorVersion)
+		if (isModern())
 			return true;
-		else
-			return false;
+		return minor > minorVersion;
+	}
+
+	/** True once Minecraft dropped the leading "1." from its versions (26+). */
+	private boolean isModern() {
+		return major > 1;
 	}
 }

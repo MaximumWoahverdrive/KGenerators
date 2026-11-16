@@ -129,11 +129,19 @@
 			<version>2.15.1</version>
 		</dependency>
 
-		<!-- https://mvnrepository.com/artifact/com.github.cryptomorin/XSeries -->
+		<!-- XSeries.
+		     13.3.1 parses the server version with a regex that assumes the old
+		     "1.x.y" scheme, so it throws on Minecraft 26+:
+		       IllegalArgumentException: Failed to parse server version from:
+		         26.2-2633-3f5d9c0 (MC: 26.2)
+		     That is thrown from XMaterial's static initialiser during
+		     Main.onLoad, which aborts plugin initialisation entirely.
+		     13.7.1 matches "MC: (\d+)\.(\d+)" and tracks major and minor
+		     separately. -->
 		<dependency>
-		    <groupId>com.github.cryptomorin</groupId>
-		    <artifactId>XSeries</artifactId>
-		    <version>13.3.1</version>
+			<groupId>com.github.cryptomorin</groupId>
+			<artifactId>XSeries</artifactId>
+			<version>13.7.1</version>
 		</dependency>
 
 		<!--This adds the Spigot API artifact to the build -->
