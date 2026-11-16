@@ -35,6 +35,7 @@ import me.kryniowesegryderiusz.kgenerators.listeners.BlockBreakListener;
 import me.kryniowesegryderiusz.kgenerators.listeners.BlockPistonListener;
 import me.kryniowesegryderiusz.kgenerators.listeners.BlockPlaceListener;
 import me.kryniowesegryderiusz.kgenerators.listeners.CraftingListeners;
+import me.kryniowesegryderiusz.kgenerators.listeners.EntityChangeBlockListener;
 import me.kryniowesegryderiusz.kgenerators.listeners.FurnaceSmeltListener;
 import me.kryniowesegryderiusz.kgenerators.listeners.InventoryClickListener;
 import me.kryniowesegryderiusz.kgenerators.listeners.GeneratorProtectionListeners;
@@ -169,6 +170,7 @@ public class Main extends JavaPlugin {
 			this.getServer().getPluginManager().registerEvents(new BlockPlaceListener(), this);
 			this.getServer().getPluginManager().registerEvents(new CraftingListeners(), this);
 			this.getServer().getPluginManager().registerEvents(new BlockPistonListener(), this);
+			this.getServer().getPluginManager().registerEvents(new EntityChangeBlockListener(), this);
 			this.getServer().getPluginManager().registerEvents(new PlayerInteractListener(), this);
 			this.getServer().getPluginManager().registerEvents(new InventoryClickListener(), this);
 			this.getServer().getPluginManager().registerEvents(new FurnaceSmeltListener(), this);
