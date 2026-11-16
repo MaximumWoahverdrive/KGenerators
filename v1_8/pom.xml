@@ -30,7 +30,10 @@
 		<!-- GameProfile -->
 		<repository>
 			<id>authlib</id>
-			<url>https://papermc.io/repo/repository/maven-releases/</url>
+			<!-- The old papermc.io/repo host now returns 403; this is its
+			     replacement, and it still carries the 1.8-era authlib and
+			     bungeecord-chat artifacts this module needs. -->
+			<url>https://repo.papermc.io/repository/maven-public/</url>
 		</repository>
 	</repositories>
 

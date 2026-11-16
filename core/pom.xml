@@ -90,7 +90,9 @@
 		<repository>
 			<id>fancyplugins-releases</id>
 			<name>FancyPlugins Repository</name>
-			<url>https://repo.fancyplugins.de/releases</url>
+			<!-- repo.fancyplugins.de no longer resolves at all; FancyHolograms
+			     moved to FancyInnovations. 2.4.1 is still published there. -->
+			<url>https://repo.fancyinnovations.com/releases</url>
 		</repository>
 
 		<repository>
@@ -212,11 +214,14 @@
 			<scope>provided</scope>
 		</dependency>
 
-		<!-- IridiumSkyblock -->
+		<!-- IridiumSkyblock.
+		     4.0.9.1 has been removed from Iridium's nexus; 4.1.5 is the only
+		     version still published. This is an optional integration hook and
+		     is not used on this server. -->
 		<dependency>
 			<groupId>com.iridium</groupId>
 			<artifactId>IridiumSkyblock</artifactId>
-			<version>4.0.9.1</version>
+			<version>4.1.5</version>
 		</dependency>
 
 		<!-- DecentHolograms -->
