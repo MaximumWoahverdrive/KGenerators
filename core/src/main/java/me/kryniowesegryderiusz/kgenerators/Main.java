@@ -95,25 +95,14 @@ public class Main extends JavaPlugin {
     	}
     }
 
-    /**
-     * Whether this is Paper or a fork of it (Purpur, Folia, ...), recognised by Paper's
-     * configuration class, which moved twice over the supported versions.
-     */
+    /** Whether this is Paper or a fork of it (Purpur, Folia, ...), recognised by Paper's configuration class. */
     private static boolean isPaper() {
-    	String[] paperClasses = {
-    			"io.papermc.paper.configuration.GlobalConfiguration", // 1.19+
-    			"com.destroystokyo.paper.PaperConfig", // 1.9 - 1.18
-    			"org.github.paperspigot.PaperSpigotConfig", // 1.8
-    	};
-    	for (String c : paperClasses) {
-    		try {
-    			Class.forName(c);
-    			return true;
-    		} catch (ClassNotFoundException e) {
-    			// try the next one
-    		}
+    	try {
+    		Class.forName("io.papermc.paper.configuration.GlobalConfiguration");
+    		return true;
+    	} catch (ClassNotFoundException e) {
+    		return false;
     	}
-    	return false;
     }
     
 	@Override

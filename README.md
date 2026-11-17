@@ -12,7 +12,7 @@
 </p>
 
 <p align="center">
-  <b>Custom block generators for Paper and Folia, from Minecraft 1.8.8 to 26.x.</br>
+  <b>Custom block generators for Paper and Folia, from Minecraft 1.19.4 to 26.x.</br>
   Skyblock, survival, prison or anywhere else: simple and multi-purpose.</b>
 </p>
 
@@ -32,15 +32,16 @@ unchanged, so an existing server keeps its generators when swapping the jar.
 On top of the original it adds:
 
 - **Folia** support
-- **Minecraft 26.x** support, alongside every version back to 1.8.8
+- **Minecraft 26.x** support
 - Generators made of gravity blocks (sand, gravel, ...) no longer fall out of place
-- Crop generators (`WHEAT`, `CARROT`, `POTATO`) work on 1.8-1.12 as well
 
 ## Download
 
 Get the latest jar from [Releases](https://github.com/MaximumWoahverdrive/KGenerators/releases)
-and put it in your server's `plugins/` folder. It needs Paper or a Paper fork (Purpur, Folia, ...);
-for plain Spigot use [7.3.1](https://github.com/MaximumWoahverdrive/KGenerators/releases/tag/7.3.1).
+and put it in your server's `plugins/` folder. It needs Paper 1.19.4 or newer, or a Paper fork
+(Purpur, Folia, ...), on Java 17 or newer. For plain Spigot or older Minecraft versions, use
+[7.3.1](https://github.com/MaximumWoahverdrive/KGenerators/releases/tag/7.3.1), which runs on
+Spigot and Paper from 1.8.8.
 
 ## Documentation
 
@@ -58,7 +59,7 @@ gradle build
 ```
 
 The plugin jar is written to `build/libs/`. Gradle downloads the JDKs it needs. Test servers for
-each supported version run with `gradle runPaper1_8_8`, ... `runPaper1_21_11`, `runServer`
+each supported version run with `gradle runPaper1_19_4`, ... `runPaper1_21_11`, `runServer`
 (Paper 26.3) and `runFolia`.
 
 ## Credits and license

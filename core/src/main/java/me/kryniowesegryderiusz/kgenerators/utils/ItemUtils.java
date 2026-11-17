@@ -58,8 +58,8 @@ public abstract class ItemUtils {
     }
     
 	/**
-	 * Crop items whose block has a different name on every version, so that configs can name
-	 * the crop by its item (CARROT) as they can for WHEAT.
+	 * Crop items whose block has a different name, so that configs can name the crop by its
+	 * item (CARROT) as they can for WHEAT.
 	 */
 	private static final Map<XMaterial, XMaterial> CROP_BLOCKS = new EnumMap<>(XMaterial.class);
 	static {
@@ -68,29 +68,10 @@ public abstract class ItemUtils {
 		CROP_BLOCKS.put(XMaterial.BEETROOT, XMaterial.BEETROOTS);
 	}
 
-	/**
-	 * The block this material places on this server, or null if it is not placeable.
-	 *
-	 * <p>Before 1.13 some names mean the item, not the block: WHEAT is the wheat item and the
-	 * crop block is CROPS, while CARROT is the crop block and the item is CARROT_ITEM. XMaterial
-	 * resolves to the item, so the block is looked for under the material's own name and its
-	 * legacy names as well.
-	 */
+	/** The block this material places on this server, or null if it is not placeable. */
 	public static Material getBlockMaterial(XMaterial xm) {
-		if (CROP_BLOCKS.containsKey(xm) && CROP_BLOCKS.get(xm).isSupported())
-			xm = CROP_BLOCKS.get(xm);
-		List<String> names = new ArrayList<>();
-		names.add(xm.name());
-		names.addAll(Arrays.asList(xm.getLegacy()));
-		Material parsed = xm.get();
-		if (parsed != null && parsed.isBlock())
-			return parsed;
-		for (String name : names) {
-			Material m = Material.getMaterial(name);
-			if (m != null && m.isBlock())
-				return m;
-		}
-		return null;
+		Material m = CROP_BLOCKS.getOrDefault(xm, xm).get();
+		return m != null && m.isBlock() ? m : null;
 	}
 
 	public static XMaterial getXMaterial(String material, String place, boolean isBlockCheck) {

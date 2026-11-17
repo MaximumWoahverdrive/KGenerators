@@ -64,16 +64,9 @@ public class BlockBreakListener implements Listener {
 				    		}
 				    		
 				    		if (Main.getSettings().isBlockDropToEq()) {
-					    		if (Main.getMultiVersion().isHigher(11)) {
-						    		for (ItemStack item : e.getBlock().getDrops(p.getItemInHand(), p))
-						    			PlayerUtils.dropToInventory(p, gLoc.getGeneratedBlockLocation(), item);
-					    			e.setDropItems(false);
-					    		} else {
-						    		for (ItemStack item : e.getBlock().getDrops(p.getItemInHand()))
-						    			PlayerUtils.dropToInventory(p, gLoc.getGeneratedBlockLocation(), item);
-					    			Main.getMultiVersion().getBlocksUtils().setBlock(e.getBlock().getLocation(), Material.AIR);
-					    			e.setCancelled(true);
-					    		}
+					    		for (ItemStack item : e.getBlock().getDrops(p.getItemInHand(), p))
+					    			PlayerUtils.dropToInventory(p, gLoc.getGeneratedBlockLocation(), item);
+					    		e.setDropItems(false);
 				    		}
 						}
 					}

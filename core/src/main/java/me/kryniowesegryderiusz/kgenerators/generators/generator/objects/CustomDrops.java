@@ -125,13 +125,8 @@ public class CustomDrops {
 		 * Version dependent
 		 */
 
-		if (this.removeDefaults) {
-			if (Main.getMultiVersion().isHigher(11)) e.setDropItems(false);
-			else {
-				Main.getMultiVersion().getBlocksUtils().setBlock(e.getBlock().getLocation(), Material.AIR);
-				e.setCancelled(true);
-			}
-		}
+		if (this.removeDefaults)
+			e.setDropItems(false);
 
 		/*
 		 * Other

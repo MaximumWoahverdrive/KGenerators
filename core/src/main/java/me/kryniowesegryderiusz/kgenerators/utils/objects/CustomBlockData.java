@@ -12,7 +12,7 @@ import com.cryptomorin.xseries.XMaterial;
 public class CustomBlockData {
 
 	@Getter XMaterial xMaterial;
-	/** What gets placed: can differ from xMaterial.get() before 1.13, e.g. CROPS for WHEAT. */
+	/** What gets placed: can differ from xMaterial.get(), e.g. CARROTS for CARROT. */
 	private final Material blockMaterial;
 	
 	public CustomBlockData(XMaterial xMaterial){

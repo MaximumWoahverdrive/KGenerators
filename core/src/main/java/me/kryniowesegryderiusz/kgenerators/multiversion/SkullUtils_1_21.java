@@ -17,17 +17,6 @@ import me.kryniowesegryderiusz.kgenerators.multiversion.interfaces.SkullUtils;
 
 public class SkullUtils_1_21 implements SkullUtils {
 	
-	private boolean isPaper = false;
-	
-	public SkullUtils_1_21() {
-		try {
-			Main.getInstance().getServer().createProfile(UUID.randomUUID());
-			isPaper = true;
-		} catch (NoClassDefFoundError e) {
-			Main.getInstance().getLogger().warning("This server is not running PaperMC. Base64 skulls wont work.");
-		}
-	}
-
 	@Override
 	public ItemStack itemFromName(String name) {
 		ItemStack is = new ItemStack(org.bukkit.Material.PLAYER_HEAD);
@@ -39,11 +28,7 @@ public class SkullUtils_1_21 implements SkullUtils {
 
 	@Override
 	public ItemStack itemFromBase64(String base64) {
-				
-		if (!isPaper) {
-			return new ItemStack(Material.PLAYER_HEAD);
-		}
-		
+
 		ItemStack is = new ItemStack(org.bukkit.Material.PLAYER_HEAD);
 		SkullMeta meta = (SkullMeta) is.getItemMeta();
 		
@@ -56,10 +41,6 @@ public class SkullUtils_1_21 implements SkullUtils {
 
 	@Override
 	public void blockWithBase64(Block block, String skullBase64) {
-		
-		if (!isPaper) {
-			return;
-		}
 
 		if (block.getType() != Material.PLAYER_HEAD) {
 			block.setType(Material.PLAYER_HEAD);
