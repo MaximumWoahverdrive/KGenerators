@@ -4,15 +4,12 @@ import com.cryptomorin.xseries.XMaterial;
 import com.cryptomorin.xseries.XSound;
 import java.io.File;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import lombok.Getter;
 import lombok.Setter;
 import me.kryniowesegryderiusz.kgenerators.Main;
 import me.kryniowesegryderiusz.kgenerators.data.enums.DatabaseType;
 import me.kryniowesegryderiusz.kgenerators.data.objects.SQLConfig;
-import me.kryniowesegryderiusz.kgenerators.generators.generator.objects.GeneratorAction;
-import me.kryniowesegryderiusz.kgenerators.generators.locations.handlers.enums.ActionType;
 import me.kryniowesegryderiusz.kgenerators.logger.Logger;
 import me.kryniowesegryderiusz.kgenerators.settings.objects.Actions;
 import me.kryniowesegryderiusz.kgenerators.settings.objects.GeneratorItemMatcher;
@@ -74,10 +71,6 @@ public class Settings {
 
     @Setter
     @Getter
-    private HashMap<ActionType, GeneratorAction> guis = new HashMap<>();
-
-    @Setter
-    @Getter
     private Sound placeSound = new Sound(XSound.BLOCK_ANVIL_LAND);
 
     @Setter
@@ -98,9 +91,6 @@ public class Settings {
 
     @Getter
     private boolean adjustDelayOnUnloadedChunks = true;
-
-    @Getter
-    private boolean asyncChunkLoading = true;
 
     @Setter
     @Getter
@@ -189,6 +179,7 @@ public class Settings {
 
         if (config.contains("exp-drop-to-eq")) this.setExpDropToEq(config.getBoolean("exp-drop-to-eq"));
 
+        this.getDisabledWorlds().clear();
         if (config.contains("disabled-worlds"))
             this.getDisabledWorlds().addAll(config.getStringList("disabled-worlds"));
 
@@ -200,8 +191,6 @@ public class Settings {
 
         if (config.contains("database.dbtype"))
             this.setDbType(DatabaseType.Functions.getTypeByString(config.getString("database.dbtype")));
-
-        if (config.contains("async-chunk-loading")) this.asyncChunkLoading = config.getBoolean("async-chunk-loading");
 
         this.generatorItemMatcher.load(config);
 

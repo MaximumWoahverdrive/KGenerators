@@ -20,7 +20,9 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
+import org.bukkit.event.inventory.InventoryDragEvent;
 import org.bukkit.event.inventory.InventoryType;
+import org.bukkit.event.player.PlayerQuitEvent;
 
 public class InventoryClickListener implements Listener {
 
@@ -52,8 +54,12 @@ public class InventoryClickListener implements Listener {
              * Menus
              */
 
-            if (Main.getMenus().getVieving(p) != null) {
-                Enum<?> m = Main.getMenus().getVieving(p);
+            MenuPlayer mp = Main.getMenus().getMenuPlayer(p);
+            if (mp != null) {
+                Enum<?> m = mp.getMenuInventory();
+                // Every click is cancelled while a menu is open, but only clicks in the menu itself are buttons
+                e.setCancelled(true);
+                if (e.getClickedInventory() != mp.getInventory()) return;
 
                 try {
                     if (m == MenuInventoryType.GENERATOR) GeneratorMenu.onClick(p, slot);
@@ -74,7 +80,6 @@ public class InventoryClickListener implements Listener {
                     Logger.error(ex);
                     Main.getMenus().closeInv(p);
                 }
-                e.setCancelled(true);
             }
 
         } catch (Exception exception) {
@@ -84,10 +89,26 @@ public class InventoryClickListener implements Listener {
 
     @EventHandler
     public void inventoryCloseEvent(InventoryCloseEvent e) {
+        Player p = (Player) e.getPlayer();
+        MenuPlayer mp = Main.getMenus().getMenuPlayer(p);
+        if (mp != null && mp.getInventory() == e.getInventory()) Main.getMenus().remove(p, mp);
+    }
 
-        MenuPlayer mp = Main.getMenus().getMenuPlayer((Player) e.getPlayer());
-        if (mp != null && mp.getInventory() == e.getInventory()) {
-            Main.getMenus().closeInv((Player) e.getPlayer());
+    @EventHandler(priority = EventPriority.HIGH)
+    public void onInventoryDrag(InventoryDragEvent e) {
+        MenuPlayer mp = Main.getMenus().getMenuPlayer((Player) e.getWhoClicked());
+        if (mp == null) return;
+        int menuSize = mp.getInventory().getSize();
+        for (int rawSlot : e.getRawSlots()) {
+            if (rawSlot < menuSize) {
+                e.setCancelled(true);
+                return;
+            }
         }
+    }
+
+    @EventHandler
+    public void onQuit(PlayerQuitEvent e) {
+        Main.getMenus().remove(e.getPlayer());
     }
 }

@@ -60,6 +60,7 @@ public class StringContent implements Cloneable {
             }
         } else if (defaultContent != null) {
             config.set(path, defaultContent.getLines());
+            for (String s : defaultContent.getLines()) lines.add(Text.colorize(s));
             try {
                 config.saveConfig();
             } catch (IOException ex) {

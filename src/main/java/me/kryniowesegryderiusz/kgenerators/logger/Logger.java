@@ -11,7 +11,6 @@ import java.io.PrintStream;
 import java.io.PrintWriter;
 import java.net.URL;
 import java.net.URLEncoder;
-import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -118,7 +117,7 @@ public class Logger {
 
             File saveTo = new File(Main.getInstance().getDataFolder(), file);
             // FileWriter creates the file if it does not exist yet
-            FileWriter fw = new FileWriter(saveTo, true);
+            FileWriter fw = new FileWriter(saveTo, StandardCharsets.UTF_8, true);
 
             PrintWriter pw = new PrintWriter(fw);
 
@@ -239,8 +238,10 @@ public class Logger {
     private static String getLinesFromFile(String file) throws IOException {
         StringBuilder fileStrings = new StringBuilder("########################################\n########## " + file
                 + " ##########\n########################################\n\n");
-        List<String> lines = Files.readAllLines(
-                Paths.get(Main.getInstance().getDataFolder().getPath(), file), Charset.defaultCharset());
+        java.nio.file.Path path = Paths.get(Main.getInstance().getDataFolder().getPath(), file);
+        if (!Files.exists(path))
+            return fileStrings.append("(file doesn't exist)\n\n").toString();
+        List<String> lines = Files.readAllLines(path, StandardCharsets.UTF_8);
         for (String l : lines) {
             if (!l.contains("password")) fileStrings.append(l).append("\n");
         }

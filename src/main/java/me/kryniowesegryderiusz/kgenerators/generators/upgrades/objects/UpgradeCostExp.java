@@ -15,7 +15,20 @@ public class UpgradeCostExp implements IUpgradeCost {
 
     @Override
     public boolean checkRequirements(Player p, int amount) {
-        return this.cost * amount <= p.getTotalExperience();
+        return this.cost * amount <= currentExperience(p);
+    }
+
+    /**
+     * Experience points the player has right now. Not {@code getTotalExperience()}: that counts all
+     * experience ever collected and isn't lowered by enchanting or anvils.
+     */
+    static int currentExperience(Player p) {
+        int level = p.getLevel();
+        int levelPoints;
+        if (level <= 16) levelPoints = level * level + 6 * level;
+        else if (level <= 31) levelPoints = (int) (2.5 * level * level - 40.5 * level + 360);
+        else levelPoints = (int) (4.5 * level * level - 162.5 * level + 2220);
+        return levelPoints + Math.round(p.getExp() * p.getExpToLevel());
     }
 
     @Override

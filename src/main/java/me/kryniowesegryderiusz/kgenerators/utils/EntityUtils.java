@@ -7,7 +7,7 @@ public class EntityUtils {
 
     public static EntityType getEntityType(String s, String place) {
         try {
-            return EntityType.valueOf(s);
+            return EntityType.valueOf(s.toUpperCase(java.util.Locale.ROOT));
         } catch (Exception e) {
             Logger.error(place + ": " + s + " is not a proper entity! Using PIG!");
         }

@@ -39,7 +39,7 @@ public class DependenciesManager {
             dependencies.add(Dependency.ITEMS_ADDER);
         }
 
-        if (Bukkit.getPluginManager().getPlugin("EcoItems") != null) {
+        if (Bukkit.getPluginManager().isPluginEnabled("EcoItems")) {
             Logger.debugPluginLoad("Dependencies: Detected plugin EcoItems. Hooking into it.");
             dependencies.add(Dependency.ECO_ITEMS);
         }

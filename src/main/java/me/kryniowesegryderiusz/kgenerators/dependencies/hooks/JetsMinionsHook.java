@@ -4,10 +4,12 @@ import me.jet315.minions.events.MinerBlockBreakEvent;
 import me.kryniowesegryderiusz.kgenerators.Main;
 import me.kryniowesegryderiusz.kgenerators.generators.locations.objects.GeneratorLocation;
 import me.kryniowesegryderiusz.kgenerators.utils.BlockUtils;
+import me.kryniowesegryderiusz.kgenerators.utils.PlayerUtils;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.inventory.ItemStack;
 
 public class JetsMinionsHook implements Listener {
 
@@ -36,14 +38,14 @@ public class JetsMinionsHook implements Listener {
                                         e.getMinion().getActionsProcessedSinceHealthDrop() + 1);
                     }
 
-                    if (!e.getMinion()
-                            .addItemToChest(gLocation
-                                    .getLastGeneratedObject()
-                                    .getCustomDrops()
-                                    .getItem()
-                                    .clone())
-                            .isEmpty())
-                        gLocation.getLastGeneratedObject().getCustomDrops().doItemDrops(null, location);
+                    ItemStack drop =
+                            gLocation.getLastGeneratedObject().getCustomDrops().getItem();
+                    if (drop != null) {
+                        // Only what didn't fit into the minion's chest is dropped
+                        for (ItemStack leftover :
+                                e.getMinion().addItemToChest(drop.clone()).values())
+                            PlayerUtils.dropBlockToInventory(null, location, leftover);
+                    }
 
                     e.getMinion()
                             .setExp(e.getMinion().getExp()

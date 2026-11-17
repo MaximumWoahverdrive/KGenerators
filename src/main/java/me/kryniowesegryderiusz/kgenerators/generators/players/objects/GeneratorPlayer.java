@@ -23,7 +23,7 @@ public class GeneratorPlayer {
     private final String nick;
 
     @Getter
-    private boolean loaded = false;
+    private volatile boolean loaded = false;
 
     public GeneratorPlayer(String nick) {
         this.nick = nick;
@@ -53,7 +53,11 @@ public class GeneratorPlayer {
 
     private final HashMap<String, Integer> playersGenerators = new HashMap<>();
 
-    public void loadPlayer() {
+    public synchronized void loadIfNeeded() {
+        if (!this.loaded) loadPlayer();
+    }
+
+    public synchronized void loadPlayer() {
 
         for (GeneratorLocation gl : Main.getDatabases().getDb().getGenerators(nick)) {
             this.increaseGeneratorsAmount(gl.getGenerator());
@@ -61,7 +65,7 @@ public class GeneratorPlayer {
         this.loaded = true;
     }
 
-    public void addGeneratorToPlayer(Generator generator) {
+    public synchronized void addGeneratorToPlayer(Generator generator) {
         if (isNone) return;
 
         if (!this.isLoaded()) this.loadPlayer();
@@ -79,7 +83,7 @@ public class GeneratorPlayer {
         }
     }
 
-    public void removeGeneratorFromPlayer(Generator generator) {
+    public synchronized void removeGeneratorFromPlayer(Generator generator) {
         if (isNone) return;
 
         if (!this.isLoaded()) this.loadPlayer();
@@ -91,7 +95,7 @@ public class GeneratorPlayer {
         }
     }
 
-    public Integer getAllGeneratorsCount() {
+    public synchronized Integer getAllGeneratorsCount() {
         if (isNone) return 0;
 
         if (!this.isLoaded()) this.loadPlayer();
@@ -103,7 +107,7 @@ public class GeneratorPlayer {
         return nr;
     }
 
-    public Integer getGeneratorsCount(Generator generator) {
+    public synchronized Integer getGeneratorsCount(Generator generator) {
         if (isNone) return 0;
 
         if (!this.isLoaded()) this.loadPlayer();

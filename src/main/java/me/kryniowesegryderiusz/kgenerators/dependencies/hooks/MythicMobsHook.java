@@ -8,6 +8,7 @@ import io.lumine.mythic.core.mobs.ActiveMob;
 import java.util.Optional;
 import me.kryniowesegryderiusz.kgenerators.Main;
 import me.kryniowesegryderiusz.kgenerators.dependencies.enums.Dependency;
+import me.kryniowesegryderiusz.kgenerators.logger.Logger;
 import me.kryniowesegryderiusz.kgenerators.utils.EntityUtils;
 import org.bukkit.Location;
 import org.bukkit.entity.Entity;
@@ -45,6 +46,10 @@ public class MythicMobsHook {
 
         ActiveMob am = MythicBukkit.inst().getMobManager().spawnMob(string, BukkitAdapter.adapt(location));
 
+        if (am == null) {
+            Logger.error("MythicMobsHook: Cannot spawn MythicMob " + string + ", it doesn't exist!");
+            return null;
+        }
         return BukkitAdapter.adapt(am.getEntity());
     }
 }

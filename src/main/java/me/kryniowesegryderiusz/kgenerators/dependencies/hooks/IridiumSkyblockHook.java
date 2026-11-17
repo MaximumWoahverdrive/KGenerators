@@ -8,6 +8,7 @@ import me.kryniowesegryderiusz.kgenerators.logger.Logger;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 
 public class IridiumSkyblockHook implements Listener {
@@ -16,7 +17,7 @@ public class IridiumSkyblockHook implements Listener {
         Main.getInstance().getServer().getPluginManager().registerEvents(new IridiumSkyblockHook(), Main.getInstance());
     }
 
-    @EventHandler
+    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onDeleteEvent(IslandDeleteEvent e) {
         islandDeletion(e.getIsland());
     }
@@ -29,6 +30,7 @@ public class IridiumSkyblockHook implements Listener {
         };
 
         for (World w : worlds) {
+            if (w == null) continue; // dimension disabled
 
             Location min = is.getPosition1(w);
             Location max = is.getPosition2(w);
@@ -41,10 +43,10 @@ public class IridiumSkyblockHook implements Listener {
                     .bulkRemoveGenerators(
                             min.getWorld(),
                             min.getBlockX(),
-                            0,
+                            w.getMinHeight(),
                             min.getBlockZ(),
                             max.getBlockX(),
-                            min.getWorld().getMaxHeight(),
+                            w.getMaxHeight(),
                             max.getBlockZ(),
                             false);
         }

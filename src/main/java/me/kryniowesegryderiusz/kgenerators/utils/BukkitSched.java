@@ -7,7 +7,7 @@ import org.bukkit.entity.Entity;
 import org.bukkit.scheduler.BukkitScheduler;
 import org.bukkit.scheduler.BukkitTask;
 
-/** {@link Sched} on the Bukkit scheduler: everything but Folia, back to 1.8. */
+/** {@link Sched} on the Bukkit scheduler: everything but Folia. */
 final class BukkitSched implements Sched.Backend {
 
     private static BukkitScheduler scheduler() {

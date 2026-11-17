@@ -6,6 +6,7 @@ import me.waterarchery.litminions.api.events.MinerMinionBreakEvent;
 import org.bukkit.Location;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.inventory.ItemStack;
 
 public class LitMinionsHook implements Listener {
 
@@ -26,12 +27,9 @@ public class LitMinionsHook implements Listener {
                         && gLocation.getLastGeneratedObject().getCustomDrops() != null) {
                     if (gLocation.getLastGeneratedObject().getCustomDrops().isRemoveDefaults())
                         e.getDrops().clear();
-                    e.getDrops()
-                            .add(gLocation
-                                    .getLastGeneratedObject()
-                                    .getCustomDrops()
-                                    .getItem()
-                                    .clone());
+                    ItemStack drop =
+                            gLocation.getLastGeneratedObject().getCustomDrops().getItem();
+                    if (drop != null) e.getDrops().add(drop.clone());
                     e.getMinion()
                             .setExp(e.getMinion().getExp()
                                     + gLocation

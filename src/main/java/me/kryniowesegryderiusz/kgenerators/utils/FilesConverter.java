@@ -158,7 +158,7 @@ public class FilesConverter {
                                     .getGeneratorAction(ActionType.OPENGUI)
                                     .getInteraction()
                                     .toString());
-            if (settings.getActions().getGeneratorAction(ActionType.PICKUP).getItem() != null)
+            if (settings.getActions().getGeneratorAction(ActionType.OPENGUI).getItem() != null)
                 add(
                         file,
                         "    item: "
@@ -187,7 +187,7 @@ public class FilesConverter {
                         file,
                         "    item: "
                                 + settings.getActions()
-                                        .getGeneratorAction(ActionType.PICKUP)
+                                        .getGeneratorAction(ActionType.TIMELEFT)
                                         .getItem()
                                         .getType());
             else add(file, "    item: ANY");

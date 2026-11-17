@@ -11,6 +11,7 @@ import me.kryniowesegryderiusz.kgenerators.dependencies.enums.Dependency;
 import me.kryniowesegryderiusz.kgenerators.dependencies.hooks.VaultHook;
 import me.kryniowesegryderiusz.kgenerators.utils.FilesUtils;
 import me.kryniowesegryderiusz.kgenerators.utils.PlayerUtils;
+import me.kryniowesegryderiusz.kgenerators.utils.Sched;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.event.block.BlockBreakEvent;
@@ -101,10 +102,13 @@ public class CustomDrops {
                 cmd = CoordControl(cmd, location, "<x");
                 cmd = CoordControl(cmd, location, "<y");
                 cmd = CoordControl(cmd, location, "<z");
-                Main.getInstance()
+                String command = cmd.replace("<player>", playerName);
+                Runnable dispatch = () -> Main.getInstance()
                         .getServer()
-                        .dispatchCommand(
-                                Main.getInstance().getServer().getConsoleSender(), cmd.replace("<player>", playerName));
+                        .dispatchCommand(Main.getInstance().getServer().getConsoleSender(), command);
+                // Folia only runs console commands on the global region
+                if (Sched.isFolia()) Sched.global(dispatch);
+                else dispatch.run();
             }
         }
     }
@@ -117,7 +121,7 @@ public class CustomDrops {
 
         if (this.removeDefaults) e.setExpToDrop(0);
         if (this.exp > 0) e.setExpToDrop(this.exp);
-        if (Main.getSettings().isBlockDropToEq() && e.getPlayer().hasPermission("kgenerators.droptoinventory")) {
+        if (Main.getSettings().isExpDropToEq() && e.getPlayer().hasPermission("kgenerators.droptoinventory")) {
             e.getPlayer().giveExp(e.getExpToDrop());
             e.setExpToDrop(0);
         }

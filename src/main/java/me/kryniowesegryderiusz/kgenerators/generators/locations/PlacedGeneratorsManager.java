@@ -35,7 +35,7 @@ public class PlacedGeneratorsManager {
     @Getter
     private final LinkedBlockingQueue<ManagementTask> managementQueue = new LinkedBlockingQueue<>();
 
-    private boolean stopping = false;
+    private volatile boolean stopping = false;
 
     public PlacedGeneratorsManager() {
 
@@ -55,14 +55,13 @@ public class PlacedGeneratorsManager {
         }
 
         for (Entry<World, Chunk[]> e : loadedChunks.entrySet()) {
-            int amount = 0;
             int chunks = 0;
             for (Chunk c : e.getValue()) {
                 loadChunk(c);
                 chunks++;
             }
-            Logger.debugPluginLoad("PlacedGenerators: Loaded " + amount + " generators from world "
-                    + e.getKey().getName() + " (" + chunks + " chunks)");
+            Logger.debugPluginLoad("PlacedGenerators: Queued " + chunks + " loaded chunks of world "
+                    + e.getKey().getName() + " for loading generators");
         }
     }
 
@@ -91,7 +90,12 @@ public class PlacedGeneratorsManager {
         while (!managementQueue.isEmpty()) {
             ManagementTask r = managementQueue.poll();
             if (r != null) {
-                r.doTask();
+                // One failing task must not stop the generators and schedules below from being saved
+                try {
+                    r.doTask();
+                } catch (Exception e) {
+                    Logger.error(e);
+                }
             } else break;
         }
         Main.getSchedules().unloadAllSchedules();
@@ -170,7 +174,7 @@ public class PlacedGeneratorsManager {
                     Main.getSchedules().getSchedules().put(gl, finalSchedule);
                     if (gl.getGenerator().isHologram()) Main.getHolograms().createRemainingTimeHologram(gl);
                     Main.getDatabases().getDb().removeSchedule(gl);
-                } else {
+                } else if (!stopping) {
                     // SWU (Folia): reading the block must happen on the owning region, not this async worker
                     Sched.at(gl.getLocation(), () -> {
                         if (gl.isBroken()) {
@@ -182,16 +186,21 @@ public class PlacedGeneratorsManager {
                     });
                 }
 
-                Sched.at(
-                        gl.getLocation(),
-                        () -> Main.getInstance().getServer().getPluginManager().callEvent(new GeneratorLoadEvent(gl)));
+                // Tasks can't be scheduled while the plugin is disabling
+                if (!stopping)
+                    Sched.at(
+                            gl.getLocation(),
+                            () -> Main.getInstance()
+                                    .getServer()
+                                    .getPluginManager()
+                                    .callEvent(new GeneratorLoadEvent(gl)));
             }
 
             loadedGenerators.get(ci).setFullyLoaded(true);
 
             long tasktimeTaken = System.currentTimeMillis() - taskTime;
             Logger.debugPlacedGeneratorsManager(
-                    "PlacedGeneratorsManager: Unloading chunk " + ci + " taken " + tasktimeTaken + "ms)");
+                    "PlacedGeneratorsManager: Loading chunk " + ci + " taken " + tasktimeTaken + "ms)");
 
             Logger.debugPlacedGeneratorsManager("PlacedGeneratorsManager: Chunk loaded: " + ci);
         }
@@ -246,12 +255,13 @@ public class PlacedGeneratorsManager {
 
                 if (schedule != null) Main.getSchedules().remove(gl);
 
-                Sched.at(
-                        gl.getLocation(),
-                        () -> Main.getInstance()
-                                .getServer()
-                                .getPluginManager()
-                                .callEvent(new GeneratorUnloadEvent(gl)));
+                if (!stopping)
+                    Sched.at(
+                            gl.getLocation(),
+                            () -> Main.getInstance()
+                                    .getServer()
+                                    .getPluginManager()
+                                    .callEvent(new GeneratorUnloadEvent(gl)));
             }
 
             if (loadedGenerators.get(ci) != null && loadedGenerators.get(ci).isEmpty()) loadedGenerators.remove(ci);
@@ -266,13 +276,13 @@ public class PlacedGeneratorsManager {
     }
 
     /**
-     * This will load chunk
+     * Doesn't load or touch the chunk, so it's safe from any thread.
      * @param loc location inside the chunk to check
      * @return true if the chunk's generators are in the manager and fully loaded
      */
     public boolean isChunkFullyLoaded(Location loc) {
-        boolean result = loadedGenerators.get(getChunkInfo(loc.getChunk())) != null
-                && loadedGenerators.get(getChunkInfo(loc.getChunk())).isFullyLoaded();
+        ChunkGeneratorLocations cgl = loadedGenerators.get(chunkInfoAt(loc));
+        boolean result = cgl != null && cgl.isFullyLoaded();
         Logger.debugPlacedGeneratorsManager("PlacedGeneratorsManager: isChunkFullyLoaded fired with " + result);
         return result;
     }
@@ -298,13 +308,13 @@ public class PlacedGeneratorsManager {
      */
 
     /**
-     * This will load chunk if its not loaded
+     * Doesn't load or touch the chunk, so it's safe from any thread.
      * @param location block location of the generator
      * @return loaded GeneratorLocation related to location or null if none
      */
     @Nullable
     public GeneratorLocation getLoaded(Location location) {
-        ChunkGeneratorLocations cgl = loadedGenerators.get(this.getChunkInfo(location.getChunk()));
+        ChunkGeneratorLocations cgl = loadedGenerators.get(chunkInfoAt(location));
         if (cgl != null) return cgl.get(location);
         else return null;
     }
@@ -442,6 +452,11 @@ public class PlacedGeneratorsManager {
 
     public ChunkInfo getChunkInfo(Chunk c) {
         return new ChunkInfo(c);
+    }
+
+    /** The chunk of a location, from its coordinates: unlike {@code getChunk()} this never loads the chunk. */
+    private ChunkInfo chunkInfoAt(Location loc) {
+        return new ChunkInfo(loc.getWorld(), loc.getBlockX() >> 4, loc.getBlockZ() >> 4);
     }
 
     @AllArgsConstructor

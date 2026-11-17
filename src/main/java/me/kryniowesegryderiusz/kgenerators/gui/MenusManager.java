@@ -1,6 +1,7 @@
 package me.kryniowesegryderiusz.kgenerators.gui;
 
 import java.util.Map.Entry;
+import java.util.function.Supplier;
 import me.kryniowesegryderiusz.kgenerators.Main;
 import me.kryniowesegryderiusz.kgenerators.dependencies.hooks.BentoBoxHook;
 import me.kryniowesegryderiusz.kgenerators.dependencies.hooks.SuperiorSkyblock2Hook;
@@ -58,6 +59,14 @@ public class MenusManager implements Listener {
         return guis.get(p);
     }
 
+    public void remove(Player p, MenuPlayer mp) {
+        guis.remove(p, mp);
+    }
+
+    public void remove(Player p) {
+        guis.remove(p);
+    }
+
     public void closeInv(Player p) {
         Sched.entity(p, p::closeInventory);
     }
@@ -70,9 +79,10 @@ public class MenusManager implements Listener {
             return;
         }
 
-        Inventory menu = GeneratorMenu.get(p, gLocation);
-        guis.put(p, new MenuPlayer(p, MenuInventoryType.GENERATOR, menu, gLocation));
-        p.openInventory(menu);
+        open(p, () -> {
+            Inventory menu = GeneratorMenu.get(p, gLocation);
+            return new MenuPlayer(p, MenuInventoryType.GENERATOR, menu, gLocation);
+        });
     }
 
     /**
@@ -110,33 +120,26 @@ public class MenusManager implements Listener {
      * @param page (starts from 0)
      */
     public void openMainMenu(Player p, int page) {
-        Inventory menu = MainMenu.get(p, page);
-        guis.put(p, new MenuPlayer(p, MenuInventoryType.MAIN, menu, page));
-        p.openInventory(menu);
+        open(p, () -> new MenuPlayer(p, MenuInventoryType.MAIN, MainMenu.get(p, page), page));
     }
 
     public void openChancesMenu(Player p, Generator generator) {
-        Inventory menu = GeneratedObjectsMenu.get(p, generator);
-        guis.put(p, new MenuPlayer(p, MenuInventoryType.GENERATED_OBJECTS, menu, generator));
-        p.openInventory(menu);
+        open(
+                p,
+                () -> new MenuPlayer(
+                        p, MenuInventoryType.GENERATED_OBJECTS, GeneratedObjectsMenu.get(p, generator), generator));
     }
 
     public void openRecipeMenu(Player p, Generator generator) {
-        Inventory menu = RecipeMenu.get(p, generator);
-        guis.put(p, new MenuPlayer(p, MenuInventoryType.RECIPE, menu, generator));
-        p.openInventory(menu);
+        open(p, () -> new MenuPlayer(p, MenuInventoryType.RECIPE, RecipeMenu.get(p, generator), generator));
     }
 
     public void openUpgradeMenu(Player p, Generator generator) {
-        Inventory menu = UpgradeMenu.get(p, generator);
-        guis.put(p, new MenuPlayer(p, MenuInventoryType.UPGRADE, menu, generator));
-        p.openInventory(menu);
+        open(p, () -> new MenuPlayer(p, MenuInventoryType.UPGRADE, UpgradeMenu.get(p, generator), generator));
     }
 
     public void openLimitsMenu(Player p) {
-        Inventory menu = LimitsMenu.get(p);
-        guis.put(p, new MenuPlayer(p, MenuInventoryType.LIMITS, menu));
-        p.openInventory(menu);
+        open(p, () -> new MenuPlayer(p, MenuInventoryType.LIMITS, LimitsMenu.get(p)));
     }
 
     public Enum<?> getVieving(Player p) {
@@ -148,5 +151,23 @@ public class MenusManager implements Listener {
         for (Entry<Player, MenuPlayer> e : guis.entrySet()) {
             e.getKey().closeInventory();
         }
+    }
+
+    /**
+     * Builds and opens a menu on the player's own scheduler: never inside the click event that asked for it
+     * (Bukkit forbids opening inventories there) and on the right thread on Folia.
+     */
+    private void open(Player p, Supplier<MenuPlayer> menu) {
+        Sched.entity(p, () -> {
+            try {
+                MenuPlayer mp = menu.get();
+                guis.put(p, mp);
+                p.openInventory(mp.getInventory());
+            } catch (Exception e) {
+                Lang.getMessageStorage().send(p, Message.COMMANDS_MENU_ERROR);
+                Logger.error("MenusManager: An error occurred while opening a menu");
+                Logger.error(e);
+            }
+        });
     }
 }

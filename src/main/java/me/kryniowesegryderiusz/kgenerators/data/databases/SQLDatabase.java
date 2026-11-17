@@ -278,7 +278,7 @@ public class SQLDatabase implements IDatabase {
                 stat.setInt(3, gl.getLocation().getBlockY());
                 stat.setInt(4, gl.getLocation().getBlockZ());
                 stat.setString(5, gl.getGenerator().getId());
-                stat.setString(6, gl.getOwner().getName());
+                stat.setString(6, ownerName(gl));
                 stat.setInt(7, gl.getChunkInfo().getX());
                 stat.setInt(8, gl.getChunkInfo().getZ());
                 stat.setInt(9, gl.getLastGeneratedObjectId());
@@ -298,7 +298,7 @@ public class SQLDatabase implements IDatabase {
                 stat = conn.prepareStatement("UPDATE " + PLACED_TABLE
                         + " SET `generator_id` = ?, `owner` = ?, `last_generated_object` = ? WHERE `id` = ?");
                 stat.setString(1, gl.getGenerator().getId());
-                stat.setString(2, gl.getOwner().getName());
+                stat.setString(2, ownerName(gl));
                 stat.setInt(3, gl.getLastGeneratedObjectId());
                 stat.setInt(4, gl.getId());
                 stat.executeUpdate();
@@ -487,6 +487,7 @@ public class SQLDatabase implements IDatabase {
         } catch (Exception e) {
             Logger.error("Database " + dbType.name() + ": Cannot get generators by chunk: " + chunkInfo.toString());
             Logger.error(e);
+            gl = null; // tells the caller to try again
         } finally {
             this.close(stat, conn, res);
         }
@@ -556,7 +557,7 @@ public class SQLDatabase implements IDatabase {
             stat.setInt(6, schedule.getTimeLeft());
             stat.executeUpdate();
         } catch (Exception e) {
-            Logger.error("Database " + dbType.name() + ": Cannot remove schedule " + gl + " from database");
+            Logger.error("Database " + dbType.name() + ": Cannot add schedule " + gl + " to database");
             Logger.error(e);
         } finally {
             this.close(stat, conn, null);
@@ -607,7 +608,7 @@ public class SQLDatabase implements IDatabase {
             stat.setInt(4, l.getBlockZ());
             stat.executeUpdate();
         } catch (Exception e) {
-            Logger.error("Database " + dbType.name() + ": Cannot remove schedule " + gl + " from  database");
+            Logger.error("Database " + dbType.name() + ": Cannot remove schedule " + gl + " from database");
             Logger.error(e);
         } finally {
             this.close(stat, conn, null);
@@ -615,12 +616,19 @@ public class SQLDatabase implements IDatabase {
     }
 
     public void close(Statement stat, Connection conn, ResultSet res) {
-        try {
-            if (stat != null) stat.close();
-            if (conn != null) conn.close();
-            if (res != null) res.close();
-        } catch (Exception e) {
-            Logger.error(e);
+        // Each closed separately, so a failure closing one doesn't leak the connection
+        for (AutoCloseable c : new AutoCloseable[] {res, stat, conn}) {
+            if (c == null) continue;
+            try {
+                c.close();
+            } catch (Exception e) {
+                Logger.error(e);
+            }
         }
+    }
+
+    /** The owner column value: null for generators without an owner, not the "none" display text. */
+    private static String ownerName(GeneratorLocation gl) {
+        return gl.getOwner().isNone() ? null : gl.getOwner().getName();
     }
 }

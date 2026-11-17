@@ -97,7 +97,7 @@ public class LimitsMenu {
             try {
                 menu.setItem(slotList.get(lastId), readyItem);
             } catch (Exception e1) {
-                Logger.error("Lang: There is probably more limits than slots set in /lang/gui/limits.limit");
+                Logger.error("Lang: There is probably more limits than slots set in lang/<lang>_gui.yml, limits.limit");
                 Logger.error(e1);
             }
         }
@@ -111,6 +111,7 @@ public class LimitsMenu {
                         .getSlots()
                         .contains(slot)
                 && Lang.getMenuItemStorage().get(MenuItemType.LIMITS_MENU_BACK).isEnabled()
+                && currentItem != null
                 && currentItem.equals(Lang.getMenuItemStorage()
                         .get(MenuItemType.LIMITS_MENU_BACK)
                         .build(p))) {

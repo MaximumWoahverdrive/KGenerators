@@ -11,6 +11,7 @@ import me.kryniowesegryderiusz.kgenerators.dependencies.enums.Dependency;
 import me.kryniowesegryderiusz.kgenerators.generators.locations.objects.GeneratorLocation;
 import me.kryniowesegryderiusz.kgenerators.logger.Logger;
 import org.bukkit.Location;
+import org.bukkit.World;
 import org.bukkit.World.Environment;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
@@ -75,35 +76,37 @@ public class SuperiorSkyblock2Hook implements Listener {
                 .bulkRemoveGenerators(
                         min.getWorld(),
                         min.getBlockX(),
-                        0,
+                        min.getWorld().getMinHeight(),
                         min.getBlockZ(),
                         max.getBlockX(),
                         min.getWorld().getMaxHeight(),
                         max.getBlockZ(),
                         false);
 
-        if (e.getIsland().isNetherEnabled()) {
+        World nether = SuperiorSkyblockAPI.getIslandsWorld(e.getIsland(), Environment.NETHER);
+        if (e.getIsland().isNetherEnabled() && nether != null) {
             Main.getPlacedGenerators()
                     .bulkRemoveGenerators(
-                            SuperiorSkyblockAPI.getIslandsWorld(e.getIsland(), Environment.NETHER),
+                            nether,
                             min.getBlockX(),
-                            0,
+                            nether.getMinHeight(),
                             min.getBlockZ(),
                             max.getBlockX(),
-                            min.getWorld().getMaxHeight(),
+                            nether.getMaxHeight(),
                             max.getBlockZ(),
                             false);
         }
 
-        if (e.getIsland().isEndEnabled()) {
+        World end = SuperiorSkyblockAPI.getIslandsWorld(e.getIsland(), Environment.THE_END);
+        if (e.getIsland().isEndEnabled() && end != null) {
             Main.getPlacedGenerators()
                     .bulkRemoveGenerators(
-                            SuperiorSkyblockAPI.getIslandsWorld(e.getIsland(), Environment.THE_END),
+                            end,
                             min.getBlockX(),
-                            0,
+                            end.getMinHeight(),
                             min.getBlockZ(),
                             max.getBlockX(),
-                            min.getWorld().getMaxHeight(),
+                            end.getMaxHeight(),
                             max.getBlockZ(),
                             false);
         }

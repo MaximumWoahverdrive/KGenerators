@@ -56,8 +56,8 @@ public class RecipeMenu {
                     menu.setItem(slotList.get(lastId), readyItem);
                 } catch (Exception e1) {
                     Logger.error(
-                            "Lang: There is probably more ingredients than slots set in /lang/gui/recipe.ingredients");
-                    Logger.error(1);
+                            "Lang: There is probably more ingredients than slots set in lang/<lang>_gui.yml, recipe.ingredients");
+                    Logger.error(e1);
                 }
             }
         }

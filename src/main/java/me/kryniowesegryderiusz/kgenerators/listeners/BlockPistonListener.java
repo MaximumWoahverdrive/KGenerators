@@ -1,5 +1,6 @@
 package me.kryniowesegryderiusz.kgenerators.listeners;
 
+import java.util.ArrayList;
 import java.util.List;
 import me.kryniowesegryderiusz.kgenerators.Main;
 import me.kryniowesegryderiusz.kgenerators.generators.locations.objects.GeneratorLocation;
@@ -12,7 +13,7 @@ import org.bukkit.event.block.BlockPistonRetractEvent;
 
 public class BlockPistonListener implements Listener {
 
-    @EventHandler
+    @EventHandler(ignoreCancelled = true)
     public void onBlockPistonExtend(final BlockPistonExtendEvent e) {
         try {
             if (pistonEvent(e.getBlocks())) e.setCancelled(true);
@@ -21,7 +22,7 @@ public class BlockPistonListener implements Listener {
         }
     }
 
-    @EventHandler
+    @EventHandler(ignoreCancelled = true)
     public void onBlockPistonRetractEvent(final BlockPistonRetractEvent e) {
         try {
             if (pistonEvent(e.getBlocks())) e.setCancelled(true);
@@ -30,8 +31,9 @@ public class BlockPistonListener implements Listener {
         }
     }
 
-    /* Returns true if cancelled */
+    /* Returns true if cancelled. Regeneration is only scheduled once every block is known to be allowed. */
     Boolean pistonEvent(List<Block> blocks) {
+        List<GeneratorLocation> pushed = new ArrayList<>();
         for (Block block : blocks) {
             GeneratorLocation gLoc = Main.getPlacedGenerators().getLoaded(block.getLocation());
             if (gLoc != null) {
@@ -40,11 +42,11 @@ public class BlockPistonListener implements Listener {
                         || Main.getSchedules().isScheduled(gLoc)
                         || Main.getLimits().isOnlyOwnerUse(gLoc.getGenerator())) {
                     return true;
-                } else {
-                    gLoc.scheduleGeneratorRegeneration();
                 }
+                pushed.add(gLoc);
             }
         }
+        for (GeneratorLocation gLoc : pushed) gLoc.scheduleGeneratorRegeneration();
         return false;
     }
 }

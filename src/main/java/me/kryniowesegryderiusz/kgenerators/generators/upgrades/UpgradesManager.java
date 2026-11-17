@@ -45,14 +45,8 @@ public class UpgradesManager {
 
     @Nullable
     public Upgrade getUpgrade(ItemStack item) {
-        ItemStack i = item.clone();
-        i.setAmount(1);
-
         Generator g = Main.getGenerators().get(item);
-        if (g == null) return null;
-
-        if (getUpgrade(g.getId()) == null) return null;
-        return getUpgrade(g.getId());
+        return g == null ? null : getUpgrade(g.getId());
     }
 
     /**

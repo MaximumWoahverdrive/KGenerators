@@ -11,10 +11,8 @@ import me.kryniowesegryderiusz.kgenerators.generators.schedules.objects.Schedule
 import me.kryniowesegryderiusz.kgenerators.lang.Lang;
 import me.kryniowesegryderiusz.kgenerators.lang.enums.Message;
 import me.kryniowesegryderiusz.kgenerators.logger.Logger;
-import me.kryniowesegryderiusz.kgenerators.utils.BlockUtils;
 import me.kryniowesegryderiusz.kgenerators.utils.Sched;
 import me.kryniowesegryderiusz.kgenerators.utils.objects.CustomBlockData;
-import org.bukkit.Location;
 
 public class SchedulesManager {
 
@@ -25,10 +23,11 @@ public class SchedulesManager {
 
         Logger.debugPluginLoad("SchedulesManager: Setting up manager");
 
+        // The timer's period can't change after start, so neither may the time it counts down per run
+        final int freq = Main.getSettings().getGenerationCheckFrequency();
         Sched.globalTimer(
                 () -> {
                     try {
-                        int freq = Main.getSettings().getGenerationCheckFrequency();
 
                         ArrayList<GeneratorLocation> readyForRegeneration = new ArrayList<>();
 
@@ -55,7 +54,7 @@ public class SchedulesManager {
                     }
                 },
                 1L,
-                Main.getSettings().getGenerationCheckFrequency());
+                freq);
     }
 
     public int getAmount() {
@@ -122,18 +121,8 @@ public class SchedulesManager {
      * @return left ticks or -1 if not exist
      */
     public int timeLeft(GeneratorLocation gLocation) {
-        if (schedules.containsKey(gLocation)) return schedules.get(gLocation).getTimeLeft();
-        else {
-            Location aLocation = gLocation.getLocation().clone().add(0, 1, 0);
-            GeneratorLocation agLocation;
-
-            if (Main.getPlacedGenerators().getLoaded(aLocation) != null) return -1;
-            else agLocation = Main.getPlacedGenerators().getLoaded(aLocation);
-
-            if (agLocation != null && schedules.containsKey(agLocation) && BlockUtils.isAir(aLocation.getBlock()))
-                return schedules.get(agLocation).getTimeLeft();
-            else return -1;
-        }
+        Schedule schedule = schedules.get(gLocation);
+        return schedule != null ? schedule.getTimeLeft() : -1;
     }
 
     public String timeLeftFormatted(GeneratorLocation gLocation, boolean removeMs) {

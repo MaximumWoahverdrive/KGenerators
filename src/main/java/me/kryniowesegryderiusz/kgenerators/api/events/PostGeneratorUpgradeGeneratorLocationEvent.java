@@ -9,7 +9,7 @@ import org.bukkit.event.HandlerList;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * Event is fired, when generator is being removed from world.
+ * Event is fired after a placed generator is upgraded.
  * @author user
  */
 public class PostGeneratorUpgradeGeneratorLocationEvent extends Event {

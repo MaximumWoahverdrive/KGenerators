@@ -97,9 +97,11 @@ public class Generator {
 
         this.id = generatorID;
 
+        if (!config.contains(generatorID + ".delay"))
+            Logger.error("Generators file: " + generatorID + " has no delay set! Using 0 (regenerates every tick).");
         this.delay = config.getInt(generatorID + ".delay");
         double sm = (double) delay / 20;
-        if (sm == Math.floor(sm)) secondMultiple = true;
+        secondMultiple = sm == Math.floor(sm);
 
         this.type = GeneratorType.getGeneratorTypeByString(config.getString(generatorID + ".type"));
 
@@ -154,6 +156,11 @@ public class Generator {
                         .getGeneratedObjectsManager()
                         .getNewObject((String) generatedObjectConfig.get("type"));
                 if (ago != null && ago.load(generatedObjectConfig)) {
+                    if (ago.getChance() <= 0) {
+                        Logger.error("Generators file: " + generatorID + " has a generated object with chance "
+                                + ago.getChance() + "; chances must be above 0, so it's skipped: " + ago);
+                        continue;
+                    }
                     this.chances.put(ago, ago.getChance());
                     this.fullChance += ago.getChance();
                 }
@@ -162,7 +169,7 @@ public class Generator {
             Logger.error("Generator " + generatorID
                     + " has OLD generates (chances) section set, which allow only block generation!");
             Logger.error(
-                    "Check https://github.com/MaximumWoahverdrive/KGenerators/blob/master/core/src/main/resources/generators.yml#L32 for new generators.yml look!");
+                    "Check https://github.com/MaximumWoahverdrive/KGenerators/blob/master/src/main/resources/generators.yml for new generators.yml look!");
         } else {
             Logger.error("Generators file: " + generatorID + " doesnt have generating section!");
             error = true;
@@ -176,6 +183,14 @@ public class Generator {
         /*
          * Optional options
          */
+
+        // Back to defaults first, so options removed from the config don't survive /kgen reload
+        this.placeholder = null;
+        this.generateImmediatelyAfterPlace = true;
+        this.allowPistonPush = true;
+        this.hologram = false;
+        this.actions = null;
+        this.disabledWorlds.clear();
 
         if (config.contains(generatorID + ".placeholder")
                 && !config.getString(generatorID + ".placeholder").isEmpty()) {

@@ -11,6 +11,7 @@ import me.kryniowesegryderiusz.kgenerators.utils.BlockUtils;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
+import org.bukkit.inventory.ItemStack;
 
 public class GeneratorLocationRegenerateHandler {
 
@@ -50,6 +51,13 @@ public class GeneratorLocationRegenerateHandler {
                         .equals(BlockUtils.getItemStackByBlock(generatingLocationBlock));
 
         if (!isAir && !isOnWhitelist && !isPlaceholder) {
+            // Already holds one of its generated blocks (a regeneration that wasn't needed, e.g. after a
+            // cancelled break or piston push): nothing to do
+            ItemStack current = BlockUtils.getItemStackByBlock(generatingLocationBlock);
+            for (AbstractGeneratedObject generated : gLocation.getGenerator().getGeneratedObjects()) {
+                if (generated.isBlockSimilar(current)) return;
+            }
+
             Logger.debug("GeneratorLocationRegenerateHandler: Dropping generator " + gLocation
                     + ": its generated block was replaced by " + generatingLocationBlock.getType());
             gLocation.removeGenerator(true, null);

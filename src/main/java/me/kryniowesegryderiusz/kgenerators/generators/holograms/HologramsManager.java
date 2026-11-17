@@ -7,6 +7,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.regex.Matcher;
 import lombok.Getter;
 import me.kryniowesegryderiusz.kgenerators.Main;
 import me.kryniowesegryderiusz.kgenerators.addons.events.HologramReplaceLinesEvent;
@@ -113,12 +114,12 @@ public class HologramsManager {
         String time = Main.getSchedules().timeLeftFormatted(gLocation);
         for (String s :
                 Lang.getHologramTextStorage().get(HologramText.REMAINING_TIME).getLines()) {
-            if (s.contains("<time>")) s = s.replaceAll("<time>", time);
+            if (s.contains("<time>")) s = s.replace("<time>", time);
             if (s.contains("<generator_name>"))
-                s = s.replaceAll("<generator_name>", gLocation.getGenerator().getGeneratorItemName());
+                s = s.replace("<generator_name>", gLocation.getGenerator().getGeneratorItemName());
 
             for (Entry<String, String> en : e.getReplacablesMap().entrySet()) {
-                s = s.replaceAll(en.getKey(), en.getValue());
+                s = s.replaceAll(en.getKey(), Matcher.quoteReplacement(en.getValue()));
             }
 
             lines.add(s);

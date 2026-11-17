@@ -200,6 +200,7 @@ public class Commands implements CommandExecutor {
                                 if (args.length >= 4) {
                                     try {
                                         amount = Integer.parseInt(args[3]);
+                                        if (amount < 1) throw new NumberFormatException();
                                         item.setAmount(amount);
                                     } catch (NumberFormatException e) {
                                         Lang.getMessageStorage()
@@ -212,7 +213,8 @@ public class Commands implements CommandExecutor {
                                     }
                                 }
 
-                                player.getInventory().addItem(item);
+                                // The player's own thread (Folia), as this may run from the console
+                                Sched.entity(player, () -> player.getInventory().addItem(item));
 
                                 Lang.getMessageStorage()
                                         .send(
@@ -223,9 +225,7 @@ public class Commands implements CommandExecutor {
                                                 "<player>",
                                                 Text.legacy(player.displayName()),
                                                 "<amount>",
-                                                String.valueOf(amount),
-                                                label,
-                                                generatorID);
+                                                String.valueOf(amount));
 
                                 Lang.getMessageStorage()
                                         .send(
@@ -323,22 +323,25 @@ public class Commands implements CommandExecutor {
                                 } else {
                                     Generator generator = Main.getGenerators().get(args[3]);
 
-                                    if (args[2].toLowerCase().contains("chances")) {
+                                    if (args[2].equalsIgnoreCase("chances")) {
                                         Main.getMenus().openChancesMenu(player, generator);
-                                    } else if (args[2].toLowerCase().contains("recipe")) {
+                                        openedOthers(sender, player, generator, args[2]);
+                                    } else if (args[2].equalsIgnoreCase("recipe")) {
                                         List<Recipe> recipe = Main.getInstance()
                                                 .getServer()
                                                 .getRecipesFor(generator.getGeneratorItem());
                                         if (!recipe.isEmpty()
-                                                && recipe.get(0).getResult().equals(generator.getGeneratorItem()))
+                                                && recipe.get(0).getResult().equals(generator.getGeneratorItem())) {
                                             Main.getMenus().openRecipeMenu(player, generator);
-                                        else
+                                            openedOthers(sender, player, generator, args[2]);
+                                        } else
                                             Lang.getMessageStorage()
                                                     .send(sender, Message.COMMANDS_ANY_MENU_DOESNT_EXIST);
-                                    } else if (args[2].toLowerCase().contains("upgrade")) {
-                                        if (Main.getUpgrades().couldBeObtained(generator.getId()))
+                                    } else if (args[2].equalsIgnoreCase("upgrade")) {
+                                        if (Main.getUpgrades().couldBeObtained(generator.getId())) {
                                             Main.getMenus().openUpgradeMenu(player, generator);
-                                        else
+                                            openedOthers(sender, player, generator, args[2]);
+                                        } else
                                             Lang.getMessageStorage()
                                                     .send(sender, Message.COMMANDS_ANY_MENU_DOESNT_EXIST);
                                     }
@@ -511,9 +514,9 @@ public class Commands implements CommandExecutor {
                         ArrayList<GeneratorLocation> gls = WorldEditHook.getGeneratorsInRange(p);
                         if (gls != null) {
                             int amount = gls.size();
-                            for (GeneratorLocation gl : gls) {
-                                gl.removeGenerator(false, null);
-                            }
+                            // Each on the thread owning its region (Folia)
+                            for (GeneratorLocation gl : gls)
+                                Sched.atNow(gl.getLocation(), () -> gl.removeGenerator(false, null));
                             Lang.getMessageStorage()
                                     .send(sender, Message.COMMANDS_REMOVE_DONE, "<amount>", String.valueOf(amount));
                         }
@@ -524,10 +527,13 @@ public class Commands implements CommandExecutor {
                         }
 
                         int amount = 0;
+                        // Removals may run later on Folia, so skip database rows already removed as loaded ones
+                        java.util.Set<Location> removed = new java.util.HashSet<>();
 
                         for (GeneratorLocation gl : Main.getPlacedGenerators().getAll()) {
                             if (gl.getOwner() != null && gl.getOwner().getName().equalsIgnoreCase(args[2])) {
-                                gl.removeGenerator(false, null);
+                                removed.add(gl.getLocation());
+                                Sched.atNow(gl.getLocation(), () -> gl.removeGenerator(false, null));
                                 amount++;
                             }
                         }
@@ -536,7 +542,8 @@ public class Commands implements CommandExecutor {
                                 Main.getDatabases().getDb().getGenerators(args[2]);
                         if (gls != null) {
                             for (GeneratorLocation gl : gls) {
-                                gl.removeGenerator(false, null);
+                                if (removed.contains(gl.getLocation())) continue;
+                                Sched.atNow(gl.getLocation(), () -> gl.removeGenerator(false, null));
                                 amount++;
                             }
                         }
@@ -549,9 +556,15 @@ public class Commands implements CommandExecutor {
                 case "convertdbto":
                     if (sender instanceof ConsoleCommandSender) {
                         if (args.length >= 2) {
-                            DatabaseType newDbType = DatabaseType.Functions.getTypeByString(args[1]);
+                            DatabaseType newDbType = null;
+                            for (DatabaseType type : new DatabaseType[] {DatabaseType.SQLITE, DatabaseType.MYSQL})
+                                if (type.name().equalsIgnoreCase(args[1])) newDbType = type;
 
-                            if (newDbType != Main.getSettings().getDbType()) {
+                            if (newDbType == null)
+                                Logger.textToConsole("Unknown database type " + args[1] + "! Use SQLITE or MYSQL.");
+                            else if (Main.getDatabases().isMigratorRunning())
+                                Logger.textToConsole("A database conversion is already running!");
+                            else if (newDbType != Main.getSettings().getDbType()) {
                                 Main.getDatabases().changeTo(newDbType);
                             } else Logger.textToConsole("You already have this database type!");
                         } else Logger.textToConsole("You have to choose database you want to convert to!");
@@ -572,5 +585,18 @@ public class Commands implements CommandExecutor {
                     .send(sender, Message.COMMANDS_ANY_NO_PERMISSION, "<permission>", "kgenerators.commands");
 
         return false;
+    }
+
+    private static void openedOthers(CommandSender sender, Player player, Generator generator, String menu) {
+        Lang.getMessageStorage()
+                .send(
+                        sender,
+                        Message.COMMANDS_MENU_OPENED_OTHERS,
+                        "<generator>",
+                        generator.getGeneratorItemName(),
+                        "<menu>",
+                        menu.toLowerCase(java.util.Locale.ROOT),
+                        "<player>",
+                        player.getName());
     }
 }

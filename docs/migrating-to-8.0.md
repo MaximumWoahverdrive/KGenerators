@@ -60,8 +60,8 @@ container can read them under the new keys.
 - **Limits:**
   - `kgenerators.placelimit.<limit_id>.<number>` permissions now work for limit ids with capital
     letters, and only match their own limit: with limits `stone` and `stone_generators`,
-    `kgenerators.placelimit.stone_generators.40` no longer also raises `stone` to 40. Permissions set to `false` no longer count, and on a group without
-    `place-limit` such a permission no longer turns the player's unlimited group into a limited one.
+    `kgenerators.placelimit.stone_generators.40` no longer also raises `stone` to 40. Permissions set
+    to `false` no longer count, and on a group without `place-limit` such a permission no longer turns the player's unlimited group into a limited one.
   - Upgrading a placed generator is refused if it would take the owner over a place limit.
   - The "can't place more" message shows the player's own limit instead of the group's default.
   - `%kgenerators_limits_left_<limit_id>%` is `-1` for unlimited groups and never negative.
@@ -69,8 +69,45 @@ container can read them under the new keys.
 - **Commands that only players can use** now tell the console so (new message
   `commands.any.player-only`, added to existing language files automatically) instead of printing to
   the server log.
+- **Menus:**
+  - Clicking in your own inventory while a KGenerators menu is open no longer presses the menu button in
+    the same slot (for example picking up the generator).
+  - Dragging items over a menu no longer loses them.
+  - Menus no longer stay registered after they are closed, so later clicks in other inventories aren't
+    treated as menu clicks.
+  - `/kgen menu <player> ...` tells the sender it opened the menu (`commands.menu.opened-others`).
+- **Generators no longer pop off as an item** when a regeneration finds its generated block still in
+  place (after a cancelled break or piston push), and a piston push that ends up cancelled no longer
+  schedules a regeneration.
+- **Upgrades:** an upgrade whose `next-level` generator doesn't exist is reported when loading instead
+  of taking the player's payment and failing. Experience costs check the player's current experience,
+  not all experience they ever collected.
+- **Generators that weren't saved on shutdown:** a chunk that loaded or unloaded just before `/stop`
+  could stop all generators and schedules from being saved.
+- **Ownerless generators** (`/kgen spawn` without an owner) are saved without an owner instead of with
+  the "none" text, which made them owned by a player of that name after a restart.
+- **A database error while loading a chunk** is retried instead of leaving that chunk's generators
+  unloaded.
+- **`/kgen reload`** now removes `disabled-worlds` entries and generator options that were deleted from
+  the config, and no longer changes how fast generators regenerate when `generation-check` changed.
+- **`/kgen give`** refuses amounts below 1, and its message no longer replaces the command name in the
+  player's name.
+- **`/kgen convertdbto`** refuses unknown database types (a typo used to convert to SQLite) and a second
+  conversion while one is running, and no longer leaves chunk loading switched off if reading the old
+  database fails.
+- **Custom drops:** `exp-drop-to-eq` decides whether custom-drop experience goes to the inventory
+  (it followed `block-drop-to-eq`). Minions no longer fail on custom drops without an item, and
+  JetsMinions no longer drops the whole item when only part of it didn't fit into the chest.
+- **Integrations:** worlds with WorldGuard regions turned off no longer cause errors; island deletions
+  (BentoBox, SuperiorSkyblock2, IridiumSkyblock) also remove generators below y=0, and IridiumSkyblock
+  deletions cancelled by another plugin no longer remove generators; an unknown MythicMobs mob no longer
+  causes an error on every regeneration.
+- **Folia:** `/kgen give`, `/kgen remove`, menus and custom-drop commands run on the right thread.
+- **Holograms** of generators whose name contains `$` no longer stop all holograms from updating.
+- **`lang: zhcn`** now uses the bundled Chinese translation instead of an English copy.
 - **Malformed config values** (an item with no material, a non-list `generators:` in limits, a
-  non-text sound name, ...) are reported as errors instead of stopping the file from loading.
+  non-text sound name, a generated object with `chance: 0`, a generator without `delay`, a FancyHolograms
+  background colour above 255, ...) are reported as errors instead of stopping the file from loading.
 
 ## Text
 
@@ -96,7 +133,8 @@ differences:
 - The unused `GeneratingType` and `UpgradeType` enums are removed.
 - A few unused internal methods were removed, among them `IDatabase.getDataSource()`,
   `MenusManager.isVieving`/`isSomeoneVieving`, `RecipesManager.isGeneratorRecipe` and the
-  `ItemsAdderHook` block helpers. `MenusManager.getVieving` returns `Enum<?>`, and
+  `ItemsAdderHook` block helpers, and the unused `Settings.getGuis` and `isAsyncChunkLoading` (the
+  `async-chunk-loading` option never did anything). `MenusManager.getVieving` returns `Enum<?>`, and
   `MenuItemStorage.get` takes an `IMenuItemType`.
 - The API is published on JitPack: `com.github.MaximumWoahverdrive:KGenerators:<version>` (see
   [Developers API](developers-api.md)).

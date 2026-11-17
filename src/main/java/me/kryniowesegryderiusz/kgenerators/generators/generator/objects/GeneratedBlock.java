@@ -7,6 +7,7 @@ import me.kryniowesegryderiusz.kgenerators.api.interfaces.IGeneratorLocation;
 import me.kryniowesegryderiusz.kgenerators.api.objects.AbstractGeneratedObject;
 import me.kryniowesegryderiusz.kgenerators.dependencies.enums.Dependency;
 import me.kryniowesegryderiusz.kgenerators.dependencies.hooks.SuperiorSkyblock2Hook;
+import me.kryniowesegryderiusz.kgenerators.logger.Logger;
 import me.kryniowesegryderiusz.kgenerators.utils.BlockUtils;
 import me.kryniowesegryderiusz.kgenerators.utils.objects.CustomBlockData;
 import org.bukkit.inventory.ItemStack;
@@ -41,6 +42,8 @@ public class GeneratedBlock extends AbstractGeneratedObject {
                     (String) generatedObjectConfig.get("material"), "Generators file: GeneratedBlock:");
             return true;
         }
+        Logger.error(
+                "Generators file: A generated block has no material set, so it's skipped: " + generatedObjectConfig);
         return false;
     }
 

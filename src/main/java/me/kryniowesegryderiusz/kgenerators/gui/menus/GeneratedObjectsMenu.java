@@ -124,7 +124,8 @@ public class GeneratedObjectsMenu {
             try {
                 menu.setItem(slotList.get(lastId), readyItem);
             } catch (Exception e1) {
-                Logger.error("Lang: There is probably more generators than slots set in /lang/gui/chances.block");
+                Logger.error(
+                        "Lang: There is probably more generators than slots set in lang/<lang>_gui.yml, generated-objects.generated-object");
                 Logger.error(e1);
             }
         }

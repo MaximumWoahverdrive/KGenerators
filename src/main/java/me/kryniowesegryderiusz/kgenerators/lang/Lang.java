@@ -51,7 +51,7 @@ public class Lang {
 
         FilesUtils.mkdir("lang");
 
-        String[] langs = {"en", "pl", "ro", "vi", "fr", "se"};
+        String[] langs = {"en", "pl", "ro", "vi", "fr", "se", "zhcn"};
 
         /*
          * Adding resource lang files
@@ -74,7 +74,8 @@ public class Lang {
             config = (ConfigManager.getConfig(Main.getSettings().getLang() + ".yml", "/lang", false, true));
             config.loadConfig();
         } catch (IOException | InvalidConfigurationException e1) {
-            Logger.error("Lang: Cant find lang file " + Main.getSettings().getLang());
+            Logger.error("Lang: Cant load lang file " + Main.getSettings().getLang());
+            Logger.error(e1);
             return;
         }
 

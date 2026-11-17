@@ -3,7 +3,7 @@ package me.kryniowesegryderiusz.kgenerators.lang.storages;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 import me.kryniowesegryderiusz.kgenerators.Main;
@@ -18,7 +18,8 @@ import org.bukkit.entity.Player;
 
 public class MessageStorage {
 
-    private final HashMap<String, String> lang = new HashMap<>();
+    // Linked, so help lists commands in a stable order
+    private final LinkedHashMap<String, String> lang = new LinkedHashMap<>();
     private final Config config;
 
     public MessageStorage(Config config) {

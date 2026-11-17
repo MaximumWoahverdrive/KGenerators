@@ -134,7 +134,7 @@ public class BentoBoxHook implements Listener {
                 .bulkRemoveGenerators(
                         id.getWorld(),
                         id.getMinX(),
-                        0,
+                        id.getWorld().getMinHeight(),
                         id.getMinZ(),
                         id.getMaxX(),
                         id.getWorld().getMaxHeight(),

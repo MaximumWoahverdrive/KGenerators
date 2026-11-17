@@ -9,7 +9,7 @@ import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * Event is fired, when generator is being removed from world.
+ * Event is fired after a generator item in a player's hand is upgraded.
  * @author user
  */
 public class PostGeneratorUpgradeItemEvent extends Event {

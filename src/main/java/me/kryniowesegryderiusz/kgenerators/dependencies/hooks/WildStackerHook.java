@@ -51,6 +51,8 @@ public class WildStackerHook implements Listener {
 
             for (int x = cx - 1; x <= cx + 1; x++) {
                 for (int z = cz - 1; z <= cz + 1; z++) {
+                    // Barrels in unloaded chunks can't be merged into; don't load them just to look
+                    if (!e.getBlock().getWorld().isChunkLoaded(x, z)) continue;
                     for (StackedBarrel b : WildStackerAPI.getWildStacker()
                             .getSystemManager()
                             .getStackedBarrels(

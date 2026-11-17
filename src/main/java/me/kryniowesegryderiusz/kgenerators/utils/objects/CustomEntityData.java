@@ -6,6 +6,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 import me.kryniowesegryderiusz.kgenerators.dependencies.hooks.MythicMobsHook;
+import me.kryniowesegryderiusz.kgenerators.logger.Logger;
 import me.kryniowesegryderiusz.kgenerators.utils.EntityUtils;
 import me.kryniowesegryderiusz.kgenerators.utils.ItemUtils;
 import me.kryniowesegryderiusz.kgenerators.utils.Text;
@@ -32,6 +33,9 @@ public class CustomEntityData {
     @Setter
     private String name;
 
+    /** MythicMobs mob id for {@code mythicmobs:<id>} entities, otherwise null */
+    private String mythicMob;
+
     public CustomEntityData(String entityTypeString) {
         this.entityTypeString = entityTypeString;
         if (!entityTypeString.contains(":"))
@@ -39,7 +43,11 @@ public class CustomEntityData {
         else {
             String[] splitted = entityTypeString.split(":");
             if (splitted[0].equalsIgnoreCase("mythicmobs")) {
+                this.mythicMob = splitted[1];
                 this.entityType = MythicMobsHook.getEntityType(splitted[1]);
+            } else {
+                Logger.error("CustomEntityData: " + entityTypeString + " is not a proper entity! Using PIG!");
+                this.entityType = EntityType.PIG;
             }
         }
     }
@@ -49,9 +57,9 @@ public class CustomEntityData {
         ArrayList<Entity> spawnedEntities = new ArrayList<>();
 
         for (int i = 0; i < amount; i++) {
-            if (this.entityTypeString.contains("mythicmobs")) {
-                Entity e = MythicMobsHook.spawnMythicMob(this.entityTypeString.split(":")[1], location);
-                spawnedEntities.add(e);
+            if (this.mythicMob != null) {
+                Entity e = MythicMobsHook.spawnMythicMob(this.mythicMob, location);
+                if (e != null) spawnedEntities.add(e);
             } else {
                 Entity e = location.getWorld().spawnEntity(location, entityType);
                 if (name != null) e.customName(Text.component(Text.colorize(name)));

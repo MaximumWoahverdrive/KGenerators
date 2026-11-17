@@ -46,6 +46,11 @@ public class Upgrade {
                 this.nextGeneratorId = config.getString(generatorId + ".next-level");
             else throw (new CannnotLoadUpgradeException("Next-level generator is not set!"));
 
+            // Caught here, not when a player pays for the upgrade
+            if (Main.getGenerators().get(this.nextGeneratorId) == null)
+                throw new CannnotLoadUpgradeException(
+                        "Next-level generator " + this.nextGeneratorId + " doesn't exist!");
+
             for (IUpgradeCost upgradeCost :
                     upgradesManager.getUpgradesCostsManager().getUpgradeCosts()) {
                 if (upgradeCost.load(config, generatorId)) upgradeCosts.add(upgradeCost);

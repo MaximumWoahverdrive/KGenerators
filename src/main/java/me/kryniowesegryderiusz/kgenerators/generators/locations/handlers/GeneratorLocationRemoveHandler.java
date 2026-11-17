@@ -25,10 +25,11 @@ public class GeneratorLocationRemoveHandler {
         Main.getSchedules().remove(gLocation);
         Main.getDatabases().getDb().removeSchedule(gLocation);
 
+        // Before the database row goes: an owner loaded here counts from the database
+        gLocation.getOwner().removeGeneratorFromPlayer(gLocation.getGenerator());
+
         Main.getPlacedGenerators().removeLoaded(gLocation);
         Main.getDatabases().getDb().removeGenerator(location);
-
-        gLocation.getOwner().removeGeneratorFromPlayer(gLocation.getGenerator());
 
         ItemStack generatorItem = generator.getGeneratorItem();
 

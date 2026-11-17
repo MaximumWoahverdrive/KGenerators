@@ -23,6 +23,7 @@ public class FancyHologramsHook {
             return;
         }
 
+        HOLOGRAM_COLOR = null;
         if (config.contains("fancy-holograms")) {
             boolean transparent = config.getBoolean("fancy-holograms.background.transparent");
             int red = config.getInt("fancy-holograms.background.red");
@@ -32,7 +33,10 @@ public class FancyHologramsHook {
             if (transparent) {
                 HOLOGRAM_COLOR = Hologram.TRANSPARENT;
             } else if (red >= 0 && green >= 0 && blue >= 0) {
-                HOLOGRAM_COLOR = Color.fromRGB(red, green, blue);
+                if (red > 255 || green > 255 || blue > 255)
+                    Logger.error("FancyHologramsHook: fancy-holograms.background colours must be between 0 and 255;"
+                            + " using the default background.");
+                else HOLOGRAM_COLOR = Color.fromRGB(red, green, blue);
             }
 
         } else {

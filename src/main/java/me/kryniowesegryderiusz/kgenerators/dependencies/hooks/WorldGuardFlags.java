@@ -1,7 +1,6 @@
 package me.kryniowesegryderiusz.kgenerators.dependencies.hooks;
 
 import com.sk89q.worldedit.bukkit.BukkitAdapter;
-import com.sk89q.worldguard.LocalPlayer;
 import com.sk89q.worldguard.WorldGuard;
 import com.sk89q.worldguard.bukkit.WorldGuardPlugin;
 import com.sk89q.worldguard.protection.ApplicableRegionSet;
@@ -78,17 +77,18 @@ class WorldGuardFlags {
 
         RegionContainer container = WorldGuard.getInstance().getPlatform().getRegionContainer();
 
-        RegionManager regions = container.get(BukkitAdapter.adapt(location.getWorld()));
-        ApplicableRegionSet regionSet = regions.getApplicableRegions(
-                BukkitAdapter.adapt(location).toVector().toBlockPoint());
-
-        LocalPlayer localPlayer = WorldGuardPlugin.inst().wrapPlayer(player);
-
         StateFlag stateFlag = null;
         if (flag == WGFlag.PICK_UP) stateFlag = PICK_UP_FLAG;
         if (flag == WGFlag.ONLY_GEN_BREAK) stateFlag = ONLY_GEN_BREAK_FLAG;
         if (flag == WGFlag.INTERACT) stateFlag = INTERACT_FLAG;
+        if (stateFlag == null) return false;
 
-        return flag != null && regionSet.testState(localPlayer, stateFlag);
+        // No region data for this world (regions disabled there): only the flag's default applies
+        RegionManager regions = container.get(BukkitAdapter.adapt(location.getWorld()));
+        if (regions == null) return stateFlag.getDefault() == StateFlag.State.ALLOW;
+
+        ApplicableRegionSet regionSet = regions.getApplicableRegions(
+                BukkitAdapter.adapt(location).toVector().toBlockPoint());
+        return regionSet.testState(WorldGuardPlugin.inst().wrapPlayer(player), stateFlag);
     }
 }

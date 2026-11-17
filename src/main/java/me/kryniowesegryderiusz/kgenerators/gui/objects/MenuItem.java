@@ -176,7 +176,7 @@ public class MenuItem implements Cloneable {
     public ArrayList<Integer> getSlots() {
         ArrayList<Integer> slots = new ArrayList<>();
         String[] s = this.slots.split(",");
-        for (String string : s) slots.add(Integer.valueOf(string));
+        for (String string : s) slots.add(Integer.valueOf(string.trim()));
         return slots;
     }
 

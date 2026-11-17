@@ -19,7 +19,7 @@ public class DatabaseManager {
     private IDatabase db;
 
     @Getter
-    boolean isMigratorRunning = false;
+    volatile boolean isMigratorRunning = false;
 
     public DatabaseManager(DatabaseType dbType) {
         Logger.debugPluginLoad("DatabaseManager: Setting up manager");
@@ -61,35 +61,41 @@ public class DatabaseManager {
                 return;
             }
 
-            int amount = db.getGeneratorsAmount();
-
-            migratorInfo = new MigratorInfo(amount);
             isMigratorRunning = true;
+            try {
+                int amount = db.getGeneratorsAmount();
+                migratorInfo = new MigratorInfo(amount);
 
-            int amountAtOnce = 500;
+                int amountAtOnce = 500;
 
-            for (int i = 0; i <= amount; i = i + amountAtOnce) {
-                Logger.info("DatabasesHandler: Migrating next " + amountAtOnce + " generators: " + i + "-"
-                        + (i + amountAtOnce));
-                ArrayList<GeneratorLocation> next = db.getGenerators(i, amountAtOnce);
-                Logger.info("DatabaseHandler: Obtained " + next.size() + " from old database");
-                for (GeneratorLocation gl : next) {
-                    newDb.saveGenerator(gl, true);
-                    migratorInfo.increment();
+                for (int i = 0; i <= amount; i = i + amountAtOnce) {
+                    Logger.info("DatabasesHandler: Migrating next " + amountAtOnce + " generators: " + i + "-"
+                            + (i + amountAtOnce));
+                    ArrayList<GeneratorLocation> next = db.getGenerators(i, amountAtOnce);
+                    if (next == null) {
+                        Logger.error("DatabasesHandler: Cannot read generators from the old database! Conversion"
+                                + " stopped; still using " + Main.getSettings().getDbType() + ".");
+                        return;
+                    }
+                    Logger.info("DatabaseHandler: Obtained " + next.size() + " from old database");
+                    for (GeneratorLocation gl : next) {
+                        newDb.saveGenerator(gl, true);
+                        migratorInfo.increment();
+                    }
                 }
+
+                Main.getSettings().setDbType(toDbType);
+                FilesUtils.changeText(
+                        new File(Main.getInstance().getDataFolder(), "config.yml"),
+                        "  dbtype: ",
+                        "  dbtype: " + toDbType.name() + "  #Earlier: ");
+
+                db = newDb;
+            } finally {
+                if (migratorInfo != null) migratorInfo.end();
+                migratorInfo = null;
+                isMigratorRunning = false;
             }
-
-            Main.getSettings().setDbType(toDbType);
-            FilesUtils.changeText(
-                    new File(Main.getInstance().getDataFolder(), "config.yml"),
-                    "  dbtype: ",
-                    "  dbtype: " + toDbType.name() + "  #Earlier: ");
-
-            migratorInfo.end();
-            migratorInfo = null;
-            isMigratorRunning = false;
-
-            db = newDb;
             Logger.info("DatabasesHandler: Succesfully converted database to " + toDbType + "!");
         });
     }
