@@ -54,12 +54,13 @@ allprojects {
         maven { url = 'https://jitpack.io' }
         maven { url = 'https://repo.codemc.io/repository/maven-public/' }
         maven { url = 'https://repo.bg-software.com/repository/api/' }
-        maven { url = 'https://repo.extendedclip.com/content/repositories/placeholderapi/' }
+        maven { url = 'https://repo.extendedclip.com/releases/' }
         maven { url = 'https://mvn.lumine.io/repository/maven-public/' }
         maven { url = 'https://ci.ender.zone/plugin/repository/everything/' }
         // 4.0.9.1 has been removed from Iridium's nexus; 4.1.5 is the only version still published.
         maven { url = 'https://nexus.iridiumdevelopment.net/repository/maven-releases/' }
         maven { url = 'https://repo.nexomc.com/releases' }
+        maven { url = 'https://repo.oraxen.com/releases' }
         maven { url = 'https://repo.rosewooddev.io/repository/public/' }
         // repo.fancyplugins.de no longer resolves; FancyHolograms moved to FancyInnovations.
         maven { url = 'https://repo.fancyinnovations.com/releases' }
