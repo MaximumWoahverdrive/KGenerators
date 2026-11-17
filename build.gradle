@@ -34,11 +34,12 @@ idea {
 group = 'me.kryniowesegryderiusz'
 
 repositories {
+    // XSeries, HikariCP, slf4j, bStats, Lombok, JetBrains annotations, PlotSquared
     mavenCentral()
     maven { url = 'https://repo.papermc.io/repository/maven-public/' }
-    maven { url = 'https://hub.spigotmc.org/nexus/content/repositories/snapshots/' }
+    // WorldEdit, WorldGuard
     maven { url = 'https://maven.enginehub.org/repo/' }
-    // BentoBox's POMs declare themselves as -SNAPSHOT versions, which Gradle rejects; take the jar alone.
+    // BentoBox. Its POMs declare themselves as -SNAPSHOT versions, which Gradle rejects; take the jar alone.
     exclusiveContent {
         forRepository {
             maven {
@@ -48,21 +49,31 @@ repositories {
         }
         filter { includeGroup 'world.bentobox' }
     }
+    // Builds GitHub projects on demand: Lands API, DecentHolograms, ItemsAdder API, Slimefun,
+    // LitMinions API, CMI API and CMILib
     maven { url = 'https://jitpack.io' }
-    maven { url = 'https://repo.codemc.io/repository/maven-public/' }
+    // BG-Software: SuperiorSkyblock2 API, WildStacker API
     maven { url = 'https://repo.bg-software.com/repository/api/' }
+    // PlaceholderAPI
     maven { url = 'https://repo.extendedclip.com/releases/' }
+    // MythicMobs (Mythic-Dist)
     maven { url = 'https://mvn.lumine.io/repository/maven-public/' }
+    // FactionsUUID
     maven { url = 'https://ci.ender.zone/plugin/repository/everything/' }
-    // 4.0.9.1 has been removed from Iridium's nexus; 4.1.5 is the only version still published.
+    // IridiumSkyblock. 4.0.9.1 has been removed from Iridium's nexus; 4.1.5 is the only version still published.
     maven { url = 'https://nexus.iridiumdevelopment.net/repository/maven-releases/' }
+    // Nexo
     maven { url = 'https://repo.nexomc.com/releases' }
+    // Oraxen
     maven { url = 'https://repo.oraxen.com/releases' }
+    // PlayerPoints (Rosewood Development)
     maven { url = 'https://repo.rosewooddev.io/repository/public/' }
-    // repo.fancyplugins.de no longer resolves; FancyHolograms moved to FancyInnovations.
+    // FancyHolograms. repo.fancyplugins.de no longer resolves; FancyHolograms moved to FancyInnovations.
     maven { url = 'https://repo.fancyinnovations.com/releases' }
+    // Phoenix Development: MMOItems API and MythicLib, which MMOItems' API builds on
     maven { url = 'https://nexus.phoenixdevt.fr/repository/maven-public/' }
-    // eco, EcoItems
+    // Auxilor: eco, EcoItems, libreforge. Their official repository, although another one listed
+    // here happens to carry the versions used as well.
     maven { url = 'https://repo.auxilor.io/repository/maven-public/' }
 }
 
