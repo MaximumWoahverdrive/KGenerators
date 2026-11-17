@@ -25,15 +25,19 @@
 ## About
 
 KGenerators Regenerated continues [KGenerators](https://github.com/Kryniowesegryderiusz/KGenerators)
-by Kryniowesegryderiusz, which was archived in October 2025. It is a drop-in replacement: the
-plugin name, commands, permissions, configuration files, data folder and developer API are
-unchanged, so an existing server keeps its generators when swapping the jar.
+by Kryniowesegryderiusz, which was archived in October 2025. The plugin name, commands,
+permissions, configuration files, data folder and developer API are unchanged, so a server
+running KGenerators 7.3 keeps its placed generators, generator items and settings when it switches
+to KGenerators Regenerated. Version 8.0.0 does raise the requirements (see below) and changes a
+few behaviours; the [migration notes](docs/migrating-to-8.0.md) list everything.
 
 On top of the original it adds:
 
 - **Folia** support
 - **Minecraft 26.x** support
 - Generators made of gravity blocks (sand, gravel, ...) no longer fall out of place
+- **MiniMessage** formatting in messages, menus and items, alongside `&` colour codes
+- Many bug fixes, listed in the migration notes
 
 ## Download
 
