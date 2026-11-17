@@ -1,3 +1,5 @@
+> **Moved to https://git.foe.rip/SWU/KGenerators** – this GitHub repository is archived and no longer updated.
+
 <p align="center">
  <img src="docs/assets/banner.png" width="100%">
 </p>
