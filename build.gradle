@@ -87,11 +87,10 @@ dependencies {
     // Shaded into the plugin jar (relocated in shadowJar below).
     // 13.3.1 could not parse Minecraft 26's version scheme; 13.7.1 and later can.
     implementation 'com.github.cryptomorin:XSeries:14.0.0'
-    implementation 'com.zaxxer:HikariCP:7.1.0'
-    implementation 'org.slf4j:slf4j-api:2.0.20'
+    // Logs through slf4j, which Paper provides
+    implementation('com.zaxxer:HikariCP:7.1.0') { exclude group: 'org.slf4j' }
     // Usage statistics; Folia-aware since 3.1
     implementation 'org.bstats:bstats-bukkit:3.2.1'
-    implementation 'org.slf4j:slf4j-simple:2.0.20'
 
     // Paper API for the region/entity/global/async schedulers (Folia, also present on Paper)
     compileOnly 'io.papermc.paper:paper-api:26.3.build.253-stable'
