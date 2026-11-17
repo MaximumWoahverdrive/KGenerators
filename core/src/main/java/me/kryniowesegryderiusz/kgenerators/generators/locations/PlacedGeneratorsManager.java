@@ -33,7 +33,7 @@ public class PlacedGeneratorsManager {
 	
 	@Getter private ConcurrentHashMap<ChunkInfo, ChunkGeneratorLocations> loadedGenerators = new ConcurrentHashMap<ChunkInfo, ChunkGeneratorLocations>();
 	
-	private io.papermc.paper.threadedregions.scheduler.ScheduledTask managementTask;
+	private Sched.Task managementTask;
 	@Getter private LinkedBlockingQueue<ManagementTask> managementQueue = new LinkedBlockingQueue<ManagementTask>();
 	
 	private boolean stopping = false;

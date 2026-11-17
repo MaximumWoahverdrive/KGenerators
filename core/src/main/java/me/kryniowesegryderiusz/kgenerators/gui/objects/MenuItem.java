@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 import org.bukkit.Material;
-import org.bukkit.enchantments.Enchantment;
+import com.cryptomorin.xseries.XEnchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
@@ -150,7 +150,7 @@ public class MenuItem implements Cloneable {
 		item.setItemMeta(meta);
 
 		if (glow)
-			item.addUnsafeEnchantment(Enchantment.FORTUNE, 1);
+			item.addUnsafeEnchantment(XEnchantment.FORTUNE.get(), 1);
 		
 		item = PlaceholderAPIHook.translatePlaceholders(p, item);
 		

@@ -9,7 +9,7 @@ import java.util.Random;
 import java.util.Set;
 
 import org.bukkit.World;
-import org.bukkit.enchantments.Enchantment;
+import com.cryptomorin.xseries.XEnchantment;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -128,7 +128,7 @@ public class Generator {
 				meta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
 			this.generatorItem.setItemMeta(meta);
 			if (glow)
-				this.generatorItem.addUnsafeEnchantment(Enchantment.FORTUNE, 1);
+				this.generatorItem.addUnsafeEnchantment(XEnchantment.FORTUNE.get(), 1);
 		} else {
 			Logger.error("Generator " + generatorID + " is lacking generator-item configuration");
 			error = true;

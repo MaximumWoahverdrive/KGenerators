@@ -8,9 +8,11 @@ plugins {
 
 def baseVersion = '7.3'
 def runPaperVersion = '26.3'
-// The oldest server API the plugin is compiled against (see core/build.gradle)
-def apiVersion = '1.21.5'
-def targetJavaVersion = 21
+// Oldest server the plugin supports, and the Java it runs on there (1.8.8 servers run Java 8)
+def oldestMinecraftVersion = '1.8.8'
+def targetJavaVersion = 8
+// JDK that compiles it: it must read the Paper API, whose class files are Java 21
+def compilerJavaVersion = 21
 def gitDetails = versionDetails()
 def isClean = providers.exec { commandLine 'git', 'status', '--porcelain' }.standardOutput.asText.get().trim().isEmpty()
 // Format: 7.3-<hash>[+dirty]
@@ -59,13 +61,19 @@ allprojects {
     }
 
     java {
-        // Lombok and the shaded libraries are built for Java 21; foojay downloads it if missing.
-        toolchain.languageVersion = JavaLanguageVersion.of(targetJavaVersion)
+        // foojay downloads this JDK if it is missing.
+        toolchain.languageVersion = JavaLanguageVersion.of(compilerJavaVersion)
+        // Server and hook APIs are compile-only and newer than Java 8; the server supplies them at runtime.
+        disableAutoTargetJvm()
     }
 
     tasks.withType(JavaCompile).configureEach {
         options.encoding = 'UTF-8'
+        // --release, not just -target: javac then rejects any JDK API newer than Java 8,
+        // which would otherwise only fail at runtime on an old server.
         options.release.set(targetJavaVersion)
+        // Java 8 is a deprecated --release value; that is the point, so don't warn about it.
+        options.compilerArgs += '-Xlint:-options'
     }
 }
 
@@ -88,7 +96,7 @@ tasks.assemble { dependsOn tasks.shadowJar }
 
 tasks.runServer {
     minecraftVersion(runPaperVersion)
-    // Minecraft 26 needs Java 25, newer than the Java 21 the plugin is built for.
+    // Minecraft 26 needs Java 25; the plugin itself is built for Java 8.
     javaLauncher = javaToolchains.launcherFor { languageVersion = JavaLanguageVersion.of(25) }
 }
 
@@ -96,12 +104,15 @@ tasks.runServer {
 runPaper.folia.registerTask()
 tasks.named('runFolia') {
     minecraftVersion(runPaperVersion)
+    // Minecraft 26 needs Java 25; the plugin itself is built for Java 8.
     javaLauncher = javaToolchains.launcherFor { languageVersion = JavaLanguageVersion.of(25) }
 }
 
 tasks.register('printReleaseMetadata') {
     doLast {
         println("java_version=${targetJavaVersion}")
-        println("paper_version=${apiVersion}")
+        println("oldest_minecraft_version=${oldestMinecraftVersion}")
+        println("newest_minecraft_version=${runPaperVersion}")
     }
 }
+

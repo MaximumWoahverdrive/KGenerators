@@ -103,7 +103,7 @@ public class DatabaseManager {
 		
 		int amount;
 		int migratedAmount = 0;
-		io.papermc.paper.threadedregions.scheduler.ScheduledTask taskId;
+		Sched.Task taskId;
 		
 		public MigratorInfo(int generatorsAmount) {
 			amount = generatorsAmount;
