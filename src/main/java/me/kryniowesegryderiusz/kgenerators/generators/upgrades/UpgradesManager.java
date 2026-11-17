@@ -28,10 +28,10 @@ import me.kryniowesegryderiusz.kgenerators.utils.immutable.ConfigManager;
 
 public class UpgradesManager {
 
-	private HashMap<String, Upgrade> upgrades = new HashMap<String, Upgrade>();
+	private final HashMap<String, Upgrade> upgrades = new HashMap<>();
 
 	@Getter
-	private UpgradesCostsManager upgradesCostsManager = new UpgradesCostsManager();
+	private final UpgradesCostsManager upgradesCostsManager = new UpgradesCostsManager();
 
 	public UpgradesManager() {
 		this.reload();
@@ -83,7 +83,7 @@ public class UpgradesManager {
 	}
 
 	public boolean hasUpgrades() {
-		return this.upgrades.size() != 0;
+		return !this.upgrades.isEmpty();
 	}
 
 	public void reload() {
@@ -95,7 +95,7 @@ public class UpgradesManager {
 		Config config;
 
 		try {
-			config = ConfigManager.getConfig("upgrades.yml", (String) null, true, false);
+			config = ConfigManager.getConfig("upgrades.yml", null, true, false);
 			config.loadConfig();
 		} catch (InvalidConfigurationException e) {
 			Logger.error("Generators file: You've missconfigured upgrades.yml file. Check your spaces! More info below. Disabling plugin.");
@@ -109,7 +109,7 @@ public class UpgradesManager {
 			return;
 		}
 
-		if (!config.contains("enabled") || config.getBoolean("enabled") != true) {
+		if (!config.contains("enabled") || !config.getBoolean("enabled")) {
 			Logger.info("Upgrades file: Upgrades are disabled. You can enable them in upgrades.yml");
 			return;
 		}
@@ -126,7 +126,7 @@ public class UpgradesManager {
 	}
 
 	public class UpgradesCostsManager {
-		private ArrayList<Class<? extends IUpgradeCost>> upgradeCosts = new ArrayList<Class<? extends IUpgradeCost>>();
+		private final ArrayList<Class<? extends IUpgradeCost>> upgradeCosts = new ArrayList<>();
 
 		public UpgradesCostsManager() {
 			this.registerUpgradeCost(UpgradeCostMoney.class);
@@ -146,7 +146,7 @@ public class UpgradesManager {
 		}
 
 		public ArrayList<IUpgradeCost> getUpgradeCosts() {
-			ArrayList<IUpgradeCost> newUpgradeCosts = new ArrayList<IUpgradeCost>();
+			ArrayList<IUpgradeCost> newUpgradeCosts = new ArrayList<>();
 
 			for (Class<? extends IUpgradeCost> c : upgradeCosts) {
 				try {

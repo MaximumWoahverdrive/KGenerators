@@ -1,11 +1,8 @@
 package me.kryniowesegryderiusz.kgenerators.gui;
 import me.kryniowesegryderiusz.kgenerators.utils.Sched;
 
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Map.Entry;
 
-import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
 import org.bukkit.inventory.Inventory;
@@ -31,33 +28,30 @@ import me.kryniowesegryderiusz.kgenerators.logger.Logger;
 
 public class MenusManager implements Listener {
 	
-	private java.util.concurrent.ConcurrentHashMap<Player, MenuPlayer> guis = new java.util.concurrent.ConcurrentHashMap<Player, MenuPlayer>();
+	private final java.util.concurrent.ConcurrentHashMap<Player, MenuPlayer> guis = new java.util.concurrent.ConcurrentHashMap<>();
 	
 	public MenusManager() {
 		
 		Logger.debugPluginLoad("MenusManager: Setting up manager");
 		
 		if (Main.getSettings().getGuiUpdateFrequency() > 0) {
-			Sched.globalTimer(new Runnable() {
-			    @Override
-			    public void run() {
-			    	try {
-						// SWU (Folia): each open menu is updated on its player's own scheduler
-						for (Entry<Player, MenuPlayer> e : guis.entrySet()) {
-							final Player p = e.getKey();
-							final MenuPlayer mp = e.getValue();
-							Sched.entity(p, () -> {
-								if (!mp.update())
-									guis.remove(p, mp);
-							});
-						}
-			    	} catch (Exception e) {
-			    		Logger.error("MenusManager: An error occurred at menus task");
-			    		Logger.error(e);
-			    	}
+			Sched.globalTimer(() -> {
+                try {
+                    // SWU (Folia): each open menu is updated on its player's own scheduler
+                    for (Entry<Player, MenuPlayer> e : guis.entrySet()) {
+                        final Player p = e.getKey();
+                        final MenuPlayer mp = e.getValue();
+                        Sched.entity(p, () -> {
+                            if (!mp.update())
+                                guis.remove(p, mp);
+                        });
+                    }
+                } catch (Exception e) {
+                    Logger.error("MenusManager: An error occurred at menus task");
+                    Logger.error(e);
+                }
 
-			    }
-			}, 1L, Main.getSettings().getGuiUpdateFrequency()*1L);
+            }, 1L, Main.getSettings().getGuiUpdateFrequency());
 		}
 		
 	}
@@ -105,7 +99,7 @@ public class MenusManager implements Listener {
 		{
 			if (e.getValue() == g)
 			{
-				openMainMenu(p, (int) Math.floor(nr/Lang.getMenuItemStorage().get(MenuItemType.MAIN_MENU_GENERATOR).getSlots().size()));
+				openMainMenu(p, nr / Lang.getMenuItemStorage().get(MenuItemType.MAIN_MENU_GENERATOR).getSlots().size());
 			}
 			nr ++;
 		}
@@ -148,9 +142,7 @@ public class MenusManager implements Listener {
 	
 	public <T extends Enum<T> & IMenuInventoryType> boolean isVieving(Player p, T enumMenuInventory)
 	{
-		if (guis.containsKey(p) && guis.get(p).getMenuInventory() == enumMenuInventory)
-			return true;
-		return false;
+		return guis.containsKey(p) && guis.get(p).getMenuInventory() == enumMenuInventory;
 	}
 	
 	public <T extends Enum<T> & IMenuInventoryType> T getVieving(Player p)

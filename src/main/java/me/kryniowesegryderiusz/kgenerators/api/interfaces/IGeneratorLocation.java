@@ -11,7 +11,7 @@ public interface IGeneratorLocation {
 	 * Gets the location of the generated block.
 	 * @return location, where generated object would appear
 	 */
-	public Location getGeneratedBlockLocation();
+	Location getGeneratedBlockLocation();
 	
 	/**
 	 * Checks if block at location is physically possible to mine.
@@ -19,7 +19,7 @@ public interface IGeneratorLocation {
 	 * @param location - Crucial for double generators. 
 	 * @return true if the location is the generated block's location and the block there is not the placeholder
 	 */
-	public boolean isBlockPossibleToMine(Location location);
+	boolean isBlockPossibleToMine(Location location);
 	
 	/**
 	 * Checks if player is permitted to mine generated block
@@ -28,34 +28,34 @@ public interface IGeneratorLocation {
 	 * @param player the player trying to mine
 	 * @return true if player is permitted
 	 */
-	public boolean isPermittedToMine(Player player);
+	boolean isPermittedToMine(Player player);
 	
 	/**
 	 * Checks whether this generatorLocation is corrupted.
 	 * @return true if generator is not scheduled and there is nothing to mine
 	 */
-	public boolean isBroken();
+	boolean isBroken();
 	
 	/**
 	 * Instantly regenerates generator
 	 */
-	public void regenerateGenerator();
+	void regenerateGenerator();
 	
 	/**
 	 * Schedules generator regeneration based on generator settings
 	 */
-	public void scheduleGeneratorRegeneration();
+	void scheduleGeneratorRegeneration();
 	
 	/**
 	 * Removes generator from world and database
 	 * @param drop - whether generator item should be spawned
 	 * @param player - player removing generator
 	 */
-	public void removeGenerator(boolean drop, @Nullable Player player);
+	void removeGenerator(boolean drop, @Nullable Player player);
 	
 	/**
 	 * Pick up generator
 	 * @param player - player, who is picking up generator
 	 */
-	public void pickUpGenerator(Player player);
+	void pickUpGenerator(Player player);
 }

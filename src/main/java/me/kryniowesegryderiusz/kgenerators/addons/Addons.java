@@ -8,7 +8,7 @@ import me.kryniowesegryderiusz.kgenerators.addons.objects.Addon;
 public class Addons {
 
 	@Getter
-	static ArrayList<Addon> addons = new ArrayList<Addon>();
+	static ArrayList<Addon> addons = new ArrayList<>();
 
 	public static void register(Addon addon) {
 		if (!addons.contains(addon))

@@ -17,7 +17,7 @@ public class UpgradeMenu {
 	
 	public static Inventory get(Player player, Generator generator)
 	{		
-		ArrayList<MenuItemType> exludedEnumMenuItems = new ArrayList<MenuItemType>();
+		ArrayList<MenuItemType> exludedEnumMenuItems = new ArrayList<>();
 		exludedEnumMenuItems.add(MenuItemType.UPGRADE_MENU_INGREDIENT);
 		exludedEnumMenuItems.add(MenuItemType.UPGRADE_MENU_RESULT);
 		exludedEnumMenuItems.add(MenuItemType.UPGRADE_MENU_MARKER);

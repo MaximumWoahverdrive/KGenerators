@@ -21,7 +21,7 @@ public class GeneratorPlayer {
 	@Getter
 	private boolean isNone = false;
 
-	private String nick;
+	private final String nick;
 
 	@Getter
 	private boolean loaded = false;
@@ -39,7 +39,6 @@ public class GeneratorPlayer {
 		return Bukkit.getPlayer(this.nick);
 	}
 
-	@SuppressWarnings("deprecation")
 	public OfflinePlayer getOfflinePlayer() {
 		return Bukkit.getOfflinePlayer(this.nick);
 	}
@@ -55,7 +54,7 @@ public class GeneratorPlayer {
 	 * Limits
 	 */
 
-	private HashMap<String, Integer> playersGenerators = new HashMap<String, Integer>();
+	private final HashMap<String, Integer> playersGenerators = new HashMap<>();
 
 	public void loadPlayer() {
 
@@ -120,10 +119,7 @@ public class GeneratorPlayer {
 		if (!this.isLoaded())
 			this.loadPlayer();
 
-		if (playersGenerators.containsKey(generator.getId()))
-			return playersGenerators.get(generator.getId());
-		else
-			return 0;
+        return playersGenerators.getOrDefault(generator.getId(), 0);
 	}
 
 	/**

@@ -8,9 +8,9 @@ public enum HologramText implements IHologramText {
 	REMAINING_TIME("remaining-time", new StringContent("<generator_name>", "&6Time left:", "&e<time>"));
 
 	@Getter
-	String key;
+	final String key;
 	@Getter
-	StringContent stringContent;
+	final StringContent stringContent;
 	
 	HologramText(String key, StringContent stringContent) {
 		this.key = key;

@@ -10,7 +10,6 @@ import me.kryniowesegryderiusz.kgenerators.generators.locations.objects.Generato
 
 public class CMIHologramsProvider extends IHologramProvider {
 
-	@SuppressWarnings("deprecation")
 	@Override
 	public void providerCreateHologram(GeneratorLocation gLocation, ArrayList<String> lines) {
 		if (CMI.getInstance().getHologramManager().getHolograms().get(gLocation.getHologramUUID()) == null) {

@@ -35,65 +35,61 @@ public class DatabaseManager {
 	 */
 	@Nullable
 	public IDatabase getDatabase(DatabaseType dbType) {
-		switch (dbType) {
-		case MYSQL:
-			return new SQLDatabase(DatabaseType.MYSQL, Main.getSettings().getSqlConfig());
-		case SQLITE:
-			return new SQLDatabase(DatabaseType.SQLITE, Main.getSettings().getSqlConfig());
-		default:
-			Logger.error("DatabasesHandler: Could not return OTHER database, as not specified");
-			return null;
-		}
+        return switch (dbType) {
+            case MYSQL -> new SQLDatabase(DatabaseType.MYSQL, Main.getSettings().getSqlConfig());
+            case SQLITE -> new SQLDatabase(DatabaseType.SQLITE, Main.getSettings().getSqlConfig());
+            default -> {
+                Logger.error("DatabasesHandler: Could not return OTHER database, as not specified");
+                yield null;
+            }
+        };
 	}
 	
 	private MigratorInfo migratorInfo = null;
 
 	public void changeTo(DatabaseType toDbType) {
 
-		Sched.async(new Runnable() {
-			@Override
-			public void run() {
-				Logger.info("DatabasesHandler: Converting database from " + Main.getSettings().getDbType().name() + " to " + toDbType.name() + ". IT COULD TAKE A WHILE!");
-
-				
-				IDatabase newDb = getDatabase(toDbType);
-
-				if (newDb == null) {
-					Logger.error("DatabasesHandler: Cannot change database to " + toDbType.toString()
-							+ "! Connection could not be initialised!");
-					return;
-				}
-				
-				int amount = db.getGeneratorsAmount();
-				
-				migratorInfo = new MigratorInfo(amount);
-				isMigratorRunning = true;
-
-				int amountAtOnce = 500;
-				
-				for (int i = 0; i <= amount; i = i + amountAtOnce) {
-					Logger.info("DatabasesHandler: Migrating next "+amountAtOnce+" generators: " + i + "-" + (i+amountAtOnce));
-					ArrayList<GeneratorLocation> next = db.getGenerators(i, amountAtOnce);
-					Logger.info("DatabaseHandler: Obtained " + next.size() + " from old database");
-					for (GeneratorLocation gl : next) {
-						newDb.saveGenerator(gl, true);
-						migratorInfo.increment();
-					}
-				}
+		Sched.async(() -> {
+            Logger.info("DatabasesHandler: Converting database from " + Main.getSettings().getDbType().name() + " to " + toDbType.name() + ". IT COULD TAKE A WHILE!");
 
 
-				Main.getSettings().setDbType(toDbType);
-				FilesUtils.changeText(new File(Main.getInstance().getDataFolder(), "config.yml"), "  dbtype: ",
-						"  dbtype: " + toDbType.name() + "  #Earlier: ");
+            IDatabase newDb = getDatabase(toDbType);
 
-				migratorInfo.end();
-				migratorInfo = null;
-				isMigratorRunning = false;
-				
-				db = newDb;
-				Logger.info("DatabasesHandler: Succesfully converted database to " + toDbType.toString() + "!");
-			}
-		});
+            if (newDb == null) {
+                Logger.error("DatabasesHandler: Cannot change database to " + toDbType
+                        + "! Connection could not be initialised!");
+                return;
+            }
+
+            int amount = db.getGeneratorsAmount();
+
+            migratorInfo = new MigratorInfo(amount);
+            isMigratorRunning = true;
+
+            int amountAtOnce = 500;
+
+            for (int i = 0; i <= amount; i = i + amountAtOnce) {
+                Logger.info("DatabasesHandler: Migrating next "+amountAtOnce+" generators: " + i + "-" + (i+amountAtOnce));
+                ArrayList<GeneratorLocation> next = db.getGenerators(i, amountAtOnce);
+                Logger.info("DatabaseHandler: Obtained " + next.size() + " from old database");
+                for (GeneratorLocation gl : next) {
+                    newDb.saveGenerator(gl, true);
+                    migratorInfo.increment();
+                }
+            }
+
+
+            Main.getSettings().setDbType(toDbType);
+            FilesUtils.changeText(new File(Main.getInstance().getDataFolder(), "config.yml"), "  dbtype: ",
+                    "  dbtype: " + toDbType.name() + "  #Earlier: ");
+
+            migratorInfo.end();
+            migratorInfo = null;
+            isMigratorRunning = false;
+
+            db = newDb;
+            Logger.info("DatabasesHandler: Succesfully converted database to " + toDbType + "!");
+        });
 	}
 	
 	class MigratorInfo {
@@ -105,12 +101,7 @@ public class DatabaseManager {
 		public MigratorInfo(int generatorsAmount) {
 			amount = generatorsAmount;
 			
-			taskId = Sched.globalTimer(new Runnable() {
-				@Override
-				public void run() {
-					Logger.info("DatabasesHandler: Migrated " + migratedAmount + "/" + amount);
-				}
-			}, 40L, 40L);
+			taskId = Sched.globalTimer(() -> Logger.info("DatabasesHandler: Migrated " + migratedAmount + "/" + amount), 40L, 40L);
 		}
 		
 		public void increment() {

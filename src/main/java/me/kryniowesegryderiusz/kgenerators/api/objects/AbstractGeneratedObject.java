@@ -13,7 +13,7 @@ import me.kryniowesegryderiusz.kgenerators.logger.Logger;
 
 public abstract class AbstractGeneratedObject {
 	
-	@Getter private String type;
+	@Getter private final String type;
 	@Getter private Double chance = 0.0;
 	
 	@Nullable @Getter private CustomDrops customDrops;
@@ -43,10 +43,10 @@ public abstract class AbstractGeneratedObject {
 		try {
 			if (generatedObjectConfig.get("chance") != null) {
 				Object obj = generatedObjectConfig.get("chance");
-				if (obj instanceof Double)
-					this.chance = (Double) obj;
-				else if (obj instanceof Integer)
-					this.chance = (double) ((Integer) obj);
+				if (obj instanceof Double d)
+					this.chance = d;
+				else if (obj instanceof Integer i)
+					this.chance = (double) i;
 				else {
 					Logger.error("Generators file: Cant load chance (" + obj + ") for one generation! Using 0%");
 					return false;
@@ -63,7 +63,7 @@ public abstract class AbstractGeneratedObject {
 			if (cd.loadCustomDrops(generatedObjectConfig))
 				this.customDrops = cd;
 			
-			Logger.debugPluginLoad("Generators file: Loaded GeneratedObject: " + this.toString());
+			Logger.debugPluginLoad("Generators file: Loaded GeneratedObject: " + this);
 			
 		} catch (Exception e) {
 			Logger.error("Generators file: Cant load GeneratedObject: " + this.toStringSimple());
@@ -75,13 +75,13 @@ public abstract class AbstractGeneratedObject {
 	}
 	
 	public String toStringSimple() {
-		return "Type: " + this.type + " | Chance: " + String.valueOf(this.chance);
+		return "Type: " + this.type + " | Chance: " + this.chance;
 	}
 	
 	public String toString() {
 		return this.toStringSimple() 
 				+ " | " + this.toStringSpecific() 
-				+ (this.customDrops == null ? "" : " | CustomDrops: " + this.customDrops.toString());
+				+ (this.customDrops == null ? "" : " | CustomDrops: " + this.customDrops);
 	}
 	
 	/*

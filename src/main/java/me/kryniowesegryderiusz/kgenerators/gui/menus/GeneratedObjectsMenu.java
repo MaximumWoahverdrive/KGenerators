@@ -24,7 +24,7 @@ public class GeneratedObjectsMenu {
 	
 	public static Inventory get(Player player, Generator generator)
 	{
-		ArrayList<MenuItemType> exludedEnumMenuItems = new ArrayList<MenuItemType>();
+		ArrayList<MenuItemType> exludedEnumMenuItems = new ArrayList<>();
 		exludedEnumMenuItems.add(MenuItemType.GENERATED_OBJECTS_MENU_GENERATED_OBJECT);
 		
 		Inventory menu = Lang.getMenuInventoryStorage().get(MenuInventoryType.GENERATED_OBJECTS).getInv(MenuInventoryType.GENERATED_OBJECTS, player, exludedEnumMenuItems);

@@ -7,7 +7,6 @@ import java.util.LinkedHashMap;
 import java.util.Map.Entry;
 import java.util.concurrent.ConcurrentHashMap;
 
-import org.bukkit.Bukkit;
 import org.bukkit.Location;
 
 import lombok.Getter;
@@ -21,44 +20,41 @@ import me.kryniowesegryderiusz.kgenerators.utils.objects.CustomBlockData;
 
 public class SchedulesManager {
 	
-	@Getter private ConcurrentHashMap<GeneratorLocation, Schedule> schedules = new ConcurrentHashMap<GeneratorLocation, Schedule>();
+	@Getter private final ConcurrentHashMap<GeneratorLocation, Schedule> schedules = new ConcurrentHashMap<>();
 	
 	public SchedulesManager() {
 		
 		Logger.debugPluginLoad("SchedulesManager: Setting up manager");
 		
-		Sched.globalTimer(new Runnable() {
-		    @Override
-		    public void run() {
-		    	try {
-					int freq = Main.getSettings().getGenerationCheckFrequency();
-					
-					ArrayList<GeneratorLocation> readyForRegeneration = new ArrayList<GeneratorLocation>();
-					
-					for (Entry<GeneratorLocation, Schedule> e : schedules.entrySet()) {
-						e.getValue().decreaseDelay(freq);
-						if (e.getValue().isReadyForRegeneration()) {
-							readyForRegeneration.add(e.getKey());
-						}
-					}
-					
-					for (GeneratorLocation gl : readyForRegeneration) {
-						remove(gl);
-						// SWU (Folia): regenerate on the region that owns the generator
-						Sched.at(gl.getLocation(), () -> {
-							if (Main.getPlacedGenerators().isLoaded(gl)) {
-								Logger.debugSchedulesManager("SchedulesManager: Regenerating " + gl.getId());
-								gl.regenerateGenerator();
-							}
-						});
-					}
-		    	} catch (Exception e) {
-		    		Logger.error("SchedulesManager: An error occurred at scheduler task");
-		    		Logger.error(e);
-		    	}
+		Sched.globalTimer(() -> {
+            try {
+                int freq = Main.getSettings().getGenerationCheckFrequency();
 
-		    }
-		}, 1L, Main.getSettings().getGenerationCheckFrequency()*1L);
+                ArrayList<GeneratorLocation> readyForRegeneration = new ArrayList<>();
+
+                for (Entry<GeneratorLocation, Schedule> e : schedules.entrySet()) {
+                    e.getValue().decreaseDelay(freq);
+                    if (e.getValue().isReadyForRegeneration()) {
+                        readyForRegeneration.add(e.getKey());
+                    }
+                }
+
+                for (GeneratorLocation gl : readyForRegeneration) {
+                    remove(gl);
+                    // SWU (Folia): regenerate on the region that owns the generator
+                    Sched.at(gl.getLocation(), () -> {
+                        if (Main.getPlacedGenerators().isLoaded(gl)) {
+                            Logger.debugSchedulesManager("SchedulesManager: Regenerating " + gl.getId());
+                            gl.regenerateGenerator();
+                        }
+                    });
+                }
+            } catch (Exception e) {
+                Logger.error("SchedulesManager: An error occurred at scheduler task");
+                Logger.error(e);
+            }
+
+        }, 1L, Main.getSettings().getGenerationCheckFrequency());
 	}
 	
 	public int getAmount() {
@@ -75,13 +71,9 @@ public class SchedulesManager {
 		
 		if ((place && gLocation.getGenerator().isGenerateImmediatelyAfterPlace()) 
 				|| gLocation.getGenerator().getDelay() <= 0) {
-			Sched.at(gLocation.getLocation(), () -> {
-				gLocation.regenerateGenerator();
-			});
+			Sched.at(gLocation.getLocation(), gLocation::regenerateGenerator);
 		} else {
-			Sched.at(gLocation.getLocation(), () -> {
-				this.generatePlaceholder(gLocation);
-			});
+			Sched.at(gLocation.getLocation(), () -> this.generatePlaceholder(gLocation));
 			
 			schedules.put(gLocation, new Schedule(gLocation.getGenerator().getDelay()));
 			
@@ -153,7 +145,7 @@ public class SchedulesManager {
 	}
 	
 	public String timeLeftFormatted(GeneratorLocation gLocation, boolean removeMs) {
-		LinkedHashMap<Integer, Message> times = new LinkedHashMap<Integer, Message>();
+		LinkedHashMap<Integer, Message> times = new LinkedHashMap<>();
 		times.put(20*60*60*24, Message.COMMANDS_TIME_LEFT_FORMAT_DAY);
 		times.put(20*60*60, Message.COMMANDS_TIME_LEFT_FORMAT_HOUR);
 		times.put(20*60, Message.COMMANDS_TIME_LEFT_FORMAT_MIN);
@@ -169,13 +161,13 @@ public class SchedulesManager {
 				int ticks = e.getKey();
 				int amount = Math.floorDiv(delay, ticks);
 				delay -= ticks*amount;
-				if (!s.equals("")) s += " ";
-				s += String.valueOf(amount) + Lang.getMessageStorage().get(e.getValue(), false);
+				if (!s.isEmpty()) s += " ";
+				s += amount + Lang.getMessageStorage().get(e.getValue(), false);
 			}
 		}
-		if (!s.equals("")) s += " ";
+		if (!s.isEmpty()) s += " ";
 		if (removeMs || gLocation.getGenerator().isSecondMultiple()) {
-			int d = ((int) delay/20);
+			int d = (delay/20);
 			s += String.valueOf(d);
 		}
 		else {

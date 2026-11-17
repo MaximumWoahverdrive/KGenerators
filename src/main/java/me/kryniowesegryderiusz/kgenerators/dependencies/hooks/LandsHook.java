@@ -50,9 +50,7 @@ public class LandsHook {
         
 		LandWorld world = api.getWorld(l.getWorld());
 		if (world != null) { // Lands is enabled in this world
-		    if (!world.hasRoleFlag(api.getLandPlayer(p.getUniqueId()), l, flag, null, false)) {
-		       return false;
-		    }
+		    return world.hasRoleFlag(api.getLandPlayer(p.getUniqueId()), l, flag, null, false);
 		}
 		return true;
 		

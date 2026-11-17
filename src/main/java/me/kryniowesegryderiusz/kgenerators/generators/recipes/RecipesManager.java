@@ -1,6 +1,7 @@
 package me.kryniowesegryderiusz.kgenerators.generators.recipes;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
 
@@ -23,7 +24,7 @@ import me.kryniowesegryderiusz.kgenerators.utils.immutable.ConfigManager;
 public class RecipesManager {
 
 	@Getter private boolean enabled = false;
-	private HashMap<Generator, Recipe> recipes = new HashMap<Generator, Recipe>();
+	private final HashMap<Generator, Recipe> recipes = new HashMap<>();
 
 	public RecipesManager() {
 		Logger.debugPluginLoad("RecipesManager: Setting up manager");
@@ -31,7 +32,7 @@ public class RecipesManager {
 		Config file;
 
 		try {
-			file = ConfigManager.getConfig("recipes.yml", (String) null, true, false);
+			file = ConfigManager.getConfig("recipes.yml", null, true, false);
 			file.loadConfig();
 		} catch (InvalidConfigurationException e) {
 			Logger.error("Generators file: You've missconfigured recipes.yml file. Check your spaces! More info below. Disabling plugin.");
@@ -45,7 +46,7 @@ public class RecipesManager {
 			return;
 		}
 
-		if (!file.contains("enabled") || file.getBoolean("enabled") != true) {
+		if (!file.contains("enabled") || !file.getBoolean("enabled")) {
 			Logger.info("Recipes file: Recipes are disabled. You can enable them in recipes.yml");
 			return;
 		}
@@ -77,10 +78,10 @@ public class RecipesManager {
 			for (org.bukkit.inventory.Recipe bukkitRecipe : Main.getInstance().getServer()
 					.getRecipesFor(generator.getGeneratorItem())) {
 				if (bukkitRecipe.getResult().equals(generator.getGeneratorItem())) {
-					if (bukkitRecipe instanceof ShapedRecipe)
-						return new Recipe(generator, (ShapedRecipe) bukkitRecipe);
-					else if (bukkitRecipe instanceof ShapelessRecipe)
-						return new Recipe(generator, (ShapelessRecipe) bukkitRecipe);
+					if (bukkitRecipe instanceof ShapedRecipe shaped)
+						return new Recipe(generator, shaped);
+					else if (bukkitRecipe instanceof ShapelessRecipe shapeless)
+						return new Recipe(generator, shapeless);
 				}
 			}
 			return null;
@@ -88,7 +89,7 @@ public class RecipesManager {
 	}
 
 	public boolean hasRecipes() {
-		return this.recipes.size() != 0;
+		return !this.recipes.isEmpty();
 	}
 
 	public boolean isGeneratorRecipe(Generator generator, ArrayList<ItemStack> items) {
@@ -112,10 +113,7 @@ public class RecipesManager {
 	}
 
 	public boolean isGeneratorRecipe(Generator g, ItemStack[] items) {
-		ArrayList<ItemStack> recipeItemsArray = new ArrayList<>();
-		for (ItemStack i : items) {
-			recipeItemsArray.add(i);
-		}
+		ArrayList<ItemStack> recipeItemsArray = new ArrayList<>(Arrays.asList(items));
 		return this.isGeneratorRecipe(g, recipeItemsArray);
 	}
 }

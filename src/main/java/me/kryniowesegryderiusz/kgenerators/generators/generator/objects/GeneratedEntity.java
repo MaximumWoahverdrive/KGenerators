@@ -2,7 +2,6 @@ package me.kryniowesegryderiusz.kgenerators.generators.generator.objects;
 
 import me.kryniowesegryderiusz.kgenerators.utils.BlockUtils;
 import java.util.ArrayList;
-import java.util.ListIterator;
 import java.util.Map;
 
 import org.bukkit.Location;
@@ -10,7 +9,6 @@ import org.bukkit.entity.Entity;
 import org.bukkit.inventory.ItemStack;
 
 import lombok.Getter;
-import me.kryniowesegryderiusz.kgenerators.Main;
 import me.kryniowesegryderiusz.kgenerators.api.interfaces.IGeneratorLocation;
 import me.kryniowesegryderiusz.kgenerators.api.objects.AbstractGeneratedObject;
 import me.kryniowesegryderiusz.kgenerators.utils.ItemUtils;
@@ -21,7 +19,7 @@ public class GeneratedEntity extends AbstractGeneratedObject {
 	@Getter private CustomEntityData customEntityData;
 	
 	private int maxEntities = 1;
-	private ArrayList<Entity> entities = new ArrayList<Entity>();
+	private final ArrayList<Entity> entities = new ArrayList<>();
 
 	public GeneratedEntity() {
 		super("entity");
@@ -63,21 +61,15 @@ public class GeneratedEntity extends AbstractGeneratedObject {
 		
 		if (generatedObjectConfig.containsKey("entity")) {
 			this.customEntityData = CustomEntityData.load(generatedObjectConfig, "entity");
-			if (this.customEntityData != null)
-				return true;
+			return this.customEntityData != null;
 		}
 		return false;
 	}
 	
 	@Override
 	public boolean isReady() {
-		
-		ListIterator<Entity> iter = this.entities.listIterator();
-		while(iter.hasNext()) {
-		    if(iter.next().isDead()) {
-		        iter.remove();
-		    }
-		}
+
+        this.entities.removeIf(Entity::isDead);
 		
 		return this.maxEntities < 0 || this.entities.size() < this.maxEntities;
 	}

@@ -16,9 +16,9 @@ public class PostGeneratorUpgradeGeneratorLocationEvent extends Event {
 	
     private static final HandlerList HANDLERS = new HandlerList();
     
-    @Getter private Upgrade upgrade;
-    @Getter private Player player;
-    @Getter private IGeneratorLocation generatorLocation;
+    @Getter private final Upgrade upgrade;
+    @Getter private final Player player;
+    @Getter private final IGeneratorLocation generatorLocation;
 
 	public PostGeneratorUpgradeGeneratorLocationEvent(Upgrade upgrade, Player player, IGeneratorLocation generatorLocation) {
 		this.upgrade = upgrade;

@@ -2,8 +2,8 @@ package me.kryniowesegryderiusz.kgenerators.generators.generator.objects;
 
 import me.kryniowesegryderiusz.kgenerators.utils.Text;
 import java.util.ArrayList;
-import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Random;
@@ -25,7 +25,6 @@ import me.kryniowesegryderiusz.kgenerators.generators.generator.enums.GeneratorT
 import me.kryniowesegryderiusz.kgenerators.generators.upgrades.objects.Upgrade;
 import me.kryniowesegryderiusz.kgenerators.logger.Logger;
 import me.kryniowesegryderiusz.kgenerators.settings.objects.Actions;
-import me.kryniowesegryderiusz.kgenerators.settings.objects.GeneratorItemMatcher;
 import me.kryniowesegryderiusz.kgenerators.utils.FilesUtils;
 import me.kryniowesegryderiusz.kgenerators.utils.ItemUtils;
 import me.kryniowesegryderiusz.kgenerators.utils.immutable.Config;
@@ -43,7 +42,7 @@ public class Generator {
 	private int delay;
 	@Getter
 	private GeneratorType type = GeneratorType.SINGLE;
-	private LinkedHashMap<AbstractGeneratedObject, Double> chances = new LinkedHashMap<AbstractGeneratedObject, Double>();
+	private final LinkedHashMap<AbstractGeneratedObject, Double> chances = new LinkedHashMap<>();
 
 	@Getter
 	private CustomBlockData placeholder;
@@ -56,7 +55,7 @@ public class Generator {
 	@Getter
 	private Actions actions = null;
 	@Getter
-	private ArrayList<String> disabledWorlds = new ArrayList<String>();
+	private final ArrayList<String> disabledWorlds = new ArrayList<>();
 
 	@Getter
 	private boolean secondMultiple = false;
@@ -82,7 +81,7 @@ public class Generator {
 	@SuppressWarnings("unchecked")
 	public boolean loadConfiguration(GeneratorsManager generatorsManager, Config config, String generatorID) {
 
-		Boolean error = false;
+		boolean error = false;
 
 		/*
 		 * Required options
@@ -108,7 +107,7 @@ public class Generator {
 			Logger.error(
 					"Check https://github.com/MaximumWoahverdrive/KGenerators/blob/master/core/src/main/resources/generators.yml#L14 for new configuration options!");
 
-			Boolean glow = true;
+			boolean glow = true;
 			if (config.contains(generatorID + ".glow")) {
 				glow = config.getBoolean(generatorID + ".glow");
 			}
@@ -147,7 +146,7 @@ public class Generator {
 		fullChance = 0.0;
 
 		if (config.contains(generatorID + ".generates"))
-			for (Map<?, ?> generatedObjectConfig : (List<Map<?, ?>>) config.getMapList(generatorID + ".generates")) {
+			for (Map<?, ?> generatedObjectConfig : config.getMapList(generatorID + ".generates")) {
 
 				AbstractGeneratedObject ago = generatorsManager.getGeneratedObjectsManager()
 						.getNewObject((String) generatedObjectConfig.get("type"));
@@ -234,8 +233,7 @@ public class Generator {
 	public double getChancePercent(AbstractGeneratedObject ago) {
 		double chance = chances.get(ago);
 		double fullchance = this.fullChance;
-		double percent = (chance / fullchance) * 100;
-		return percent;
+		return (chance / fullchance) * 100;
 	}
 
 	public String getChancePercentFormatted(AbstractGeneratedObject ago) {
@@ -255,7 +253,7 @@ public class Generator {
 
 	public AbstractGeneratedObject drawGeneratedObject() {
 		RandomSelector<AbstractGeneratedObject> selector = RandomSelector.weighted(this.chances.keySet(),
-				s -> this.chances.get(s));
+				this.chances::get);
 		return selector.next(new Random());
 	}
 

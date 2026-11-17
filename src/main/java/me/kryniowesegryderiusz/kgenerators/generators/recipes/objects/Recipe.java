@@ -2,6 +2,7 @@ package me.kryniowesegryderiusz.kgenerators.generators.recipes.objects;
 
 import me.kryniowesegryderiusz.kgenerators.utils.Text;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -29,10 +30,10 @@ public class Recipe {
 	@Getter
 	Generator generator;
 	@Getter
-	private HashMap<Character, ItemStack> ingredients = new HashMap<Character, ItemStack>();
+	private final HashMap<Character, ItemStack> ingredients = new HashMap<>();
 	@Getter
 	@Setter
-	private ArrayList<String> shape = new ArrayList<String>();
+	private ArrayList<String> shape = new ArrayList<>();
 
 	/**
 	 * Loads recipe from file and adds it to RecipesManager
@@ -55,8 +56,7 @@ public class Recipe {
 				ShapedRecipe shapedRecipe = new ShapedRecipe(new NamespacedKey(Main.getInstance(), "KGenerators_" + generator.getId()),
 						generator.getGeneratorItem());
 
-				ArrayList<String> shape = new ArrayList<String>();
-				shape = (ArrayList<String>) file.getList(generatorID + ".shape");
+				ArrayList<String> shape = (ArrayList<String>) file.getList(generatorID + ".shape");
 				shapedRecipe.shape(shape.get(0), shape.get(1), shape.get(2));
 				this.setShape(shape);
 
@@ -77,7 +77,7 @@ public class Recipe {
 				Bukkit.addRecipe(shapedRecipe);
 
 				Logger.debugPluginLoad(
-						"Recipes file: Loaded recipe for `" + generatorID + "`! Recipe: " + this.toString());
+						"Recipes file: Loaded recipe for `" + generatorID + "`! Recipe: " + this);
 			}
 		}
 	}
@@ -86,9 +86,7 @@ public class Recipe {
 		this.generator = generator;
 		for (Map.Entry<Character, RecipeChoice> e : shaped.getChoiceMap().entrySet())
 			ingredients.put(e.getKey(), toItem(e.getValue()));
-		for (String s : shaped.getShape()) {
-			shape.add(s);
-		}
+		Collections.addAll(shape, shaped.getShape());
 	}
 
 	public Recipe(Generator generator, ShapelessRecipe shapeless) {
@@ -109,10 +107,10 @@ public class Recipe {
 
 	/** An item a recipe ingredient accepts: its first exact item or material, or air if the slot is empty. */
 	private static ItemStack toItem(RecipeChoice choice) {
-		if (choice instanceof RecipeChoice.ExactChoice && !((RecipeChoice.ExactChoice) choice).getChoices().isEmpty())
-			return ((RecipeChoice.ExactChoice) choice).getChoices().get(0).clone();
-		if (choice instanceof RecipeChoice.MaterialChoice && !((RecipeChoice.MaterialChoice) choice).getChoices().isEmpty())
-			return new ItemStack(((RecipeChoice.MaterialChoice) choice).getChoices().get(0));
+		if (choice instanceof RecipeChoice.ExactChoice exact && !exact.getChoices().isEmpty())
+			return exact.getChoices().get(0).clone();
+		if (choice instanceof RecipeChoice.MaterialChoice material && !material.getChoices().isEmpty())
+			return new ItemStack(material.getChoices().get(0));
 		return new ItemStack(Material.AIR);
 	}
 
@@ -130,7 +128,7 @@ public class Recipe {
 	 * @return the ingredients of the 3x3 grid, row by row
 	 */
 	public ArrayList<ItemStack> getRecipe() {
-		ArrayList<ItemStack> recipe = new ArrayList<ItemStack>();
+		ArrayList<ItemStack> recipe = new ArrayList<>();
 		for (String s : shape) {
 			for (int i = 0; i < 3; i++) {
 				recipe.add(ingredients.get(s.charAt(i)));
@@ -140,9 +138,9 @@ public class Recipe {
 	}
 
 	public String toString() {
-		ArrayList<String> string = new ArrayList<String>();
+		ArrayList<String> string = new ArrayList<>();
 		for (String s : this.shape) {
-			ArrayList<String> line = new ArrayList<String>();
+			ArrayList<String> line = new ArrayList<>();
 			for (char c : s.toCharArray()) {
 				if (this.ingredients.get(c).hasItemMeta() && this.ingredients.get(c).getItemMeta().hasDisplayName())
 					line.add(Text.name(this.ingredients.get(c).getItemMeta()));

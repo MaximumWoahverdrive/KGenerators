@@ -39,9 +39,8 @@ public class InventoryClickListener implements Listener {
 			/*
 			 * Grindstone and anvil change generator item protection
 			 */
-			if (((e.getInventory() != null
-					&& e.getInventory().getType() == InventoryType.GRINDSTONE)
-					|| (e.getInventory() != null && e.getInventory().getType() == InventoryType.ANVIL))
+			if ((e.getInventory().getType() == InventoryType.GRINDSTONE
+					|| e.getInventory().getType() == InventoryType.ANVIL)
 					&& e.getCurrentItem() != null && Main.getGenerators().get(e.getCurrentItem()) != null) {
 
 				Lang.getMessageStorage().send(e.getWhoClicked(),

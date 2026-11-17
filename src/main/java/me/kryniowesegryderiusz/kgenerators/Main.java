@@ -5,7 +5,6 @@ import me.kryniowesegryderiusz.kgenerators.utils.Sched;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.concurrent.Callable;
 
 import org.bstats.bukkit.Metrics;
 import org.bstats.charts.AdvancedPie;
@@ -26,7 +25,6 @@ import me.kryniowesegryderiusz.kgenerators.api.events.PluginReloadEvent;
 import me.kryniowesegryderiusz.kgenerators.data.DatabaseManager;
 import me.kryniowesegryderiusz.kgenerators.dependencies.DependenciesManager;
 import me.kryniowesegryderiusz.kgenerators.dependencies.enums.Dependency;
-import me.kryniowesegryderiusz.kgenerators.dependencies.hooks.BentoBoxHook;
 import me.kryniowesegryderiusz.kgenerators.dependencies.hooks.FancyHologramsHook;
 import me.kryniowesegryderiusz.kgenerators.dependencies.hooks.ItemsAdderHook;
 import me.kryniowesegryderiusz.kgenerators.generators.generator.GeneratorsManager;
@@ -64,14 +62,14 @@ public class Main extends JavaPlugin {
 	@Getter private static GeneratorsManager generators;
 	@Getter private static HologramsManager holograms;
 	@Getter private static PlacedGeneratorsManager placedGenerators;
-	@Getter private static PlayersManager players = new PlayersManager();
+	@Getter private static final PlayersManager players = new PlayersManager();
 	@Getter private static LimitsManager limits;
 	@Getter private static RecipesManager recipes;
 	@Getter private static SchedulesManager schedules;
 	@Getter private static UpgradesManager upgrades;
 	
 	@Getter private static DatabaseManager databases;
-	@Getter private static DependenciesManager dependencies = new DependenciesManager();
+	@Getter private static final DependenciesManager dependencies = new DependenciesManager();
 	@Getter private static MenusManager menus;
 	
     @Override
@@ -88,9 +86,7 @@ public class Main extends JavaPlugin {
     		this.getServer().getPluginManager().registerEvents(new ItemsAdderHook().new ItemsAdderListeners(), this);
     	} else {
     		Logger.debugPluginLoad("KGenerators will finish loading once the server has started");
-    		Sched.global(() -> {
-    			Main.getInstance().enable();
-    		});
+    		Sched.global(() -> Main.getInstance().enable());
     	}
     }
 
@@ -223,30 +219,22 @@ public class Main extends JavaPlugin {
 			metrics.addCustomChart(new SingleLineChart("configured_generators", () -> Main.getGenerators().getAmount()));
 			metrics.addCustomChart(new SingleLineChart("database_generators", () -> Main.getDatabases().getDb().getGeneratorsAmount()));
 			metrics.addCustomChart(new SingleLineChart("loaded_generators", () -> Main.getPlacedGenerators().getLoadedGeneratorsAmount()));
-			metrics.addCustomChart(new SimplePie("database_type", () -> {return Main.getSettings().getDbType().toString();}));
-			metrics.addCustomChart(new AdvancedPie("features", new Callable<Map<String, Integer>>() {
-				@Override
-				public Map<String, Integer> call() throws Exception {
-		            Map<String, Integer> valueMap = new HashMap<>();
-		            if (Main.getLimits().hasLimits()) valueMap.put("Limits", 1);
-		            if (Main.getRecipes().hasRecipes()) valueMap.put("Recipes", 1);
-		            if (Main.getUpgrades().hasUpgrades()) valueMap.put("Upgrades", 1);
-		            if (Main.getSettings().isBlockDropToEq()) valueMap.put("DropToInventory", 1);
-		            return valueMap;
-				}
-			}));
-			metrics.addCustomChart(new AdvancedPie("hooked_plugins", new Callable<Map<String, Integer>>() {
-				@Override
-				public Map<String, Integer> call() throws Exception {
-		            Map<String, Integer> valueMap = new HashMap<>();
-		            if (Main.getDependencies() != null) {
-		            	for (Dependency dep : Main.getDependencies().getDependencies()) {
-		            		valueMap.put(dep.toString(), 1);
-		            	}
-		            }
-		            return valueMap;
-				}
-			}));
+			metrics.addCustomChart(new SimplePie("database_type", () -> Main.getSettings().getDbType().toString()));
+			metrics.addCustomChart(new AdvancedPie("features", () -> {
+                Map<String, Integer> valueMap = new HashMap<>();
+                if (Main.getLimits().hasLimits()) valueMap.put("Limits", 1);
+                if (Main.getRecipes().hasRecipes()) valueMap.put("Recipes", 1);
+                if (Main.getUpgrades().hasUpgrades()) valueMap.put("Upgrades", 1);
+                if (Main.getSettings().isBlockDropToEq()) valueMap.put("DropToInventory", 1);
+                return valueMap;
+            }));
+			metrics.addCustomChart(new AdvancedPie("hooked_plugins", () -> {
+                Map<String, Integer> valueMap = new HashMap<>();
+                for (Dependency dep : Main.getDependencies().getDependencies()) {
+                    valueMap.put(dep.toString(), 1);
+                }
+                return valueMap;
+            }));
 	        metrics.addCustomChart(new DrilldownPie("complex_plugin_version", () -> {
 	            Map<String, Map<String, Integer>> map = new HashMap<>();
 	            // 7.3.0-r24.a6b5d0c -> 7.3.0 / r24.a6b5d0c; a tagged release (7.3.0) has no second part
@@ -256,16 +244,13 @@ public class Main extends JavaPlugin {
 	            map.put(sVersion[0], entry);
 	            return map;
 	        }));
-			metrics.addCustomChart(new AdvancedPie("addons", new Callable<Map<String, Integer>>() {
-				@Override
-				public Map<String, Integer> call() throws Exception {
-		            Map<String, Integer> valueMap = new HashMap<>();
-		            for (Addon a : Addons.getAddons()) {
-		            	valueMap.put(a.getName(), 1);
-		            }
-		            return valueMap;
-				}
-			}));
+			metrics.addCustomChart(new AdvancedPie("addons", () -> {
+                Map<String, Integer> valueMap = new HashMap<>();
+                for (Addon a : Addons.getAddons()) {
+                    valueMap.put(a.getName(), 1);
+                }
+                return valueMap;
+            }));
 			
 			Logger.info("MainManager: KGenerators loaded successfully");
 			

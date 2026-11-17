@@ -21,7 +21,7 @@ import me.kryniowesegryderiusz.kgenerators.logger.Logger;
 public class MainMenu {
 
 	public static Inventory get(Player player, int page) {
-		ArrayList<MenuItemType> exludedEnumMenuItems = new ArrayList<MenuItemType>();
+		ArrayList<MenuItemType> exludedEnumMenuItems = new ArrayList<>();
 		exludedEnumMenuItems.add(MenuItemType.MAIN_MENU_GENERATOR);
 		exludedEnumMenuItems.add(MenuItemType.MAIN_MENU_LIMITS);
 		exludedEnumMenuItems.add(MenuItemType.MAIN_MENU_PAGE_PREVIOUS);

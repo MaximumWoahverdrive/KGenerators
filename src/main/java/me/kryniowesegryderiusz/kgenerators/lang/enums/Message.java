@@ -148,9 +148,9 @@ public enum Message implements IMessage {
 	;
 	
 	@Getter
-	private String key;
+	private final String key;
 	@Getter
-	private String message;
+	private final String message;
 	
 	Message(String key, String message) {
 		this.key = key;

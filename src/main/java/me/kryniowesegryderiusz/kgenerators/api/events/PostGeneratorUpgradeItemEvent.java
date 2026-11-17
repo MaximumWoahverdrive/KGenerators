@@ -16,9 +16,9 @@ public class PostGeneratorUpgradeItemEvent extends Event {
 	
     private static final HandlerList HANDLERS = new HandlerList();
     
-    @Getter private Upgrade upgrade;
-    @Getter private Player player;
-    @Getter private ItemStack item;
+    @Getter private final Upgrade upgrade;
+    @Getter private final Player player;
+    @Getter private final ItemStack item;
 
 	public PostGeneratorUpgradeItemEvent(Upgrade upgrade, Player p, ItemStack item) {
 		this.upgrade = upgrade;

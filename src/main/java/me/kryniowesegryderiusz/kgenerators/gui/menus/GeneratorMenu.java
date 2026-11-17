@@ -21,13 +21,13 @@ public class GeneratorMenu {
 	
 	public static Inventory get(Player player, GeneratorLocation gLocation)
 	{
-		ArrayList<MenuItemType> exludedEnumMenuItems = new ArrayList<MenuItemType>();
+		ArrayList<MenuItemType> exludedEnumMenuItems = new ArrayList<>();
 		exludedEnumMenuItems.add(MenuItemType.GENERATOR_MENU_RESET);
 		exludedEnumMenuItems.add(MenuItemType.GENERATOR_MENU_UPGRADE);
 		exludedEnumMenuItems.add(MenuItemType.GENERATOR_MENU_UPGRADE_MAXED);
 				
 		String time = Main.getSchedules().timeLeftFormatted(gLocation);
-		if (time.equals("")) time = Lang.getMessageStorage().get(Message.COMMANDS_TIME_LEFT_FORMAT_NONE, false);
+		if (time.isEmpty()) time = Lang.getMessageStorage().get(Message.COMMANDS_TIME_LEFT_FORMAT_NONE, false);
 			
 		Inventory menu = Lang.getMenuInventoryStorage().get(MenuInventoryType.GENERATOR)
 				.getInv(MenuInventoryType.GENERATOR, player, exludedEnumMenuItems, 

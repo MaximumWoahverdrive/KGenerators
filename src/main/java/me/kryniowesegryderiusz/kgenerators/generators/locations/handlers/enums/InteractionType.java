@@ -16,7 +16,7 @@ public enum InteractionType
 		{
 			for (InteractionType mode : InteractionType.values())
 			{
-				if (mode.toString().toLowerCase().equals(s.toLowerCase())) return mode;
+				if (mode.toString().equalsIgnoreCase(s)) return mode;
 			}
 			Logger.error("Config file: Action mode " + s + " doesnt exist! Using NONE!");
 			return InteractionType.NONE;

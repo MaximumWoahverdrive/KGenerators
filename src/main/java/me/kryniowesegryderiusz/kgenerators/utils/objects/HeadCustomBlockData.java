@@ -4,12 +4,11 @@ import me.kryniowesegryderiusz.kgenerators.utils.SkullUtils;
 import org.bukkit.Location;
 import org.bukkit.inventory.ItemStack;
 
-import me.kryniowesegryderiusz.kgenerators.Main;
 import com.cryptomorin.xseries.XMaterial;
 
 public class HeadCustomBlockData extends CustomBlockData  {
 	
-	private String skullBase64;
+	private final String skullBase64;
 	
 	public HeadCustomBlockData(XMaterial xMaterial, String skullBase64) {
 		super(xMaterial);

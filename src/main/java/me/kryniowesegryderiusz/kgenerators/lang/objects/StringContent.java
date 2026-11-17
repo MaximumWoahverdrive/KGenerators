@@ -4,9 +4,9 @@ import me.kryniowesegryderiusz.kgenerators.utils.Text;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 import lombok.Getter;
-import me.kryniowesegryderiusz.kgenerators.Main;
 import me.kryniowesegryderiusz.kgenerators.lang.interfaces.IMenuItemAdditionalLines;
 import me.kryniowesegryderiusz.kgenerators.logger.Logger;
 import me.kryniowesegryderiusz.kgenerators.utils.immutable.Config;
@@ -14,7 +14,7 @@ import me.kryniowesegryderiusz.kgenerators.utils.immutable.Config;
 public class StringContent implements Cloneable {
 	
 	@Getter
-	ArrayList<String> lines = new ArrayList<String>();
+	ArrayList<String> lines = new ArrayList<>();
 	
 	public <T extends Enum<T> & IMenuItemAdditionalLines> StringContent(String path, Config config, StringContent defaultContent)
 	{
@@ -26,23 +26,20 @@ public class StringContent implements Cloneable {
 		this.lines = new ArrayList<>(Arrays.asList(contents));
 	}
 	
-	public StringContent (ArrayList<String> lines)
+	public StringContent (List<String> lines)
 	{
 		this.lines.addAll(lines);
 	}
 	
 	public StringContent replace(String key, String value)
 	{
-		for (int i = 0; i < this.lines.size(); i++)
-		{
-			this.lines.set(i, this.lines.get(i).replace(key, value));
-		}
+        this.lines.replaceAll(s -> s.replace(key, value));
 		return this;
 	}
 	
 	public StringContent replace(String key, StringContent stringContent)
 	{
-		ArrayList<String> newDesc = new ArrayList<String>();
+		ArrayList<String> newDesc = new ArrayList<>();
 		for (String s : this.lines)
 		{
 			if (s.contains(key))
@@ -92,7 +89,7 @@ public class StringContent implements Cloneable {
 	{
 		if (config.contains(path)) 
 		{
-			for (String s : (ArrayList<String>) config.getStringList(path))
+			for (String s : config.getStringList(path))
 			{
 				lines.add(Text.colorize(s));
 			}
@@ -114,7 +111,7 @@ public class StringContent implements Cloneable {
 	@Override
 	public StringContent clone()
 	{
-		return new StringContent(new ArrayList<String>(this.lines));
+		return new StringContent(new ArrayList<>(this.lines));
 	}
 
 }

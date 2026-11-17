@@ -38,11 +38,11 @@ import me.kryniowesegryderiusz.kgenerators.logger.Logger;
 
 public class GeneratorLocation implements IGeneratorLocation {
 
-	private static GeneratorLocationPickUpHandler pickUpHandler = new GeneratorLocationPickUpHandler();
-	private static GeneratorLocationPlaceHandler placeHandler = new GeneratorLocationPlaceHandler();
-	private static GeneratorLocationRegenerateHandler regenerateHandler = new GeneratorLocationRegenerateHandler();
-	private static GeneratorLocationRemoveHandler removeHandler = new GeneratorLocationRemoveHandler();
-	private static GeneratorLocationActionHandler actionHandler = new GeneratorLocationActionHandler();
+	private static final GeneratorLocationPickUpHandler pickUpHandler = new GeneratorLocationPickUpHandler();
+	private static final GeneratorLocationPlaceHandler placeHandler = new GeneratorLocationPlaceHandler();
+	private static final GeneratorLocationRegenerateHandler regenerateHandler = new GeneratorLocationRegenerateHandler();
+	private static final GeneratorLocationRemoveHandler removeHandler = new GeneratorLocationRemoveHandler();
+	private static final GeneratorLocationActionHandler actionHandler = new GeneratorLocationActionHandler();
 
 	@Setter
 	@Getter
@@ -50,15 +50,15 @@ public class GeneratorLocation implements IGeneratorLocation {
 	@Getter
 	private Generator generator;
 	@Getter
-	private GeneratorPlayer owner;
+	private final GeneratorPlayer owner;
 	@Getter
-	private Location location;
+	private final Location location;
 
-	private Location hologramLocation;
-	private UUID hologramUUID = UUID.randomUUID();
+	private final Location hologramLocation;
+	private final UUID hologramUUID = UUID.randomUUID();
 	
 	@Getter
-	private ChunkInfo chunkInfo;
+	private final ChunkInfo chunkInfo;
 
 	@Setter
 	@Getter
@@ -266,7 +266,7 @@ public class GeneratorLocation implements IGeneratorLocation {
 	}
 	
 	public boolean isReadyForRegeneration() {
-		return this.lastGeneratedObject == null ? true : this.lastGeneratedObject.isReady();
+		return this.lastGeneratedObject == null || this.lastGeneratedObject.isReady();
 	}
 	
 	/*
@@ -278,7 +278,7 @@ public class GeneratorLocation implements IGeneratorLocation {
 	}
 	
 	public String getHologramUUID() {
-		return "kgenerators_"+this.hologramUUID.toString();
+		return "kgenerators_"+this.hologramUUID;
 	}
 
 	/*
@@ -296,7 +296,7 @@ public class GeneratorLocation implements IGeneratorLocation {
 	}
 
 	public String toStringLocation() {
-		return "world " + this.location.getWorld().getName() + " at " + String.valueOf(this.location.getX()) + ", "
-				+ String.valueOf(this.location.getY()) + ", " + String.valueOf(this.location.getZ());
+		return "world " + this.location.getWorld().getName() + " at " + this.location.getX() + ", "
+				+ this.location.getY() + ", " + this.location.getZ();
 	}
 }

@@ -5,7 +5,6 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Optional;
 
-import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.configuration.InvalidConfigurationException;
@@ -28,7 +27,7 @@ import world.bentobox.bentobox.database.objects.IslandDeletion;
 
 public class BentoBoxHook implements Listener {
 
-	public static enum Type {
+	public enum Type {
 		PICKUP_FLAG, USE_FLAG, OPEN_MENU_FLAG
 	}
 
@@ -65,28 +64,26 @@ public class BentoBoxHook implements Listener {
 				Logger.error("BentoBox: Cannot load generator flag locale!");
 				Logger.error(e);
 			}
-			if (locale != null) {
-				if (!locale.contains("protection.flags.KGENERATORS_PICKUP_FLAG.name"))
-					locale.set("protection.flags.KGENERATORS_PICKUP_FLAG.name", "Generator pick up");
-				if (!locale.contains("protection.flags.KGENERATORS_PICKUP_FLAG.description"))
-					locale.set("protection.flags.KGENERATORS_PICKUP_FLAG.description", "Toggle generator pick up");
+			if (!locale.contains("protection.flags.KGENERATORS_PICKUP_FLAG.name"))
+				locale.set("protection.flags.KGENERATORS_PICKUP_FLAG.name", "Generator pick up");
+			if (!locale.contains("protection.flags.KGENERATORS_PICKUP_FLAG.description"))
+				locale.set("protection.flags.KGENERATORS_PICKUP_FLAG.description", "Toggle generator pick up");
 
-				if (!locale.contains("protection.flags.KGENERATORS_USE_FLAG.name"))
-					locale.set("protection.flags.KGENERATORS_USE_FLAG.name", "Generator use");
-				if (!locale.contains("protection.flags.KGENERATORS_USE_FLAG.description"))
-					locale.set("protection.flags.KGENERATORS_USE_FLAG.description", "Toggle breaking generator");
+			if (!locale.contains("protection.flags.KGENERATORS_USE_FLAG.name"))
+				locale.set("protection.flags.KGENERATORS_USE_FLAG.name", "Generator use");
+			if (!locale.contains("protection.flags.KGENERATORS_USE_FLAG.description"))
+				locale.set("protection.flags.KGENERATORS_USE_FLAG.description", "Toggle breaking generator");
 
-				if (!locale.contains("protection.flags.KGENERATORS_OPEN_MENU_FLAG.name"))
-					locale.set("protection.flags.KGENERATORS_OPEN_MENU_FLAG.name", "Generators open gui");
-				if (!locale.contains("protection.flags.KGENERATORS_OPEN_MENU_FLAG.description"))
-					locale.set("protection.flags.KGENERATORS_OPEN_MENU_FLAG.description", "Toggle menu opening");
-				try {
-					locale.saveConfig();
-					BentoBox.getInstance().getLocalesManager().reloadLanguages();
-				} catch (IOException e) {
-					Logger.error("BentoBox: Cannot add  generator flag to locale!");
-					Logger.error(e);
-				}
+			if (!locale.contains("protection.flags.KGENERATORS_OPEN_MENU_FLAG.name"))
+				locale.set("protection.flags.KGENERATORS_OPEN_MENU_FLAG.name", "Generators open gui");
+			if (!locale.contains("protection.flags.KGENERATORS_OPEN_MENU_FLAG.description"))
+				locale.set("protection.flags.KGENERATORS_OPEN_MENU_FLAG.description", "Toggle menu opening");
+			try {
+				locale.saveConfig();
+				BentoBox.getInstance().getLocalesManager().reloadLanguages();
+			} catch (IOException e) {
+				Logger.error("BentoBox: Cannot add  generator flag to locale!");
+				Logger.error(e);
 			}
 		});
 
@@ -119,8 +116,7 @@ public class BentoBoxHook implements Listener {
 			else if (type == Type.OPEN_MENU_FLAG)
 				flag = KGENERATORS_OPEN_MENU_FLAG;
 
-			if (!oisland.get().isAllowed(User.getInstance(p), flag))
-				return false;
+			return oisland.get().isAllowed(User.getInstance(p), flag);
 		}
 		return true;
 	}
@@ -138,7 +134,7 @@ public class BentoBoxHook implements Listener {
 		Config config;
 
 		try {
-			config = ConfigManager.getConfig("config.yml", (String) null, false, false);
+			config = ConfigManager.getConfig("config.yml", null, false, false);
 			config.loadConfig();
 		} catch (Exception e) {
 			Logger.error("Bentobox hook: Cant load config. Using default values.");

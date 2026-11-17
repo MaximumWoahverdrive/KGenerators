@@ -13,9 +13,9 @@ public class HologramReplaceLinesEvent extends Event {
 
     private static final HandlerList HANDLERS = new HandlerList();
     
-    @Getter private IHologramText hologram;
-    @Getter private GeneratorLocation generatorLocation;
-    @Getter private HashMap<String, String> replacablesMap = new HashMap<String, String>();
+    @Getter private final IHologramText hologram;
+    @Getter private final GeneratorLocation generatorLocation;
+    @Getter private final HashMap<String, String> replacablesMap = new HashMap<>();
 
     public HologramReplaceLinesEvent(GeneratorLocation generatorLocation, IHologramText hologram) {
 		this.generatorLocation = generatorLocation;

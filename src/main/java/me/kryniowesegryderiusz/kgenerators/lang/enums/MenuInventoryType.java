@@ -16,9 +16,9 @@ public enum MenuInventoryType implements IMenuInventoryType
 	;
 
 	@Getter
-	String key;
+	final String key;
 	@Getter
-	MenuInventory menuInventory;
+	final MenuInventory menuInventory;
 	MenuInventoryType(String key, MenuInventory menuInventory) {
 		this.key = key;
 		this.menuInventory = menuInventory;

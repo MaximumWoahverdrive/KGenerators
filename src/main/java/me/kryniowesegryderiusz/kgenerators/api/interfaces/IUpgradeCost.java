@@ -14,7 +14,7 @@ public interface IUpgradeCost {
 	 * @return true if cost was found in config and loaded, false if this cost is not set up
 	 * @throws CannnotLoadUpgradeException if the cost is set up but cannot be loaded
 	 */
-	public boolean load(Config config, String generatorId) throws CannnotLoadUpgradeException;
+	boolean load(Config config, String generatorId) throws CannnotLoadUpgradeException;
 	
 	/**
 	 * Checks if requirements are met
@@ -22,14 +22,14 @@ public interface IUpgradeCost {
 	 * @param amount of generators being upgraded
 	 * @return true if requirements are met
 	 */
-	public boolean checkRequirements(Player p, int amount);
+	boolean checkRequirements(Player p, int amount);
 	
 	/**
 	 * Takes requirements
 	 * @param p the player to take the cost from
 	 * @param amount of generators being upgraded
 	 */
-	public void takeRequirements(Player p, int amount);
+	void takeRequirements(Player p, int amount);
 	
 	
 	/**
@@ -37,6 +37,6 @@ public interface IUpgradeCost {
 	 * @param amount of generators being upgraded
 	 * @return string with formatted cost
 	 */
-	public String getCostFormatted(int amount);
+	String getCostFormatted(int amount);
 
 }

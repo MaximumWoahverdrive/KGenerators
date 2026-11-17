@@ -2,7 +2,6 @@ package me.kryniowesegryderiusz.kgenerators;
 
 import me.kryniowesegryderiusz.kgenerators.utils.Text;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map.Entry;
 
@@ -22,7 +21,6 @@ import me.kryniowesegryderiusz.kgenerators.data.enums.DatabaseType;
 import me.kryniowesegryderiusz.kgenerators.dependencies.hooks.WorldEditHook;
 import me.kryniowesegryderiusz.kgenerators.generators.generator.objects.Generator;
 import me.kryniowesegryderiusz.kgenerators.generators.generator.objects.GeneratorAction;
-import me.kryniowesegryderiusz.kgenerators.generators.locations.PlacedGeneratorsManager.ChunkInfo;
 import me.kryniowesegryderiusz.kgenerators.generators.locations.handlers.enums.ActionType;
 import me.kryniowesegryderiusz.kgenerators.generators.locations.handlers.enums.InteractionType;
 import me.kryniowesegryderiusz.kgenerators.generators.locations.objects.GeneratorLocation;
@@ -53,10 +51,9 @@ public class Commands implements CommandExecutor {
 				}
 				break;
 			case "getall":
-				if (sender instanceof Player) {
+				if (sender instanceof Player player) {
 					if (sender.hasPermission("kgenerators.getall")) {
-						Player player = (Player) sender;
-						for (HashMap.Entry<String, Generator> generatorhmap : Main.getGenerators().getEntrySet()) {
+                        for (Entry<String, Generator> generatorhmap : Main.getGenerators().getEntrySet()) {
 							Generator generator = generatorhmap.getValue();
 							player.getInventory().addItem(generator.getGeneratorItem());
 						}
@@ -84,9 +81,8 @@ public class Commands implements CommandExecutor {
 				break;
 			case "limits":
 				if (sender.hasPermission("kgenerators.limits") || sender instanceof ConsoleCommandSender) {
-					if (sender instanceof Player) {
-						Player player = (Player) sender;
-						Main.getMenus().openLimitsMenu(player);
+					if (sender instanceof Player player) {
+                        Main.getMenus().openLimitsMenu(player);
 					} else {
 						System.out.println("[KGenerators] Use that command as player!");
 					}
@@ -157,7 +153,7 @@ public class Commands implements CommandExecutor {
 
 							if (args.length >= 4) {
 								try {
-									amount = Integer.valueOf(args[3]);
+									amount = Integer.parseInt(args[3]);
 									item.setAmount(amount);
 								} catch (NumberFormatException e) {
 									Lang.getMessageStorage().send(sender, Message.COMMANDS_ANY_NOT_A_INTEGER,
@@ -193,9 +189,8 @@ public class Commands implements CommandExecutor {
 				}
 				break;
 			case "timeleft":
-				if (sender instanceof Player) {
-					Player p = (Player) sender;
-					if (sender.hasPermission("kgenerators.timeleft")) {
+				if (sender instanceof Player p) {
+                    if (sender.hasPermission("kgenerators.timeleft")) {
 						Location l = null;
 						if (p.getTargetBlockExact(5) != null)
 							l = p.getTargetBlockExact(5).getLocation();
@@ -214,10 +209,9 @@ public class Commands implements CommandExecutor {
 				}
 				break;
 			case "upgrade":
-				if (sender instanceof Player) {
-					Player p = (Player) sender;
+				if (sender instanceof Player p) {
 
-					if (Main.getUpgrades().getUpgrade(p.getItemInHand()) != null) {
+                    if (Main.getUpgrades().getUpgrade(p.getItemInHand()) != null) {
 						Main.getUpgrades().getUpgrade(p.getItemInHand()).handUpgrade(p);
 					} else {
 						Lang.getMessageStorage().send(p, Message.UPGRADES_NO_NEXT_LEVEL);
@@ -229,8 +223,8 @@ public class Commands implements CommandExecutor {
 			case "menu":
 				if (sender.hasPermission("kgenerators.menu") || sender instanceof ConsoleCommandSender) {
 					if (args.length == 1) {
-						if (sender instanceof Player)
-							Main.getMenus().openMainMenu((Player) sender);
+						if (sender instanceof Player player)
+							Main.getMenus().openMainMenu(player);
 						else
 							System.out.println("[KGenerators] Use that command as player!");
 					} else if (sender.hasPermission("kgenerators.menu.others")) {
@@ -240,9 +234,9 @@ public class Commands implements CommandExecutor {
 						if (player != null) {
 							if (args.length == 2) {
 								Main.getMenus().openMainMenu(player);
-							} else if (!args[2].toLowerCase().equals("chances")
-									&& !args[2].toLowerCase().equals("recipe")
-									&& !args[2].toLowerCase().equals("upgrade")) {
+							} else if (!args[2].equalsIgnoreCase("chances")
+									&& !args[2].equalsIgnoreCase("recipe")
+									&& !args[2].equalsIgnoreCase("upgrade")) {
 								Lang.getMessageStorage().send(sender, Message.COMMANDS_ANY_MENU_DOESNT_EXIST);
 							} else if (args.length < 4 || Main.getGenerators().get(args[3]) == null) {
 								Lang.getMessageStorage().send(sender, Message.COMMANDS_ANY_GENERATOR_DOESNT_EXIST);
@@ -376,7 +370,7 @@ public class Commands implements CommandExecutor {
 					return false;
 				}
 
-				if (args[1].toLowerCase().equals("worldedit")) {
+				if (args[1].equalsIgnoreCase("worldedit")) {
 
 					if (!(sender instanceof Player)) {
 						System.out.println("[KGenerators] Use that command as player!");
@@ -384,7 +378,7 @@ public class Commands implements CommandExecutor {
 					}
 					Player p = (Player) sender;
 
-					ArrayList<GeneratorLocation> gls = WorldEditHook.getGeneratorsInRange(p);
+                    ArrayList<GeneratorLocation> gls = WorldEditHook.getGeneratorsInRange(p);
 					if (gls != null) {
 						int amount = gls.size();
 						for (GeneratorLocation gl : gls) {

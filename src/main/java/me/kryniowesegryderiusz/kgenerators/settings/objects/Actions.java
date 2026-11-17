@@ -10,7 +10,7 @@ import me.kryniowesegryderiusz.kgenerators.utils.immutable.Config;
 
 public class Actions {
 
-	private LinkedHashMap<ActionType, GeneratorAction> actions = new LinkedHashMap<ActionType, GeneratorAction>();
+	private final LinkedHashMap<ActionType, GeneratorAction> actions = new LinkedHashMap<>();
 
 	public Actions() {
 	}

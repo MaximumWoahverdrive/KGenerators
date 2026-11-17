@@ -26,7 +26,7 @@ public class Upgrade {
 	@Getter private String generatorId;
 	@Getter private String nextGeneratorId;	
 	
-	ArrayList<IUpgradeCost> upgradeCosts = new ArrayList<IUpgradeCost>();
+	ArrayList<IUpgradeCost> upgradeCosts = new ArrayList<>();
 	
 	/**
 	 * Loads upgrade from file and adds to UpgradeManager
@@ -54,7 +54,7 @@ public class Upgrade {
 			
 			upgradesManager.addUpgrade(generatorId, this);
 			
-			Logger.debugPluginLoad("Upgrades file: Loaded upgrade " + this.toString());
+			Logger.debugPluginLoad("Upgrades file: Loaded upgrade " + this);
 			
 			
 		}
@@ -141,7 +141,7 @@ public class Upgrade {
 	}
 	
 	public StringContent getCostsFormattedGUI() {
-		ArrayList<String> costs = new ArrayList<String>();
+		ArrayList<String> costs = new ArrayList<>();
 		for (IUpgradeCost uc : this.upgradeCosts) {
 			costs.addAll(Lang.getMenuItemAdditionalLinesStorage().get(MenuItemAdditionalLines.UPGRADE_COST).replace("<cost>", uc.getCostFormatted(1)).getLines());
 		}

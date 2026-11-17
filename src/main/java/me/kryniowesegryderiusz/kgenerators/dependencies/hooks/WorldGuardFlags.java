@@ -16,7 +16,6 @@ import com.sk89q.worldguard.protection.managers.RegionManager;
 import com.sk89q.worldguard.protection.regions.RegionContainer;
 
 import me.kryniowesegryderiusz.kgenerators.dependencies.enums.WGFlag;
-import me.kryniowesegryderiusz.kgenerators.generators.locations.objects.GeneratorLocation;
 import me.kryniowesegryderiusz.kgenerators.logger.Logger;
 
 /**
@@ -30,11 +29,7 @@ class WorldGuardFlags {
 	public static StateFlag INTERACT_FLAG;
 
 	public boolean isWorldGuardHooked() {
-		if (PICK_UP_FLAG == null || ONLY_GEN_BREAK_FLAG == null || INTERACT_FLAG == null) {
-			return false;
-		} else {
-			return true;
-		}
+		return PICK_UP_FLAG != null && ONLY_GEN_BREAK_FLAG != null && INTERACT_FLAG != null;
 	}
 
 	public void worldGuardFlagsAdd() {
@@ -61,15 +56,15 @@ class WorldGuardFlags {
 				} catch (FlagConflictException e) {
 					Logger.error("WorldGuard: FlagConflictException!");
 					Flag<?> existing = registry.get(eflag.getFlagId());
-					if (existing instanceof StateFlag) {
+					if (existing instanceof StateFlag existingFlag) {
 						Logger.warn("WorldGuard: Overriding flag!");
 
 						if (eflag == WGFlag.PICK_UP)
-							PICK_UP_FLAG = (StateFlag) existing;
+							PICK_UP_FLAG = existingFlag;
 						if (eflag == WGFlag.ONLY_GEN_BREAK)
-							ONLY_GEN_BREAK_FLAG = (StateFlag) existing;
+							ONLY_GEN_BREAK_FLAG = existingFlag;
 						if (eflag == WGFlag.INTERACT)
-							INTERACT_FLAG = (StateFlag) existing;
+							INTERACT_FLAG = existingFlag;
 
 					} else {
 						Logger.error("WorldGuard: Flag overriding not possible! Types dont match!");
@@ -105,8 +100,6 @@ class WorldGuardFlags {
 		if (flag == WGFlag.INTERACT)
 			stateFlag = INTERACT_FLAG;
 
-		if (flag != null && regionSet.testState(localPlayer, stateFlag))
-			return true;
-		return false;
+		return flag != null && regionSet.testState(localPlayer, stateFlag);
 	}
 }

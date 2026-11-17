@@ -25,13 +25,11 @@ public class CraftingListeners implements Listener {
 
 		try {
 
-			if (!(e.getWhoClicked() instanceof Player) || e.isCancelled()) {
+			if (!(e.getWhoClicked() instanceof Player p) || e.isCancelled()) {
 				return;
 			}
 
-			Player p = (Player) e.getWhoClicked();
-			
-			Generator resultGenerator = Main.getGenerators().get(e.getRecipe().getResult());
+            Generator resultGenerator = Main.getGenerators().get(e.getRecipe().getResult());
 			
 			/*
 			 * Check for crafting something with generator
@@ -59,7 +57,6 @@ public class CraftingListeners implements Listener {
 							Text.name(resultGenerator.getGeneratorItem().getItemMeta()), "<permission>", permission);
 					e.setResult(Result.DENY);
 					closeInv(p);
-					return;
 				}
 			}
 

@@ -44,10 +44,10 @@ public enum MenuItemType implements IMenuItemType
 
 	;
 	@Getter
-	MenuInventoryType menuInventory;
-	String subKey;
+	final MenuInventoryType menuInventory;
+	final String subKey;
 	@Getter
-	MenuItem menuItem;
+	final MenuItem menuItem;
 	
 	MenuItemType(MenuInventoryType menuInventory, String subKey, MenuItem menuItem) {
 		this.menuInventory = menuInventory;

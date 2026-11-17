@@ -3,7 +3,7 @@ package me.kryniowesegryderiusz.kgenerators.gui.objects;
 import me.kryniowesegryderiusz.kgenerators.utils.Text;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.List;
 
 import org.bukkit.Material;
 import com.cryptomorin.xseries.XEnchantment;
@@ -31,7 +31,7 @@ public class MenuItem implements Cloneable {
 	private ItemStack itemStack;
 	@Getter
 	private String name = "";
-	private ArrayList<String> lore = new ArrayList<String>();
+	private ArrayList<String> lore = new ArrayList<>();
 	private String slots = "";
 	@Setter
 	private boolean glow = false;
@@ -44,7 +44,7 @@ public class MenuItem implements Cloneable {
 		this.itemType = itemType;
 		setName(name);
 		this.glow = glow;
-		this.slots = slots.replaceAll(" ", "");
+		this.slots = slots.replace(" ", "");
 	}
 
 	public MenuItem(boolean enabled, String itemType, String name, boolean glow, String slots, ArrayList<String> lore) {
@@ -62,9 +62,9 @@ public class MenuItem implements Cloneable {
 		setName(name);
 		this.glow = glow;
 		boolean first = true;
-		for (String s : Arrays.asList(loreAndSlot)) {
+		for (String s : loreAndSlot) {
 			if (first) {
-				this.slots = s.replaceAll(" ", "");
+				this.slots = s.replace(" ", "");
 				first = false;
 			} else {
 				addLore(s);
@@ -78,7 +78,7 @@ public class MenuItem implements Cloneable {
 	}
 
 	public void addLore(String... lore) {
-		for (String s : Arrays.asList(lore)) {
+		for (String s : lore) {
 			if (s != null)
 				this.lore.add(Text.colorize(s));
 		}
@@ -88,7 +88,7 @@ public class MenuItem implements Cloneable {
 		this.addLore(stringContent.getLines());
 	}
 
-	public void addLore(ArrayList<String> lore) {
+	public void addLore(List<String> lore) {
 		for (String s : lore) {
 			if (s != null)
 				this.lore.add(Text.colorize(s));
@@ -102,13 +102,11 @@ public class MenuItem implements Cloneable {
 
 	public void replace(String key, String value) {
 		this.name = this.name.replace(key, value);
-		for (int i = 0; i < this.lore.size(); i++) {
-			this.lore.set(i, this.lore.get(i).replace(key, value));
-		}
+        this.lore.replaceAll(s -> s.replace(key, value));
 	}
 
 	public void replaceLore(String key, StringContent stringContent) {
-		ArrayList<String> newDesc = new ArrayList<String>();
+		ArrayList<String> newDesc = new ArrayList<>();
 		for (String s : this.lore) {
 			if (s.contains(key)) {
 				if (stringContent != null) {
@@ -133,9 +131,9 @@ public class MenuItem implements Cloneable {
 		if (item.getType().equals(Material.AIR))
 			return item;
 
-		ItemMeta meta = null;
+		ItemMeta meta;
 		if (item.getItemMeta() != null) {
-			meta = (ItemMeta) item.getItemMeta();
+			meta = item.getItemMeta();
 		} else {
 			meta = Main.getInstance().getServer().getItemFactory().getItemMeta(item.getType());
 		}
@@ -195,16 +193,15 @@ public class MenuItem implements Cloneable {
 	}
 
 	public ArrayList<Integer> getSlots() {
-		ArrayList<Integer> slots = new ArrayList<Integer>();
+		ArrayList<Integer> slots = new ArrayList<>();
 		String[] s = this.slots.split(",");
-		for (int i = 0; i < s.length; i++)
-			slots.add(Integer.valueOf(s[i]));
+        for (String string : s) slots.add(Integer.valueOf(string));
 		return slots;
 	}
 
 	public MenuItem clone() {
 		return new MenuItem(this.enabled, this.itemType, this.name, this.glow, this.slots,
-				new ArrayList<String>(this.lore));
+            new ArrayList<>(this.lore));
 	}
 
 }

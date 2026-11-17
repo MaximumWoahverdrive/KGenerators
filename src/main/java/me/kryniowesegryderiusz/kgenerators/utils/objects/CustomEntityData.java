@@ -13,7 +13,6 @@ import org.bukkit.inventory.ItemStack;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
-import me.kryniowesegryderiusz.kgenerators.Main;
 import me.kryniowesegryderiusz.kgenerators.dependencies.hooks.MythicMobsHook;
 import me.kryniowesegryderiusz.kgenerators.utils.EntityUtils;
 import me.kryniowesegryderiusz.kgenerators.utils.ItemUtils;
@@ -41,7 +40,7 @@ public class CustomEntityData {
 	
 	public ArrayList<Entity> spawnEntities(Location location) {
 		
-		ArrayList<Entity> spawnedEntities = new ArrayList<Entity>();
+		ArrayList<Entity> spawnedEntities = new ArrayList<>();
 		
 		for (int i = 0; i < amount; i++) {
 			if (this.entityTypeString.contains("mythicmobs")) {
@@ -64,7 +63,7 @@ public class CustomEntityData {
 	}
 	
 	public String toString() {
-		return "Entity: " + this.entityTypeString + "[" + String.valueOf(amount) + " " + name + "]";
+		return "Entity: " + this.entityTypeString + "[" + amount + " " + name + "]";
 	}
 	
 	/**

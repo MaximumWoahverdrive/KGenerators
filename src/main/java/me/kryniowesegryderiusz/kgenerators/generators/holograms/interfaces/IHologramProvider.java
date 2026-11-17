@@ -3,9 +3,6 @@ import me.kryniowesegryderiusz.kgenerators.utils.Sched;
 
 import java.util.ArrayList;
 
-import org.bukkit.Bukkit;
-
-import me.kryniowesegryderiusz.kgenerators.Main;
 import me.kryniowesegryderiusz.kgenerators.generators.locations.objects.GeneratorLocation;
 
 public abstract class IHologramProvider {

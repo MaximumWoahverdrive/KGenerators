@@ -30,10 +30,10 @@ import me.kryniowesegryderiusz.kgenerators.utils.immutable.ConfigManager;
 
 public class GeneratorsManager {
 
-	private LinkedHashMap<String, Generator> generators = new LinkedHashMap<String, Generator>();
+	private final LinkedHashMap<String, Generator> generators = new LinkedHashMap<>();
 
 	@Getter
-	private GeneratedObjectsManager generatedObjectsManager;
+	private final GeneratedObjectsManager generatedObjectsManager;
 
 	public GeneratorsManager() {
 		Logger.debugPluginLoad("GeneratorsManager: Setting up manager");
@@ -73,7 +73,7 @@ public class GeneratorsManager {
 	}
 
 	public Set<Entry<String, Generator>> getSpecifiedEntrySet(int firstGeneratorNr, int numberOfGenerators) {
-		LinkedHashMap<String, Generator> gens = new LinkedHashMap<String, Generator>();
+		LinkedHashMap<String, Generator> gens = new LinkedHashMap<>();
 		int nr = 0;
 		for (Entry<String, Generator> e : generators.entrySet()) {
 			if (nr >= firstGeneratorNr) {
@@ -88,9 +88,7 @@ public class GeneratorsManager {
 	}
 
 	public boolean exists(String id) {
-		if (generators.containsKey(id))
-			return true;
-		return false;
+		return generators.containsKey(id);
 	}
 
 	/**
@@ -124,15 +122,14 @@ public class GeneratorsManager {
 
 	public void reload() {
 		
-		LinkedHashMap<String, Generator> oldGenerators = new LinkedHashMap<String, Generator>();
-		oldGenerators.putAll(generators);
+		LinkedHashMap<String, Generator> oldGenerators = new LinkedHashMap<>(generators);
 
 		generators.clear();
 
 		Config config;
 
 		try {
-			config = ConfigManager.getConfig("generators.yml", (String) null, true, false);
+			config = ConfigManager.getConfig("generators.yml", null, true, false);
 			config.loadConfig();
 		} catch (InvalidConfigurationException e) {
 			Logger.error("Generators file: You've missconfigured generators.yml file. Check your spaces! More info below. Disabling plugin.");
@@ -163,21 +160,18 @@ public class GeneratorsManager {
 
 	public class GeneratedObjectsManager {
 
-		private HashMap<String, Class<?>> generatedObjects = new HashMap<String, Class<?>>();
+		private final HashMap<String, Class<?>> generatedObjects = new HashMap<>();
 
 		public <T extends AbstractGeneratedObject> void registerGeneratedObject(Class<T> c) {
 			try {
 				AbstractGeneratedObject ago = c.getDeclaredConstructor().newInstance();
 				this.generatedObjects.put(ago.getType(), c);
 				Logger.debugPluginLoad("GeneratedObjectsManager: Loaded " + c.getSimpleName() + " with type " + ago.getType());
-			} catch (Exception e) {
-				Logger.error("GeneratedObjectsManager: Cannot initialise GeneratedObject: " + c.getSimpleName());
-				Logger.error(e);
-			} catch (Error e) {
+			} catch (Exception | Error e) {
 				Logger.error("GeneratedObjectsManager: Cannot initialise GeneratedObject: " + c.getSimpleName());
 				Logger.error(e);
 			}
-		}
+        }
 
 		public AbstractGeneratedObject getNewObject(String type) {
 			if (type != null && !type.isEmpty() && this.generatedObjects.containsKey(type)) {

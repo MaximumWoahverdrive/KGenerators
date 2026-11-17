@@ -22,7 +22,7 @@ public class RecipeMenu {
 	
 	public static Inventory get(Player player, Generator generator)
 	{
-		ArrayList<MenuItemType> exludedEnumMenuItems = new ArrayList<MenuItemType>();
+		ArrayList<MenuItemType> exludedEnumMenuItems = new ArrayList<>();
 		exludedEnumMenuItems.add(MenuItemType.RECIPE_MENU_INGREDIENS);
 		exludedEnumMenuItems.add(MenuItemType.RECIPE_MENU_RESULT);
 		

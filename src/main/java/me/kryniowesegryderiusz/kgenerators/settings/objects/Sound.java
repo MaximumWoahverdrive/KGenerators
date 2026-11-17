@@ -25,7 +25,7 @@ public class Sound {
 			String name = cfg.getString(path + ".sound");
 			if (!name.toLowerCase().equals("none")) {
 				Optional<XSound> xso = XSound.of(name);
-				if (!xso.isPresent()) {
+				if (xso.isEmpty()) {
 					Logger.error("Config file: Sound " + name + " doesnt exist! It'll not work!");
 					return;
 				}

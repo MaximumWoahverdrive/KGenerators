@@ -9,7 +9,7 @@ import me.kryniowesegryderiusz.kgenerators.utils.immutable.Config;
 
 public class MenuInventoryStorage {
 	
-	private HashMap<String, MenuInventory> lang = new HashMap<String, MenuInventory>();
+	private final HashMap<String, MenuInventory> lang = new HashMap<>();
 	Config config;
 	
 	public MenuInventoryStorage(Config config)

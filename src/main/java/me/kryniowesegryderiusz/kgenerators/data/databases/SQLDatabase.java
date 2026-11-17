@@ -27,31 +27,18 @@ import me.kryniowesegryderiusz.kgenerators.utils.FilesUtils;
 
 public class SQLDatabase implements IDatabase {
 
-	private DatabaseType dbType;
+	private final DatabaseType dbType;
 	
 	@Getter private HikariDataSource dataSource;
 
-	private static String PLACED_TABLE = "`kgen_placed`";
-	private static String SCHEDULED_TABLE = "`kgen_scheduled`";
+	private static final String PLACED_TABLE = "`kgen_placed`";
+	private static final String SCHEDULED_TABLE = "`kgen_scheduled`";
 
 	public SQLDatabase(DatabaseType dbType, SQLConfig sqlconfig) {
 		this.dbType = dbType;
 
 		try {
 			if (dbType == DatabaseType.SQLITE) {
-				/*
-				FilesUtils.mkdir("data");
-				Class.forName("org.sqlite.JDBC");
-				conn = DriverManager.getConnection(
-						"jdbc:sqlite:" + Main.getInstance().getDataFolder().getPath() + "/data/database.db");
-				Statement stat = conn.createStatement();
-				stat.executeUpdate("CREATE TABLE IF NOT EXISTS " + PLACED_TABLE
-						+ " (id INTEGER NOT NULL PRIMARY KEY, world VARCHAR(32), x INT(8), y INT(8), z INT(8), chunk_x INT(8), chunk_z INT(8), generator_id VARCHAR(64), owner VARCHAR(16), last_generated_object INT(8))");
-				stat.executeUpdate("CREATE TABLE IF NOT EXISTS " + SCHEDULED_TABLE
-						+ " (id INTEGER NOT NULL PRIMARY KEY, world VARCHAR(32), x INT(8), y INT(8), z INT(8), creation_timestamp INT(8), delay_left INT(8))");
-				stat.close();
-				*/
-				
 				FilesUtils.mkdir("data");
 				
 				HikariConfig config = new HikariConfig();
@@ -82,20 +69,6 @@ public class SQLDatabase implements IDatabase {
 				conn.close();
 				
 			} else if (dbType == DatabaseType.MYSQL) {
-				/*
-				String DB_URL = "jdbc:mysql://" + sqlconfig.getDbHost() + ":" + sqlconfig.getDbPort() + "/"
-						+ sqlconfig.getDbName() + "?characterEncoding=utf8&autoReconnect=true&useSSL="
-						+ sqlconfig.isSsl();
-				conn = DriverManager.getConnection(DB_URL, sqlconfig.getDbUser(), sqlconfig.getDbPass());
-
-				Statement stat = conn.createStatement();
-				stat.executeUpdate("CREATE TABLE IF NOT EXISTS " + PLACED_TABLE
-						+ " (id INT(8) NOT NULL PRIMARY KEY AUTO_INCREMENT, world VARCHAR(32), x INT(8), y INT(8), z INT(8), chunk_x INT(8), chunk_z INT(8), generator_id VARCHAR(64), owner VARCHAR(16), last_generated_object INT(8))");
-				stat.executeUpdate("CREATE TABLE IF NOT EXISTS " + SCHEDULED_TABLE
-						+ " (id INT(8) NOT NULL PRIMARY KEY AUTO_INCREMENT, world VARCHAR(32), x INT(8), y INT(8), z INT(8), creation_timestamp INT(8), delay_left INT(8))");
-				stat.close();
-				*/
-				
 				HikariConfig config = new HikariConfig();
 				
 				
@@ -130,7 +103,7 @@ public class SQLDatabase implements IDatabase {
 			}
 
 
-			Logger.info("Database " + dbType.name() + ": Connected to " + dbType.toString() + " database");
+			Logger.info("Database " + dbType.name() + ": Connected to " + dbType + " database");
 
 		} catch (Exception e) {
 			Main.getInstance().getServer().getPluginManager().disablePlugin(Main.getInstance());
@@ -145,7 +118,6 @@ public class SQLDatabase implements IDatabase {
 		Logger.info("Database " + dbType.name() + ": Connection closed");
 	}
 
-	@SuppressWarnings("resource")
 	@Override
 	public void updateTable() {
 
@@ -322,7 +294,7 @@ public class SQLDatabase implements IDatabase {
 				stat.executeUpdate();
 			}
 		} catch (Exception e) {
-			Logger.error("Database " + dbType.name() + ": Cannot save generator " + gl.toString() + " to database");
+			Logger.error("Database " + dbType.name() + ": Cannot save generator " + gl + " to database");
 			Logger.error(e);
 		} finally {
 			this.close(stat, conn, res);
@@ -369,7 +341,7 @@ public class SQLDatabase implements IDatabase {
 		PreparedStatement stat = null;
 		ResultSet res = null;
 		
-		ArrayList<GeneratorLocation> gl = new ArrayList<GeneratorLocation>();
+		ArrayList<GeneratorLocation> gl = new ArrayList<>();
 		try {
 			GeneratorsLoader loader = new GeneratorsLoader();
 
@@ -396,7 +368,7 @@ public class SQLDatabase implements IDatabase {
 		PreparedStatement stat = null;
 		ResultSet res = null;
 		
-		ArrayList<GeneratorLocation> gl = new ArrayList<GeneratorLocation>();
+		ArrayList<GeneratorLocation> gl;
 		try {
 			GeneratorsLoader loader = new GeneratorsLoader();
 
@@ -425,7 +397,7 @@ public class SQLDatabase implements IDatabase {
 		PreparedStatement stat = null;
 		ResultSet res = null;
 		
-		ArrayList<GeneratorLocation> gl = new ArrayList<GeneratorLocation>();
+		ArrayList<GeneratorLocation> gl = new ArrayList<>();
 		try {
 			GeneratorsLoader loader = new GeneratorsLoader();
 
@@ -460,7 +432,7 @@ public class SQLDatabase implements IDatabase {
 		PreparedStatement stat = null;
 		ResultSet res = null;
 		
-		ArrayList<GeneratorLocation> gl = new ArrayList<GeneratorLocation>();
+		ArrayList<GeneratorLocation> gl = new ArrayList<>();
 		try {
 			GeneratorsLoader loader = new GeneratorsLoader();
 
@@ -487,7 +459,7 @@ public class SQLDatabase implements IDatabase {
 		PreparedStatement stat = null;
 		ResultSet res = null;
 		
-		ArrayList<GeneratorLocation> gl = new ArrayList<GeneratorLocation>();
+		ArrayList<GeneratorLocation> gl = new ArrayList<>();
 		try {
 			GeneratorsLoader loader = new GeneratorsLoader();
 
@@ -573,7 +545,7 @@ public class SQLDatabase implements IDatabase {
 			stat.setInt(6, schedule.getTimeLeft());
 			stat.executeUpdate();
 		} catch (Exception e) {
-			Logger.error("Database " + dbType.name() + ": Cannot remove schedule " + gl.toString() + " from database");
+			Logger.error("Database " + dbType.name() + ": Cannot remove schedule " + gl + " from database");
 			Logger.error(e);
 		} finally {
 			this.close(stat, conn, null);
@@ -624,7 +596,7 @@ public class SQLDatabase implements IDatabase {
 			stat.setInt(4, l.getBlockZ());
 			stat.executeUpdate();
 		} catch (Exception e) {
-			Logger.error("Database " + dbType.name() + ": Cannot remove schedule " + gl.toString() + " from  database");
+			Logger.error("Database " + dbType.name() + ": Cannot remove schedule " + gl + " from  database");
 			Logger.error(e);
 		} finally {
 			this.close(stat, conn, null);

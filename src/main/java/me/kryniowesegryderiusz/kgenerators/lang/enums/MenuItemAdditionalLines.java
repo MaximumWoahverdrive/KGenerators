@@ -24,9 +24,9 @@ public enum MenuItemAdditionalLines implements IMenuItemAdditionalLines
 	;
 
 	@Getter
-	String key;
+	final String key;
 	@Getter
-	StringContent stringContent;
+	final StringContent stringContent;
 	MenuItemAdditionalLines(String key, StringContent stringContent) {
 		this.key = key;
 		this.stringContent = stringContent;

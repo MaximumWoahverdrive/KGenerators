@@ -26,15 +26,14 @@ public class VaultHook {
             return false;
         }
         econ = rsp.getProvider();
-        return econ != null;
+        return true;
     }
     
     public static boolean takeMoney(Player player, Double cost)
     {
     	EconomyResponse r = econ.withdrawPlayer(player, cost);
-    	
-    	if (r.transactionSuccess()) return true;
-    	else return false;
+
+        return r.transactionSuccess();
     }
     
     public static void giveMoney(Player player, double amount)
@@ -49,7 +48,7 @@ public class VaultHook {
     	
         RegisteredServiceProvider<Permission> rsp = Main.getInstance().getServer().getServicesManager().getRegistration(Permission.class);
         perms = rsp.getProvider();
-        return perms != null;
+        return true;
     }
     
     public static boolean hasPermission(OfflinePlayer offPlayer, String perm)

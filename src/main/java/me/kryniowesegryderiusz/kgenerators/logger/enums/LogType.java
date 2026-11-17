@@ -1,5 +1,8 @@
 package me.kryniowesegryderiusz.kgenerators.logger.enums;
 
+import lombok.Getter;
+
+@Getter
 public enum LogType
 {
 	INFO(""),
@@ -7,15 +10,10 @@ public enum LogType
 	DEBUG("[Debug] "),
 	WARNING("!!! WARNING !!! "),
 ;
-	String header;
+	final String header;
 	
 	LogType(String header) {
 		this.header = header;
-	}
-	
-	public String getHeader()
-	{
-		return this.header;
 	}
 
 }

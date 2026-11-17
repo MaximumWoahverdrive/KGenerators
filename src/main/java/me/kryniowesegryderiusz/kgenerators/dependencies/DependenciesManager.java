@@ -24,7 +24,7 @@ import me.kryniowesegryderiusz.kgenerators.logger.Logger;
 public class DependenciesManager {
 
 	@Getter
-	private ArrayList<Dependency> dependencies = new ArrayList<Dependency>();
+	private final ArrayList<Dependency> dependencies = new ArrayList<>();
 
 	private PlaceholdersAPIExpansion papiExpansion;
 

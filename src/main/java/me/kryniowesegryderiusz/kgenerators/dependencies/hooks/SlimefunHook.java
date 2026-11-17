@@ -38,8 +38,7 @@ public class SlimefunHook implements Listener {
 		if (e.isCancelled())
 			return;
 		
-		ArrayList<Block> blocks = new ArrayList<Block>();
-		blocks.addAll(e.getAdditionalBlocks());
+		ArrayList<Block> blocks = new ArrayList<>(e.getAdditionalBlocks());
 		blocks.add(e.getPrimaryBlock());
 		
 		boolean cancel = false;

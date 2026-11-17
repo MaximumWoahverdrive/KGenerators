@@ -9,8 +9,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import org.bukkit.Bukkit;
-
 import lombok.Getter;
 import me.kryniowesegryderiusz.kgenerators.Main;
 import me.kryniowesegryderiusz.kgenerators.addons.events.HologramReplaceLinesEvent;
@@ -30,7 +28,7 @@ public class HologramsManager {
 	@Getter
 	private IHologramProvider hologramProvider;
 
-	private List<GeneratorLocation> holograms = Collections.synchronizedList(new ArrayList<GeneratorLocation>());
+	private final List<GeneratorLocation> holograms = Collections.synchronizedList(new ArrayList<>());
 
 	public HologramsManager() {
 
@@ -56,38 +54,34 @@ public class HologramsManager {
 		if (hologramProvider == null)
 			return;
 
-		Sched.globalTimer(new Runnable() {
-			public void run() {
+		Sched.globalTimer(() -> {
 
-				try {
-					synchronized (holograms) {
-						Iterator<GeneratorLocation> iter = holograms.iterator();
-						while (iter.hasNext()) {
-							try {
-								GeneratorLocation gLocation = iter.next();
+            try {
+                synchronized (holograms) {
+                    Iterator<GeneratorLocation> iter = holograms.iterator();
+                    while (iter.hasNext()) {
+                        try {
+                            GeneratorLocation gLocation = iter.next();
 
-								if (Main.getPlacedGenerators().isLoaded(gLocation) && Main.getSchedules().timeLeft(gLocation) > 0) {
-									hologramProvider.updateHologram(gLocation,
-											Main.getHolograms().getHologramRemainingTimeLines(gLocation));
-								} else {
-									try {
-										iter.remove();
-									} finally {}
-								}
-							} catch (ConcurrentModificationException eme) {
-								Logger.debugSchedulesManager(eme);
-							}
+                            if (Main.getPlacedGenerators().isLoaded(gLocation) && Main.getSchedules().timeLeft(gLocation) > 0) {
+                                hologramProvider.updateHologram(gLocation,
+                                        Main.getHolograms().getHologramRemainingTimeLines(gLocation));
+                            } else {
+                                iter.remove();
+                            }
+                        } catch (ConcurrentModificationException eme) {
+                            Logger.debugSchedulesManager(eme);
+                        }
 
-						}
-					}
+                    }
+                }
 
-		    	} catch (Exception e) {
-		    		Logger.error("Holograms: An error occurred at holograms task");
-		    		Logger.error(e);
-		    	}
+            } catch (Exception e) {
+                Logger.error("Holograms: An error occurred at holograms task");
+                Logger.error(e);
+            }
 
-			}
-		}, 1L, Main.getSettings().getHologramUpdateFrequency() * 1L);
+        }, 1L, Main.getSettings().getHologramUpdateFrequency());
 	}
 
 	public void createRemainingTimeHologram(GeneratorLocation gLocation) {
@@ -108,8 +102,7 @@ public class HologramsManager {
 		if (hologramProvider == null)
 			return;
 		hologramProvider.removeHologram(gLocation);
-		if (holograms.contains(gLocation))
-			holograms.remove(gLocation);
+        holograms.remove(gLocation);
 	}
 
 	public ArrayList<String> getHologramRemainingTimeLines(GeneratorLocation gLocation) {

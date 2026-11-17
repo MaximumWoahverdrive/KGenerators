@@ -54,11 +54,10 @@ public class GeneratorLocationPickUpHandler {
 		}
 		
 		gLocation.removeGenerator(true, p);
-		Logger.debugPlayer(p.getName() + " picked up " + gLocation.toString());
+		Logger.debugPlayer(p.getName() + " picked up " + gLocation);
 		Lang.getMessageStorage().send(p, Message.GENERATORS_PICK_UP_SUCCESFULL,
 				"<generator>", Text.name(generator.getGeneratorItem().getItemMeta()));
 		
 		Main.getSettings().getPickupSound().play(p);
-		return;
 	}
 }

@@ -18,7 +18,7 @@ public class CommandTabCompleter implements TabCompleter {
 	@Override
 	public List<String> onTabComplete(CommandSender sender, Command command, String alias, String[] args) {
 
-		List<String> c = new ArrayList<String>();
+		List<String> c = new ArrayList<>();
 
 		if (args.length == 3) {
 			if (args[0].equals("give")) {
@@ -61,7 +61,7 @@ public class CommandTabCompleter implements TabCompleter {
 	}
 
 	ArrayList<String> getPlayers(String arg) {
-		ArrayList<String> players = new ArrayList<String>();
+		ArrayList<String> players = new ArrayList<>();
 		if (isBlank(arg)) {
 			for (Player p : Bukkit.getOnlinePlayers()) {
 				players.add(p.getName());
@@ -76,7 +76,7 @@ public class CommandTabCompleter implements TabCompleter {
 	}
 
 	ArrayList<String> getGenerators(String arg) {
-		ArrayList<String> generators = new ArrayList<String>();
+		ArrayList<String> generators = new ArrayList<>();
 		if (isBlank(arg)) {
 			for (Generator g : Main.getGenerators().getAll()) {
 				generators.add(g.getId());
@@ -91,8 +91,6 @@ public class CommandTabCompleter implements TabCompleter {
 	}
 
 	boolean isBlank(String s) {
-		if (s.isEmpty() || s.equals(" "))
-			return true;
-		return false;
+		return s.isEmpty() || s.equals(" ");
 	}
 }

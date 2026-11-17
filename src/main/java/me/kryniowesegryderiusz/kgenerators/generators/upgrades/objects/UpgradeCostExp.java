@@ -16,9 +16,7 @@ public class UpgradeCostExp implements IUpgradeCost  {
 
 	@Override
 	public boolean checkRequirements(Player p, int amount) {
-		if (this.cost*amount <= p.getTotalExperience())
-			return true;
-		return false;
+		return this.cost*amount <= p.getTotalExperience();
 	}
 
 	@Override
@@ -37,6 +35,6 @@ public class UpgradeCostExp implements IUpgradeCost  {
 
 	@Override
 	public String getCostFormatted(int amount) {
-		return String.valueOf(amount*this.cost) + " " + Lang.getMessageStorage().get(Message.UPGRADES_COST_EXP);
+		return amount*this.cost + " " + Lang.getMessageStorage().get(Message.UPGRADES_COST_EXP);
 	}
 }

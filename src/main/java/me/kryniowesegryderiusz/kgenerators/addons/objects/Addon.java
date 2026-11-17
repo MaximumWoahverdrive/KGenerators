@@ -16,19 +16,19 @@ import me.kryniowesegryderiusz.kgenerators.logger.Logger;
 public class Addon {
 
 	@Getter
-	private String name;
+	private final String name;
 	@Getter
-	private String version;
+	private final String version;
 	@Getter
-	private ArrayList<String> configs = new ArrayList<String>();
+	private final ArrayList<String> configs = new ArrayList<>();
 	@Getter
-	private HashMap<String, AddonCommand> commands = new HashMap<String, AddonCommand>();
+	private final HashMap<String, AddonCommand> commands = new HashMap<>();
 
 	public Addon(Plugin plugin) {
 		this.name = plugin.getPluginMeta().getName();
 		this.version = plugin.getPluginMeta().getVersion();
 		Addons.register(this);
-		Logger.info("Addons manager: Registered " + this.toString() + " addon");
+		Logger.info("Addons manager: Registered " + this + " addon");
 	}
 
 	public String toString() {
@@ -36,6 +36,6 @@ public class Addon {
 	}
 	
 	public interface AddonCommand {
-		public void onCommand(CommandSender sender, String[] args);
+		void onCommand(CommandSender sender, String[] args);
 	}
 }

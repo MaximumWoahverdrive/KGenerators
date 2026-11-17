@@ -7,7 +7,6 @@ import java.util.concurrent.ThreadLocalRandom;
 import org.jetbrains.annotations.Nullable;
 
 import org.bukkit.Location;
-import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.inventory.ItemStack;
@@ -29,7 +28,7 @@ public class CustomDrops {
 
 	@Getter private int exp = 0;
 	@Getter private double money = 0.0;
-	@Getter private ArrayList<String> commands = new ArrayList<String>();
+	@Getter private ArrayList<String> commands = new ArrayList<>();
 
 	/**
 	 * Loads custom drops from the generated object's config section.
@@ -40,7 +39,7 @@ public class CustomDrops {
 	public boolean loadCustomDrops(Map<?, ?> generatedObjectConfig) {
 		if (generatedObjectConfig.containsKey("custom-drops")) {
 
-			Map<?, ?> customDropsConfig = (Map<?, ?>) (((Map<?, ?>) generatedObjectConfig.get("custom-drops")));
+			Map<?, ?> customDropsConfig = (Map<?, ?>) generatedObjectConfig.get("custom-drops");
 
 			if (customDropsConfig.containsKey("remove-defaults"))
 				this.removeDefaults = (boolean) customDropsConfig.get("remove-defaults");
@@ -75,9 +74,7 @@ public class CustomDrops {
 			ItemStack is = this.item.clone();
 
 			if (p != null && this.itemFortune) {
-				int level = 0;
-				if (p.getInventory().getItemInMainHand() != null)
-					level = p.getInventory().getItemInMainHand().getEnchantmentLevel(XEnchantment.FORTUNE.get());
+				int level = p.getInventory().getItemInMainHand().getEnchantmentLevel(XEnchantment.FORTUNE.get());
 				if (level > 0) {
 					int randomNum = ThreadLocalRandom.current().nextInt(1, level + 2);
 					is.setAmount(randomNum);
@@ -143,7 +140,7 @@ public class CustomDrops {
 	public String toString() {
 		String s = "RemoveDefaults: " + this.removeDefaults;
 
-		if (this.item != null) s += ", Item: " + this.item.toString() + " ItemFortune: " + this.itemFortune;
+		if (this.item != null) s += ", Item: " + this.item + " ItemFortune: " + this.itemFortune;
 		if (this.money > 0) s += ", Money:" + this.money;
 		if (this.exp > 0) s += ", Exp: " + this.exp;
 		if (!this.commands.isEmpty()) s += ", Commands: " + this.commands;
@@ -166,16 +163,12 @@ public class CustomDrops {
 	}
 
 	public double getCoordVal(String coord, Location loc) {
-		switch (coord) {
-			case "<x":
-				return (loc.getX()+0.5);
-			case "<y":
-				return (loc.getY()+1);
-			case "<z":
-				return (loc.getZ()+0.5);
-			default:
-				return 0;
-		}
+        return switch (coord) {
+            case "<x" -> (loc.getX() + 0.5);
+            case "<y" -> (loc.getY() + 1);
+            case "<z" -> (loc.getZ() + 0.5);
+            default -> 0;
+        };
 	}
 
 }

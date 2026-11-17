@@ -60,10 +60,10 @@ public class GeneratorLocationPlaceHandler {
     		return false;
     	}
     	
-    	if (sender instanceof Player)
-    		if (!PlotSquaredHook.isPlayerAllowedToPlace((Player) sender, gLocation.getLocation())
-    			|| !LandsHook.isPlayerAllowedToPlace((Player) sender, gLocation.getLocation())
-    			|| !FactionsUUIDHook.isPlayerAllowedToPlace((Player) sender, gLocation.getLocation())) {
+    	if (sender instanceof Player player)
+    		if (!PlotSquaredHook.isPlayerAllowedToPlace(player, gLocation.getLocation())
+    			|| !LandsHook.isPlayerAllowedToPlace(player, gLocation.getLocation())
+    			|| !FactionsUUIDHook.isPlayerAllowedToPlace(player, gLocation.getLocation())) {
     			Lang.getMessageStorage().send(sender, Message.GENERATORS_PLACE_CANT_HERE);
     			return false;
     		}
@@ -77,10 +77,10 @@ public class GeneratorLocationPlaceHandler {
     	
     	if (sender instanceof Player) gLocation.getOwner().addGeneratorToPlayer(gLocation.getGenerator());
     	
-    	if (sender instanceof Player) Main.getSettings().getPlaceSound().play((Player) sender);
+    	if (sender instanceof Player player) Main.getSettings().getPlaceSound().play(player);
     	
     	if (sender instanceof Player)
-    		Logger.debugPlayer(((Player) sender).getName() + " placed " + generator.getId() + " in " + gLocation.toStringLocation());
+    		Logger.debugPlayer(sender.getName() + " placed " + generator.getId() + " in " + gLocation.toStringLocation());
     	else
     		Logger.debugPlayer("Something placed " + generator.getId() + " in " + gLocation.toStringLocation());
     	

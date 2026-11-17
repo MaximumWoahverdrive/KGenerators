@@ -26,10 +26,8 @@ public class PlayerPointsUpgradeCost implements IUpgradeCost {
 
 	@Override
 	public boolean checkRequirements(Player p, int amount) {
-		if (this.cost*amount <= PlayerPointsHook.getPlayerPoints(p))
-			return true;
-		return false;
-	}
+        return this.cost * amount <= PlayerPointsHook.getPlayerPoints(p);
+    }
 
 	@Override
 	public void takeRequirements(Player p, int amount) {
@@ -38,7 +36,7 @@ public class PlayerPointsUpgradeCost implements IUpgradeCost {
 
 	@Override
 	public String getCostFormatted(int amount) {
-		return String.valueOf(amount*this.cost) + " " + Lang.getMessageStorage().get(Message.UPGRADES_COST_PLAYERPOINTS);
+		return amount*this.cost + " " + Lang.getMessageStorage().get(Message.UPGRADES_COST_PLAYERPOINTS);
 	}
 
 }

@@ -4,7 +4,7 @@ import me.kryniowesegryderiusz.kgenerators.gui.objects.MenuInventory;
 
 public interface IMenuInventoryType {
 	
-	public String getKey();
-	public MenuInventory getMenuInventory();
+	String getKey();
+	MenuInventory getMenuInventory();
 
 }

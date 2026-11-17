@@ -11,7 +11,7 @@ import me.kryniowesegryderiusz.kgenerators.Main;
 
 public class PlayerLimits {
 
-	private HashMap<Limit, Integer> adjustedPlaceLimits = new HashMap<Limit, Integer>();
+	private final HashMap<Limit, Integer> adjustedPlaceLimits = new HashMap<>();
 
 	/**
 	 * Creates limit map with limits adjusted by permissions
@@ -25,7 +25,7 @@ public class PlayerLimits {
 			this.adjustedPlaceLimits.put(e.getValue(), e.getValue().getPlaceLimit());
 		}
 
-		ArrayList<Limit> bypassedLimits = new ArrayList<Limit>();
+		ArrayList<Limit> bypassedLimits = new ArrayList<>();
 
 		/* Checking limits */
 		player.recalculatePermissions();
@@ -42,7 +42,8 @@ public class PlayerLimits {
 						if (amount > this.adjustedPlaceLimits.get(limit)) {
 							this.adjustedPlaceLimits.put(limit, amount);
 						}
-					} catch (NumberFormatException e1) {
+					} catch (NumberFormatException ignored) {
+						// Ignore invalid permission format
 					}
 				}
 

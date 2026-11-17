@@ -71,7 +71,7 @@ public class PlaceholdersAPIExpansion extends PlaceholderExpansion {
 
 		switch (args[0].toLowerCase()) {
 			case "generators":
-				if (args[1].toLowerCase().equals("placed")) {
+				if (args[1].equalsIgnoreCase("placed")) {
 					
 					StringJoiner joiner = new StringJoiner("_");
 					for (int i = 2; i < args.length; i++)
@@ -82,7 +82,7 @@ public class PlaceholdersAPIExpansion extends PlaceholderExpansion {
 					} else {
 						Generator g = Main.getGenerators().get(joiner.toString());
 						if (g == null)
-							return "KGen generator " + joiner.toString() + " doesn't exist";
+							return "KGen generator " + joiner + " doesn't exist";
 						else
 							return gp.getGeneratorsCount(g) + "";
 					}
@@ -98,22 +98,24 @@ public class PlaceholdersAPIExpansion extends PlaceholderExpansion {
 				
 				Limit limit = Main.getLimits().get(joiner.toString());
 				if (limit == null)
-					return "KGen Limit " + joiner.toString() + " doesn't exist";
-	
-				if (args[1].toLowerCase().equals("placed")) {
-					return limit.getPlacedGenerators(gp) + "";
-				} else if (args[1].toLowerCase().equals("limit")) {
-					
-					PlayerLimits pl = new PlayerLimits(p);
-					return pl.getLimit(limit) + "";
-	
-				} else if (args[1].toLowerCase().equals("left")) {
-	
-					PlayerLimits pl = new PlayerLimits(p);
-					return (pl.getLimit(limit) - limit.getPlacedGenerators(gp)) + "";
-					
-				} else
-					return "Not valid KGen placeholder";
+					return "KGen Limit " + joiner + " doesn't exist";
+
+                switch (args[1].toLowerCase()) {
+                    case "placed" -> {
+                        return limit.getPlacedGenerators(gp) + "";
+                    }
+                    case "limit" -> {
+                        PlayerLimits pl = new PlayerLimits(p);
+                        return pl.getLimit(limit) + "";
+                    }
+                    case "left" -> {
+                        PlayerLimits pl = new PlayerLimits(p);
+                        return (pl.getLimit(limit) - limit.getPlacedGenerators(gp)) + "";
+                    }
+                    default -> {
+                        return "Not valid KGen placeholder";
+                    }
+                }
 
 			}
 

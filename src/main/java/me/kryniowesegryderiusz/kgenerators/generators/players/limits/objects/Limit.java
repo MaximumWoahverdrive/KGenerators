@@ -21,13 +21,13 @@ import me.kryniowesegryderiusz.kgenerators.utils.immutable.Config;
 public class Limit {
 
 	@Getter
-	private String id;
+	private final String id;
 	@Getter
 	private String name;
 	@Getter
 	private ItemStack item;
 	@Getter
-	private ArrayList<Generator> generators = new ArrayList<Generator>();
+	private final ArrayList<Generator> generators = new ArrayList<>();
 	@Getter
 	private int placeLimit = -1;
 	@Getter
@@ -88,7 +88,7 @@ public class Limit {
 			Logger.error("Limits file: Couldnt load " + id + " limit!");
 		} else {
 			limitsManager.add(this);
-			Logger.debugPluginLoad("Limits file: Loaded " + this.toString());
+			Logger.debugPluginLoad("Limits file: Loaded " + this);
 		}
 	}
 
@@ -157,7 +157,7 @@ public class Limit {
 	}
 
 	public String toString() {
-		ArrayList<String> generators = new ArrayList<String>();
+		ArrayList<String> generators = new ArrayList<>();
 		for (Generator g : this.generators) {
 			generators.add(g.getId());
 		}

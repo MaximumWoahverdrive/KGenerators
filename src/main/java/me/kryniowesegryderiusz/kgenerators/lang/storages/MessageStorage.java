@@ -8,7 +8,6 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import org.bukkit.OfflinePlayer;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
@@ -21,8 +20,8 @@ import me.kryniowesegryderiusz.kgenerators.utils.immutable.Config;
 
 public class MessageStorage {
 
-	private HashMap<String, String> lang = new HashMap<String, String>();
-	private Config config;
+	private final HashMap<String, String> lang = new HashMap<>();
+	private final Config config;
 
 	public MessageStorage(Config config) {
 		this.config = config;
@@ -65,7 +64,7 @@ public class MessageStorage {
 		String message = lang.get(m.getKey());
 		ArrayList<String> reps = new ArrayList<>(Arrays.asList(replacables));
 
-		if (message != null && message.length() != 0) {
+		if (message != null && !message.isEmpty()) {
 
 			for (int i = 0; i < reps.size(); i = i + 2) {
 				message = message.replace(reps.get(i), reps.get(i + 1));
@@ -94,7 +93,7 @@ public class MessageStorage {
 				
 				String mess = s;
 				
-				if (sender instanceof Player) mess = PlaceholderAPIHook.translatePlaceholders((OfflinePlayer) sender, mess);
+				if (sender instanceof Player player) mess = PlaceholderAPIHook.translatePlaceholders(player, mess);
 
 				if (m.getKey().split("\\.")[0].contains("generators") && Main.getSettings().isActionbarMessages()
 						&& !forceChat) {
@@ -130,7 +129,7 @@ public class MessageStorage {
 	 */
 	public ArrayList<String> getCommands(CommandSender sender) {
 
-		ArrayList<String> commands = new ArrayList<String>();
+		ArrayList<String> commands = new ArrayList<>();
 
 		for (Map.Entry<String, String> entry : lang.entrySet()) {
 			String path = entry.getKey();

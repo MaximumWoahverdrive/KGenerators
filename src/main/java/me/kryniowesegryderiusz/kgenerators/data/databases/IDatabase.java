@@ -21,14 +21,14 @@ public interface IDatabase {
 	/**
 	 * Closes database connection
 	 */
-	public void closeConnection();
+	void closeConnection();
 	
-	public void updateTable();
+	void updateTable();
 	
 	/*
 	 * Closes connection objects;
 	 */
-	public void close(Statement stat, Connection conn, ResultSet res);
+	void close(Statement stat, Connection conn, ResultSet res);
 	
 	/*
 	 * Placed generators table
@@ -39,13 +39,13 @@ public interface IDatabase {
 	 * @param location block location of the generator
 	 * @return the generator at that location, or null if there is none
 	 */
-	@Nullable public GeneratorLocation getGenerator(Location location);
+	@Nullable GeneratorLocation getGenerator(Location location);
 	
 	/**
 	 * Gets all saved generators
 	 * @return list of all saved generators
 	 */
-	public ArrayList<GeneratorLocation> getGenerators();
+	ArrayList<GeneratorLocation> getGenerators();
 	
 	/**
 	 * Gets all saved generators
@@ -53,7 +53,7 @@ public interface IDatabase {
 	 * @param rowAmount maximum number of generators to return
 	 * @return list of saved generators in the requested row range
 	 */
-	public ArrayList<GeneratorLocation> getGenerators(int firstRow, int rowAmount);
+	ArrayList<GeneratorLocation> getGenerators(int firstRow, int rowAmount);
 	
 	/**
 	 * Gets saved generators according to ranges
@@ -66,14 +66,14 @@ public interface IDatabase {
 	 * @param maxZ maximum block Z coordinate (inclusive)
 	 * @return list of saved generators inside the given box
 	 */
-	public ArrayList<GeneratorLocation> getGenerators(World world, int minX, int minY, int minZ, int maxX, int maxY, int maxZ);
+	ArrayList<GeneratorLocation> getGenerators(World world, int minX, int minY, int minZ, int maxX, int maxY, int maxZ);
 	
 	/**
 	 * Gets saved generators according to owner
 	 * @param owner owner's player name
 	 * @return list of saved generators owned by that player
 	 */
-	public ArrayList<GeneratorLocation> getGenerators(String owner);
+	ArrayList<GeneratorLocation> getGenerators(String owner);
 	
 	/**
 	 * Gets saved generators according to chunk
@@ -81,42 +81,42 @@ public interface IDatabase {
 	 * @param chunkInfo chunk to search in
 	 * @return list of saved generators in that chunk
 	 */
-	@Nullable public ArrayList<GeneratorLocation> getGenerators(ChunkInfo chunkInfo);
+	@Nullable ArrayList<GeneratorLocation> getGenerators(ChunkInfo chunkInfo);
 	
 	/**
 	 * Gets saved generators amount
 	 * @return number of saved generators
 	 */
-	public int getGeneratorsAmount();
+	int getGeneratorsAmount();
 	
 	/**
 	 * Saves generator location info to database
 	 * @param gl generator location to save
 	 */
-	public void saveGenerator(GeneratorLocation gl);
+	void saveGenerator(GeneratorLocation gl);
 	
 	/**
 	 * Saves generator location info to database
 	 * @param gl generator location to save
 	 * @param migrate if true, always insert it as a new row even if it already has an id
 	 */
-	public void saveGenerator(GeneratorLocation gl, boolean migrate);
+	void saveGenerator(GeneratorLocation gl, boolean migrate);
 	
 	/**
 	 * Removes location from database
 	 * @param l block location of the generator to remove
 	 */
-	public void removeGenerator(Location l);
+	void removeGenerator(Location l);
 	
-	public HikariDataSource getDataSource();
+	HikariDataSource getDataSource();
 	
 	/*
 	 * Scheduled generators table
 	 */
 	
-	public void addSchedule(GeneratorLocation gl, Schedule schedule);
+	void addSchedule(GeneratorLocation gl, Schedule schedule);
 	
-	public Schedule getSchedule(GeneratorLocation gl);
+	Schedule getSchedule(GeneratorLocation gl);
 	
-	public void removeSchedule(GeneratorLocation gl);
+	void removeSchedule(GeneratorLocation gl);
 }

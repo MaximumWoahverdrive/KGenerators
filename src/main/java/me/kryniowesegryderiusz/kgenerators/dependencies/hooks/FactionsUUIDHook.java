@@ -44,10 +44,7 @@ public class FactionsUUIDHook {
 		
 		FPlayer fplayer = FPlayers.getInstance().getByPlayer(p);
 		
-		if(faction.getFPlayers().contains(fplayer))
-			return true;
-
-		return false;
+		return faction.getFPlayers().contains(fplayer);
 		
 	}
 

@@ -16,7 +16,7 @@ public class UpgradeCostItems implements IUpgradeCost  {
 	
 	public UpgradeCostItems() {}
 	
-	private ArrayList<ItemStack> items = new ArrayList<ItemStack>();
+	private final ArrayList<ItemStack> items = new ArrayList<>();
 
 	@Override
 	public boolean checkRequirements(Player p, int amount) {

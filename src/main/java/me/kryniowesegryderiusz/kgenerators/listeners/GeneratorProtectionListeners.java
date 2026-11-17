@@ -94,7 +94,7 @@ public class GeneratorProtectionListeners implements Listener {
 	/**
 	 * #0 - cancel explosion #1 - drop generator #2 - remove generator
 	 * 
-	 * @param blocks
+	 * @param blocks blocks being exploded
 	 * @return isExplosionCancelled
 	 */
 	private Boolean isExplosionCancelled(List<Block> blocks) {
@@ -103,9 +103,7 @@ public class GeneratorProtectionListeners implements Listener {
 			GeneratorLocation gLoc = Main.getPlacedGenerators().getLoaded(block.getLocation());
 			if (gLoc != null) {
 				if (handler == 1 || handler == 2) {
-					boolean drop = false;
-					if (handler == 1)
-						drop = true;
+					boolean drop = handler == 1;
 					gLoc.removeGenerator(drop, null);
 				} else
 					return true;

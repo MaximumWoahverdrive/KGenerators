@@ -1,12 +1,9 @@
 package me.kryniowesegryderiusz.kgenerators.utils;
 
-import me.kryniowesegryderiusz.kgenerators.utils.Text;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.EnumMap;
-import java.util.List;
 import java.util.Map;
-import java.util.NoSuchElementException;
 import java.util.Optional;
 
 import org.bukkit.Material;
@@ -32,8 +29,7 @@ public abstract class ItemUtils {
         			&& Main.getGenerators() != null
         			&& Main.getGenerators().exists(splitted[1]))
         		return Main.getGenerators().get(splitted[1]).getGeneratorItem().clone();
-        	else if (splitted[0].equals("customhead")
-        			&& SkullUtils.itemFromBase64(splitted[1]) != null)
+        	else if (splitted[0].equals("customhead"))
         		return SkullUtils.itemFromBase64(splitted[1]);
         	else if (splitted[0].equals("itemsadder")
         			&& ItemsAdderHook.getItemStack(splitted[1]) != null)
@@ -81,17 +77,16 @@ public abstract class ItemUtils {
 
 	public static XMaterial getXMaterial(String material, String place, boolean isBlockCheck) {
 		Optional<XMaterial> oxm = XMaterial.matchXMaterial(material);
-		try {
-			XMaterial xm = oxm.get();
-			if (isBlockCheck && getBlockMaterial(xm) == null) {
-				Logger.error(place + ": " + material + " is not a block! Using STONE!");
-				return XMaterial.STONE;
-			}
-			return xm;
-		} catch (NoSuchElementException e) {
+		if (oxm.isEmpty()) {
 			Logger.error(place + ": " + material + " is not a proper material or generator id! Using STONE!");
+			return XMaterial.STONE;
 		}
-		return XMaterial.STONE;
+		XMaterial xm = oxm.get();
+		if (isBlockCheck && getBlockMaterial(xm) == null) {
+			Logger.error(place + ": " + material + " is not a block! Using STONE!");
+			return XMaterial.STONE;
+		}
+		return xm;
 	}
 	
 	/**
@@ -127,7 +122,7 @@ public abstract class ItemUtils {
 		if (!item.hasItemMeta() || !item.getItemMeta().hasLore()) return item;
 		
 		ArrayList<String> reps = new ArrayList<>(Arrays.asList(replacables));
-		ArrayList<String> newLore = new ArrayList<String>();
+		ArrayList<String> newLore = new ArrayList<>();
 		
 		for (String s : Text.lore(item.getItemMeta())) {
 			String message = s;

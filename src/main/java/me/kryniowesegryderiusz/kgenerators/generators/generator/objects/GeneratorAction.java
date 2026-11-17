@@ -15,7 +15,7 @@ public class GeneratorAction {
 	@Getter
 	ActionType action;
 	@Getter
-	InteractionType interaction = InteractionType.NONE;
+	InteractionType interaction;
 	@Getter
 	ItemStack item = null;
 	@Getter
@@ -70,10 +70,8 @@ public class GeneratorAction {
 			return false;
 		else if (item != null && p.getInventory().getItemInMainHand().getType() != item.getType())
 			return false;
-		else if (this.sneak != p.isSneaking())
-			return false;
 		else
-			return true;
+			return this.sneak == p.isSneaking();
 	}
 
 }

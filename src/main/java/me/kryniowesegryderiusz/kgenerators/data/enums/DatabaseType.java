@@ -9,7 +9,7 @@ public enum DatabaseType {
 	public static class Functions {
 		public static DatabaseType getTypeByString(String s) {
 			for (DatabaseType type : DatabaseType.values()) {
-				if (type.toString().toLowerCase().equals(s.toLowerCase()))
+				if (type.toString().equalsIgnoreCase(s))
 					return type;
 			}
 			Logger.error("Config file: Database type " + s + " doesnt exist! Using SQLITE!");

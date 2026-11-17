@@ -7,7 +7,6 @@ import org.bukkit.block.data.Ageable;
 import org.bukkit.inventory.ItemStack;
 
 import me.kryniowesegryderiusz.kgenerators.Main;
-import me.kryniowesegryderiusz.kgenerators.utils.ItemUtils;
 
 public final class BlockUtils {
 
@@ -30,16 +29,11 @@ public final class BlockUtils {
 	}
 
 	public static boolean isOnWhitelist(Block block) {
-		if (Main.getSettings().isOnWhitelist(block.getType())) {
-			return true;
-		}
-		return false;
+		return Main.getSettings().isOnWhitelist(block.getType());
 	}
 
 	public static boolean isAir(Block block) {
-		if (block.getType() == Material.AIR || block.getType() == Material.CAVE_AIR)
-			return true;
-		return false;
+		return block.getType() == Material.AIR || block.getType() == Material.CAVE_AIR;
 	}
 
 	public static boolean isWater(Block block) {

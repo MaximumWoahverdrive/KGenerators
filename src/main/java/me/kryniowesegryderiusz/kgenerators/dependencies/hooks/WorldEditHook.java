@@ -1,7 +1,6 @@
 package me.kryniowesegryderiusz.kgenerators.dependencies.hooks;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -51,17 +50,15 @@ public class WorldEditHook {
 			return null;
 		}
 
-		ArrayList<Location> locations = new ArrayList<Location>();
+		ArrayList<Location> locations = new ArrayList<>();
 
 		WorldEditPlugin we = ((WorldEditPlugin) Bukkit.getPluginManager().getPlugin("WorldEdit"));
 		try {
 			World w = we.getSession(p).getSelectionWorld();
-			Iterator<BlockVector3> iterator = we.getSession(p).getSelection(w).iterator();
-			while (iterator.hasNext()) {
-				BlockVector3 vec = iterator.next();
-				Location loc = new Location(BukkitAdapter.adapt(w), vec.getX(), vec.getY(), vec.getZ());
-				locations.add(loc);
-			}
+            for (BlockVector3 vec : we.getSession(p).getSelection(w)) {
+                Location loc = new Location(BukkitAdapter.adapt(w), vec.getX(), vec.getY(), vec.getZ());
+                locations.add(loc);
+            }
 
 		} catch (IncompleteRegionException e) {
 			Lang.getMessageStorage().send(p, Message.COMMANDS_REMOVE_WORLDEDIT_WRONG_SELECTION);

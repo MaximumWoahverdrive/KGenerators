@@ -6,7 +6,6 @@ import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 
 import lombok.Getter;
-import me.kryniowesegryderiusz.kgenerators.Main;
 import me.kryniowesegryderiusz.kgenerators.utils.ItemUtils;
 import com.cryptomorin.xseries.XMaterial;
 

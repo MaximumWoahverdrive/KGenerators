@@ -10,7 +10,7 @@ import me.kryniowesegryderiusz.kgenerators.Main;
 
 public class ConfigManager {
 	   
-    private static JavaPlugin PLUGIN = Main.getInstance();
+    private static final JavaPlugin PLUGIN = Main.getInstance();
    
     private static File mainFolder;
    
@@ -75,7 +75,7 @@ public class ConfigManager {
 	//If String directory is null or is empty returns plugin main folder
 	public static File getFolder(String directory){
 		File folder;
-		if(directory != null && !directory.equals("")){
+		if(directory != null && !directory.isEmpty()){
 			folder = new File(mainFolder+directory);
 			if(!folder.exists()){
 				folder.mkdir();

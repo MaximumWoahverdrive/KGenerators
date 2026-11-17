@@ -16,9 +16,7 @@ public class UpgradeCostExpLevel implements IUpgradeCost  {
 
 	@Override
 	public boolean checkRequirements(Player p, int amount) {
-		if (this.cost*amount <= p.getLevel())
-			return true;
-		return false;
+		return this.cost*amount <= p.getLevel();
 	}
 
 	@Override
@@ -37,6 +35,6 @@ public class UpgradeCostExpLevel implements IUpgradeCost  {
 
 	@Override
 	public String getCostFormatted(int amount) {
-		return String.valueOf(amount*this.cost) + " " + Lang.getMessageStorage().get(Message.UPGRADES_COST_EXP_LEVELS);
+		return amount*this.cost + " " + Lang.getMessageStorage().get(Message.UPGRADES_COST_EXP_LEVELS);
 	}
 }

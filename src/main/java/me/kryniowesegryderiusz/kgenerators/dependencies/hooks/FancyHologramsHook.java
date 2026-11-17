@@ -16,7 +16,7 @@ public class FancyHologramsHook {
 		Config config;
 
 		try {
-			config = ConfigManager.getConfig("config.yml", (String) null, false, false);
+			config = ConfigManager.getConfig("config.yml", null, false, false);
 			config.loadConfig();
 		} catch (Exception e) {
 			Logger.error("FancyHologramsHook: Cant load config. Using default values.");

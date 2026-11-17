@@ -12,8 +12,8 @@ import com.cryptomorin.xseries.XMaterial;
 
 public class CustomNamesStorage {
 
-	private HashMap<String, String> customNames = new HashMap<String, String>();
-	private Config config;
+	private final HashMap<String, String> customNames = new HashMap<>();
+	private final Config config;
 
 	public CustomNamesStorage(Config config) {
 		this.config = config;
@@ -27,7 +27,7 @@ public class CustomNamesStorage {
 	}
 
 	public String getItemTypeName(ItemStack item) {
-		String name = "";
+		String name;
 
 		if (item.hasItemMeta() && item.getItemMeta().hasDisplayName())
 			name = Text.name(item.getItemMeta());
@@ -35,7 +35,7 @@ public class CustomNamesStorage {
 			name = customNames.get(XMaterial.matchXMaterial(item).name());
 		else {
 			String type = item.getType().toString();
-			type = type.toLowerCase().replaceAll("_", " ");
+			type = type.toLowerCase().replace("_", " ");
 			type = type.substring(0, 1).toUpperCase() + type.substring(1);
 			name = type;
 		}
@@ -44,13 +44,13 @@ public class CustomNamesStorage {
 
 	@SuppressWarnings("unlikely-arg-type")
 	public String getEnchantName(Enchantment enchant) {
-		String name = "";
+		String name;
 
 		if (customNames.get(XEnchantment.of(enchant)) != null)
 			name = customNames.get(XEnchantment.of(enchant));
 		else {
 			String type = enchant.getKey().getKey();
-			type = type.toLowerCase().replaceAll("_", " ");
+			type = type.toLowerCase().replace("_", " ");
 			type = type.substring(0, 1).toUpperCase() + type.substring(1);
 			name = type;
 		}

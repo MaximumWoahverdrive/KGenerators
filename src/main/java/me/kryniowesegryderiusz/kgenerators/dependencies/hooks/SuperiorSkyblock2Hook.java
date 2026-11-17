@@ -22,7 +22,7 @@ import me.kryniowesegryderiusz.kgenerators.logger.Logger;
 
 public class SuperiorSkyblock2Hook implements Listener {
 
-	public static enum Type {
+	public enum Type {
 		PICKUP_FLAG, USE_FLAG, OPEN_MENU_FLAG
 	}
 
@@ -125,8 +125,7 @@ public class SuperiorSkyblock2Hook implements Listener {
 			else if (type == Type.OPEN_MENU_FLAG)
 				flag = IslandPrivilege.getByName("KGENERATORS_OPEN_MENU_FLAG");
 
-			if (!island.hasPermission(p, flag))
-				return false;
+			return island.hasPermission(p, flag);
 		}
 		return true;
 	}

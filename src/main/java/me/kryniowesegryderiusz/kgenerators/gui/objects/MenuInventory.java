@@ -11,7 +11,6 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
 import lombok.Getter;
-import me.kryniowesegryderiusz.kgenerators.Main;
 import me.kryniowesegryderiusz.kgenerators.lang.Lang;
 import me.kryniowesegryderiusz.kgenerators.lang.interfaces.IMenuInventoryType;
 import me.kryniowesegryderiusz.kgenerators.lang.interfaces.IMenuItemType;
@@ -21,13 +20,13 @@ import me.kryniowesegryderiusz.kgenerators.utils.immutable.Config;
 public class MenuInventory {
 	
 	@Getter
-	String name = "";
+	String name;
 	@Getter
-	short slots = 27;
+	short slots;
 	
 	public MenuInventory(String name, int slots)
 	{
-		this.name = Text.colorize(name);;
+		this.name = Text.colorize(name);
 		this.slots = (short) slots;
 	}
 	

@@ -9,7 +9,7 @@ import me.kryniowesegryderiusz.kgenerators.utils.immutable.Config;
 
 public class MenuItemAdditionalLinesStorage {
 	
-	private HashMap<String, StringContent> lang = new HashMap<String, StringContent>();
+	private final HashMap<String, StringContent> lang = new HashMap<>();
 	Config config;
 	
 	public MenuItemAdditionalLinesStorage(Config config)

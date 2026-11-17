@@ -8,9 +8,9 @@ import me.kryniowesegryderiusz.kgenerators.generators.players.objects.GeneratorP
 
 public class PlayersManager {
 
-	private GeneratorPlayer nullPlayer = new GeneratorPlayer(null, true);
+	private final GeneratorPlayer nullPlayer = new GeneratorPlayer(null, true);
 
-	private HashMap<String, GeneratorPlayer> players = new HashMap<String, GeneratorPlayer>();
+	private final HashMap<String, GeneratorPlayer> players = new HashMap<>();
 
 	public GeneratorPlayer getPlayer(String nick) {
 		if (nick == null)

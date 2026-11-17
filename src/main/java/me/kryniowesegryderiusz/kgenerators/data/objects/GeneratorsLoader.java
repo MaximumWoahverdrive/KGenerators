@@ -23,11 +23,11 @@ public class GeneratorsLoader {
 	private int amount = 0;
 	@Getter
 	private int notLoaded = 0;
-	private ArrayList<String> errNotSetId = new ArrayList<String>();
-	private ArrayList<String> errNotExist = new ArrayList<String>();
-	private ArrayList<String> errWorlds = new ArrayList<String>();
+	private final ArrayList<String> errNotSetId = new ArrayList<>();
+	private final ArrayList<String> errNotExist = new ArrayList<>();
+	private final ArrayList<String> errWorlds = new ArrayList<>();
 
-	private ArrayList<GeneratorLocation> loadedGenerators = new ArrayList<GeneratorLocation>();
+	private final ArrayList<GeneratorLocation> loadedGenerators = new ArrayList<>();
 
 	/**
 	 * Loads the generator stored in the current row of a placed generators result set.
@@ -91,23 +91,23 @@ public class GeneratorsLoader {
 	public ArrayList<GeneratorLocation> finish() {
 		if (notLoaded != 0) {
 			Logger.error(
-					"Database: An error occurred, while loading " + String.valueOf(notLoaded) + " placed generators!");
+					"Database: An error occurred, while loading " + notLoaded + " placed generators!");
 			if (!errWorlds.isEmpty()) {
-				Logger.error("Database: Cant load worlds: " + errWorlds.toString());
+				Logger.error("Database: Cant load worlds: " + errWorlds);
 				String possible = "";
 				for (World world : Bukkit.getWorlds())
 					possible += world.getName() + ", ";
 				Logger.error("Database: Possible worlds: " + possible);
 			}
 			if (!errNotExist.isEmpty()) {
-				Logger.error("Database: There are no generators with ids: " + errNotExist.toString());
+				Logger.error("Database: There are no generators with ids: " + errNotExist);
 				String possible = "";
 				for (Entry<String, Generator> e : Main.getGenerators().getEntrySet())
 					possible += e.getKey() + ", ";
 				Logger.error("Database: Possible ids: " + possible);
 			}
 			if (!errNotSetId.isEmpty()) {
-				Logger.error("Database: Generator id is not set for: " + errNotSetId.toString());
+				Logger.error("Database: Generator id is not set for: " + errNotSetId);
 			}
 		}
 

@@ -1,7 +1,6 @@
 package me.kryniowesegryderiusz.kgenerators.listeners;
 
 import me.kryniowesegryderiusz.kgenerators.utils.BlockUtils;
-import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -16,7 +15,6 @@ import me.kryniowesegryderiusz.kgenerators.generators.locations.handlers.enums.I
 import me.kryniowesegryderiusz.kgenerators.generators.locations.objects.GeneratorLocation;
 import me.kryniowesegryderiusz.kgenerators.logger.Logger;
 import me.kryniowesegryderiusz.kgenerators.utils.PlayerUtils;
-import com.cryptomorin.xseries.XMaterial;
 
 public class BlockBreakListener implements Listener {
 

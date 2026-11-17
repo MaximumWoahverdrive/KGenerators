@@ -2,6 +2,7 @@ package me.kryniowesegryderiusz.kgenerators.lang.storages;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map.Entry;
 
@@ -11,7 +12,7 @@ import me.kryniowesegryderiusz.kgenerators.utils.immutable.Config;
 
 public class MenuItemStorage {
 
-	private HashMap<String, MenuItem> lang = new HashMap<String, MenuItem>();
+	private final HashMap<String, MenuItem> lang = new HashMap<>();
 	Config config;
 	ArrayList<Class<? extends Enum<?>>> classes = new ArrayList<>();
 
@@ -47,9 +48,7 @@ public class MenuItemStorage {
 	public ArrayList<Enum<?>> getAllEnums() {
 		ArrayList<Enum<?>> enums = new ArrayList<>();
 		for (Class<? extends Enum<?>> c : this.classes) {
-			for (Enum<?> en : c.getEnumConstants()) {
-				enums.add(en);
-			}
+			Collections.addAll(enums, c.getEnumConstants());
 		}
 		return enums;
 	}

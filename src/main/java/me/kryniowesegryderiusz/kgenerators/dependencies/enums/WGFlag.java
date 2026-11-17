@@ -9,9 +9,9 @@ public enum WGFlag {
 	;
 	
 	@Getter
-	String flagId;
+	final String flagId;
 	@Getter
-	Boolean defaultState;
+	final Boolean defaultState;
 
 	WGFlag(String flagId, Boolean defaultState) {
 		this.flagId = flagId;

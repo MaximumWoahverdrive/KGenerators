@@ -7,6 +7,7 @@ import me.kryniowesegryderiusz.kgenerators.api.exceptions.CannnotLoadUpgradeExce
 import me.kryniowesegryderiusz.kgenerators.api.interfaces.IUpgradeCost;
 import me.kryniowesegryderiusz.kgenerators.dependencies.enums.Dependency;
 import me.kryniowesegryderiusz.kgenerators.dependencies.hooks.VaultHook;
+import me.kryniowesegryderiusz.kgenerators.logger.Logger;
 import me.kryniowesegryderiusz.kgenerators.utils.immutable.Config;
 
 public class UpgradeCostMoney implements IUpgradeCost  {
@@ -17,9 +18,7 @@ public class UpgradeCostMoney implements IUpgradeCost  {
 
 	@Override
 	public boolean checkRequirements(Player p, int amount) {
-		if (this.cost*amount <= VaultHook.getBalance(p))
-			return true;
-		return false;
+		return this.cost*amount <= VaultHook.getBalance(p);
 	}
 
 	@Override

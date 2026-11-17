@@ -17,7 +17,7 @@ import me.kryniowesegryderiusz.kgenerators.utils.immutable.ConfigManager;
 
 public class LimitsManager {
 
-	private LinkedHashMap<String, Limit> limits = new LinkedHashMap<String, Limit>();
+	private final LinkedHashMap<String, Limit> limits = new LinkedHashMap<>();
 
 	public LimitsManager() {
 		
@@ -26,7 +26,7 @@ public class LimitsManager {
 		Config config;
 
 		try {
-			config = ConfigManager.getConfig("limits.yml", (String) null, true, false);
+			config = ConfigManager.getConfig("limits.yml", null, true, false);
 			config.loadConfig();
 		} catch (InvalidConfigurationException e) {
 			Logger.error("Generators file: You've missconfigured config.yml file. Check your spaces! More info below. Disabling plugin.");
@@ -40,7 +40,7 @@ public class LimitsManager {
 			return;
 		}
 
-		if (!config.contains("enabled") || config.getBoolean("enabled") != true) {
+		if (!config.contains("enabled") || !config.getBoolean("enabled")) {
 			Logger.info("Limits file: Limits are disabled. You can enable them in limits.yml!");
 			return;
 		}
@@ -90,7 +90,7 @@ public class LimitsManager {
 	}
 
 	public boolean hasLimits() {
-		return this.limits.size() != 0;
+		return !this.limits.isEmpty();
 	}
 
 }

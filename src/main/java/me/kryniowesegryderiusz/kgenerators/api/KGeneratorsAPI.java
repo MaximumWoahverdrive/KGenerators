@@ -22,9 +22,9 @@ public class KGeneratorsAPI {
 	/**
 	 * Get IGeneratorLocation by location. It gives access to all generator-related
 	 * methods
-	 * 
+	 * <p>
 	 * Note that it could be upper block of double generator!
-	 * 
+	 * <p>
 	 * See
 	 * {@link me.kryniowesegryderiusz.kgenerators.api.interfaces.IGeneratorLocation}
 	 * for more information

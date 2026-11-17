@@ -1,6 +1,5 @@
 package me.kryniowesegryderiusz.kgenerators.utils;
 
-import me.kryniowesegryderiusz.kgenerators.utils.Text;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.IOException;
@@ -22,6 +21,7 @@ import me.kryniowesegryderiusz.kgenerators.Main;
 import me.kryniowesegryderiusz.kgenerators.logger.Logger;
 import me.kryniowesegryderiusz.kgenerators.utils.immutable.Config;
 import com.cryptomorin.xseries.XEnchantment;
+import com.cryptomorin.xseries.XMaterial;
 
 public class FilesUtils {
 
@@ -51,7 +51,7 @@ public class FilesUtils {
 
 		try {
 			List<String> content = Files.readAllLines(file.toPath());
-			ArrayList<String> newContent = new ArrayList<String>();
+			ArrayList<String> newContent = new ArrayList<>();
 			for (String s : content) {
 				String line = s;
 
@@ -119,7 +119,7 @@ public class FilesUtils {
 		if (map.get(key) instanceof String)
 			return ItemUtils.parseItemStack((String) map.get(key), place, isBlockCheck);
 		else if (map.get(key) instanceof MemorySection)
-			return loadItemStack((Map<?, ?>) ((MemorySection) map.get(key)).getValues(false), place, isBlockCheck);
+			return loadItemStack(((MemorySection) map.get(key)).getValues(false), place, isBlockCheck);
 		else
 			return loadItemStack((Map<?, ?>) map.get(key), place, isBlockCheck);
 	}
@@ -150,14 +150,14 @@ public class FilesUtils {
 						String[] splitted = s.split(":");
 						Optional<XEnchantment> xeo = XEnchantment.of(splitted[0]);
 						if (xeo.isPresent()) {
-							item.addUnsafeEnchantment(xeo.get().get(), Integer.valueOf(splitted[1]));
+							item.addUnsafeEnchantment(xeo.get().get(), Integer.parseInt(splitted[1]));
 						} else
 							Logger.error(place + ": Cannot load enchantment! " + splitted[0] + " doesnt exist!");
 					}
 				}
 			}
 
-			ItemMeta meta = null;
+			ItemMeta meta;
 			if (item.getItemMeta() != null) {
 				meta = item.getItemMeta();
 			} else {

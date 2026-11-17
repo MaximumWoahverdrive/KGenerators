@@ -19,7 +19,7 @@ public class FilesConverter {
 		File file = new File(Main.getInstance().getDataFolder(), "config.yml");
 		Config config;
 		try {
-			config = ConfigManager.getConfig("config.yml", (String) null, false, true);
+			config = ConfigManager.getConfig("config.yml", null, false, true);
 			config.loadConfig();
 		} catch (IOException | InvalidConfigurationException e) {
 			Logger.error("FilesConverter: Cant load config. Disabling plugin.");
@@ -130,33 +130,33 @@ public class FilesConverter {
 					+ settings.getActions().getGeneratorAction(ActionType.PICKUP).getInteraction().toString());
 			if (settings.getActions().getGeneratorAction(ActionType.PICKUP).getItem() != null)
 				add(file, "    item: "
-						+ settings.getActions().getGeneratorAction(ActionType.PICKUP).getItem().getType().toString());
+						+ settings.getActions().getGeneratorAction(ActionType.PICKUP).getItem().getType());
 			else
 				add(file, "    item: ANY");
 			add(file, "    sneak: "
-					+ String.valueOf(settings.getActions().getGeneratorAction(ActionType.PICKUP).isSneak()));
+					+ settings.getActions().getGeneratorAction(ActionType.PICKUP).isSneak());
 			add(file, "  #Action, which will be used for opening generator gui");
 			add(file, "  open-gui:");
 			add(file, "    mode: "
 					+ settings.getActions().getGeneratorAction(ActionType.OPENGUI).getInteraction().toString());
 			if (settings.getActions().getGeneratorAction(ActionType.PICKUP).getItem() != null)
 				add(file, "    item: "
-						+ settings.getActions().getGeneratorAction(ActionType.OPENGUI).getItem().getType().toString());
+						+ settings.getActions().getGeneratorAction(ActionType.OPENGUI).getItem().getType());
 			else
 				add(file, "    item: ANY");
 			add(file, "    sneak: "
-					+ String.valueOf(settings.getActions().getGeneratorAction(ActionType.OPENGUI).isSneak()));
+					+ settings.getActions().getGeneratorAction(ActionType.OPENGUI).isSneak());
 			add(file, "  #Action, which will be used for checking how much time left before regeneration");
 			add(file, "  time-left-check:");
 			add(file, "    mode: "
 					+ settings.getActions().getGeneratorAction(ActionType.TIMELEFT).getInteraction().toString());
 			if (settings.getActions().getGeneratorAction(ActionType.TIMELEFT).getItem() != null)
 				add(file, "    item: "
-						+ settings.getActions().getGeneratorAction(ActionType.PICKUP).getItem().getType().toString());
+						+ settings.getActions().getGeneratorAction(ActionType.PICKUP).getItem().getType());
 			else
 				add(file, "    item: ANY");
 			add(file, "    sneak: "
-					+ String.valueOf(settings.getActions().getGeneratorAction(ActionType.TIMELEFT).isSneak()));
+					+ settings.getActions().getGeneratorAction(ActionType.TIMELEFT).isSneak());
 			Logger.info("FilesConverter: Added actions settings to config file");
 		}
 

@@ -28,7 +28,7 @@ public class Settings {
 
 	@Setter
 	@Getter
-	private ArrayList<XMaterial> generatingWhitelist = new ArrayList<XMaterial>();
+	private ArrayList<XMaterial> generatingWhitelist = new ArrayList<>();
 
 	@Setter
 	@Getter
@@ -39,7 +39,7 @@ public class Settings {
 	private boolean actionbarMessages = true;
 
 	@Getter
-	private Actions actions = new Actions();
+	private final Actions actions = new Actions();
 
 	@Setter
 	@Getter
@@ -56,7 +56,7 @@ public class Settings {
 	private boolean expDropToEq = false;
 
 	@Getter
-	private ArrayList<String> disabledWorlds = new ArrayList<String>();
+	private final ArrayList<String> disabledWorlds = new ArrayList<>();
 
 	@Setter
 	@Getter
@@ -70,7 +70,7 @@ public class Settings {
 
 	@Setter
 	@Getter
-	private HashMap<ActionType, GeneratorAction> guis = new HashMap<ActionType, GeneratorAction>();
+	private HashMap<ActionType, GeneratorAction> guis = new HashMap<>();
 
 	@Setter
 	@Getter
@@ -122,7 +122,7 @@ public class Settings {
 			Main.getInstance().saveResource("config.yml", false);
 		}
 		try {
-			config = ConfigManager.getConfig("config.yml", (String) null, false, false);
+			config = ConfigManager.getConfig("config.yml", null, false, false);
 			config.loadConfig();
 		} catch (InvalidConfigurationException e) {
 			Logger.error("Generators file: You've missconfigured config.yml file. Check your spaces! More info below. Disabling plugin.");
@@ -148,9 +148,8 @@ public class Settings {
 			this.warnings = config.getBoolean("debug.warnings");
 
 		if (config.contains("can-generate-instead")) {
-			ArrayList<String> tempListString = new ArrayList<String>();
-			ArrayList<XMaterial> generatingWhitelist = new ArrayList<XMaterial>();
-			tempListString = (ArrayList<String>) config.getList("can-generate-instead");
+			ArrayList<XMaterial> generatingWhitelist = new ArrayList<>();
+			ArrayList<String> tempListString = (ArrayList<String>) config.getList("can-generate-instead");
 
 			for (String s : tempListString) {
 				XMaterial xm = ItemUtils.getXMaterial(s, "config.yml can-generate-instead", true);

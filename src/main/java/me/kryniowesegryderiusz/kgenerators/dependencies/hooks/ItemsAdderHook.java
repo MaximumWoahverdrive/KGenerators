@@ -40,7 +40,7 @@ public class ItemsAdderHook {
 	 * @return ArrayList of CustomBlock drops if ItemsAdder is enabled and its CustomBlock
 	 */
 	public static ArrayList<ItemStack> getCustomBlockDrops(Location location, ItemStack tool) {
-		ArrayList<ItemStack> drops = new ArrayList<ItemStack>();
+		ArrayList<ItemStack> drops = new ArrayList<>();
 		if (Main.getDependencies().isEnabled(Dependency.ITEMS_ADDER)
 				&& CustomBlock.byAlreadyPlaced(location.getBlock()) != null) {
 			CustomBlock.byAlreadyPlaced(location.getBlock()).getLoot(tool, true);

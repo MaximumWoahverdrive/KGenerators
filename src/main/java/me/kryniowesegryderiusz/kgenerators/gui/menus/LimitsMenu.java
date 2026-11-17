@@ -24,7 +24,7 @@ import me.kryniowesegryderiusz.kgenerators.logger.Logger;
 public class LimitsMenu {
 
 	public static Inventory get(Player player) {
-		ArrayList<MenuItemType> exludedEnumMenuItems = new ArrayList<MenuItemType>();
+		ArrayList<MenuItemType> exludedEnumMenuItems = new ArrayList<>();
 		exludedEnumMenuItems.add(MenuItemType.LIMITS_MENU_LIMIT);
 		exludedEnumMenuItems.add(MenuItemType.LIMITS_MENU_BACK);
 
@@ -62,7 +62,7 @@ public class LimitsMenu {
 				chanceMenuItem.replace("<limit>", String.valueOf(pl.getLimit(limit)));
 
 			if (limit.getGenerators().size() != Main.getGenerators().getEntrySet().size()) {
-				ArrayList<String> generators = new ArrayList<String>();
+				ArrayList<String> generators = new ArrayList<>();
 				for (Generator g : limit.getGenerators()) {
 					StringContent s = Lang.getMenuItemAdditionalLinesStorage()
 							.get(MenuItemAdditionalLines.LIMITS_GENERATOR_LIST);

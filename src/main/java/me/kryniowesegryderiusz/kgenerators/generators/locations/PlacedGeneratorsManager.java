@@ -14,7 +14,6 @@ import org.bukkit.Bukkit;
 import org.bukkit.Chunk;
 import org.bukkit.Location;
 import org.bukkit.World;
-import org.bukkit.scheduler.BukkitTask;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -31,10 +30,10 @@ import me.kryniowesegryderiusz.kgenerators.logger.Logger;
 
 public class PlacedGeneratorsManager {
 	
-	@Getter private ConcurrentHashMap<ChunkInfo, ChunkGeneratorLocations> loadedGenerators = new ConcurrentHashMap<ChunkInfo, ChunkGeneratorLocations>();
+	@Getter private final ConcurrentHashMap<ChunkInfo, ChunkGeneratorLocations> loadedGenerators = new ConcurrentHashMap<>();
 	
 	private Sched.Task managementTask;
-	@Getter private LinkedBlockingQueue<ManagementTask> managementQueue = new LinkedBlockingQueue<ManagementTask>();
+	@Getter private final LinkedBlockingQueue<ManagementTask> managementQueue = new LinkedBlockingQueue<>();
 	
 	private boolean stopping = false;
 	
@@ -46,7 +45,7 @@ public class PlacedGeneratorsManager {
 	
 		Logger.debugPluginLoad("PlacedGenerators: Loading generators from already loaded chunks");
 
-		HashMap<World, Chunk[]> loadedChunks = new HashMap<World, Chunk[]>();
+		HashMap<World, Chunk[]> loadedChunks = new HashMap<>();
 		
 		Main.getInstance().getServer().getPluginManager().registerEvents(new ChunkLoadListener(), Main.getInstance());
 		Main.getInstance().getServer().getPluginManager().registerEvents(new ChunkUnloadListener(), Main.getInstance());
@@ -69,7 +68,7 @@ public class PlacedGeneratorsManager {
 	
 	private void nextManagementTick() {
 		managementTask = Sched.asyncLater(() -> {
-			while(managementQueue.size() > 0) {
+			while(!managementQueue.isEmpty()) {
 				if (stopping) break;
 				ManagementTask r = managementQueue.poll();
 				if (r != null) {
@@ -88,7 +87,7 @@ public class PlacedGeneratorsManager {
 	public void onDisable() {
 		stopping = true;
 		managementTask.cancel();
-		while(managementQueue.size() > 0) {
+		while(!managementQueue.isEmpty()) {
 			ManagementTask r = managementQueue.poll();
 			if (r != null) {
 				r.doTask();
@@ -128,20 +127,20 @@ public class PlacedGeneratorsManager {
 	
 	public class ChunkLoadTask extends ManagementTask {
 		
-		private ChunkInfo ci;
-		private long taskScheduleTime = System.currentTimeMillis();
+		private final ChunkInfo ci;
+		private final long taskScheduleTime = System.currentTimeMillis();
 		
 		public ChunkLoadTask(Chunk c) {
 			this.ci = getChunkInfo(c);
-			Logger.debugPlacedGeneratorsManager("PlacedGeneratorsManager: Scheduling chunk load: " + ci.toString());
+			Logger.debugPlacedGeneratorsManager("PlacedGeneratorsManager: Scheduling chunk load: " + ci);
 		}
 
 		@Override
 		public void doTask() {
 			long timeTaken = System.currentTimeMillis()-taskScheduleTime;
-			Logger.debugPlacedGeneratorsManager("PlacedGeneratorsManager: Loading chunk: " + ci.toString() + " (After " + timeTaken + "ms)");
+			Logger.debugPlacedGeneratorsManager("PlacedGeneratorsManager: Loading chunk: " + ci + " (After " + timeTaken + "ms)");
 			if (timeTaken > 500) {
-				Logger.debugPlacedGeneratorsManager("PlacedGeneratorsManager: Waiting for chunk load " + ci.toString() + " took more than 500ms! ("+timeTaken+"ms) Is the server overloaded?");
+				Logger.debugPlacedGeneratorsManager("PlacedGeneratorsManager: Waiting for chunk load " + ci + " took more than 500ms! ("+timeTaken+"ms) Is the server overloaded?");
 			}
 			
 			long taskTime = System.currentTimeMillis();
@@ -149,7 +148,7 @@ public class PlacedGeneratorsManager {
 			ArrayList<GeneratorLocation> generators = Main.getDatabases().getDb().getGenerators(ci);
 			
 			if (generators == null) {
-				Logger.error("PlacedGeneratorsManager: Cant load chunk " + ci.toString() + "! Trying again!");
+				Logger.error("PlacedGeneratorsManager: Cant load chunk " + ci + "! Trying again!");
 				managementQueue.add(this);
 				return;
 			}
@@ -158,14 +157,14 @@ public class PlacedGeneratorsManager {
 			
 			for (GeneratorLocation gl : generators) {
 				
-				Logger.debugPlacedGeneratorsManager("PlacedGeneratorsManager: Loading generator: " + gl.toString());
+				Logger.debugPlacedGeneratorsManager("PlacedGeneratorsManager: Loading generator: " + gl);
 
 				Schedule finalSchedule = Main.getDatabases().getDb().getSchedule(gl);
 				
 				Main.getPlacedGenerators().addLoaded(gl);
 				
 				if (finalSchedule != null) {
-					Logger.debugSchedulesManager("PlacedGeneratorsManager: Loading schedule " + gl.toString() + "| isNull: " + (finalSchedule == null));	
+					Logger.debugSchedulesManager("PlacedGeneratorsManager: Loading schedule " + gl);	
 					Main.getSchedules().getSchedules().put(gl, finalSchedule);
 					if (gl.getGenerator().isHologram())
 						Main.getHolograms().createRemainingTimeHologram(gl);
@@ -175,44 +174,41 @@ public class PlacedGeneratorsManager {
 					Sched.at(gl.getLocation(), () -> {
 						if (gl.isBroken()) {
 							gl.scheduleGeneratorRegeneration();
-							Logger.debugPlacedGeneratorsManager("PlacedGeneratorsManager: Broken generator found on chunk load. Automatically fixing it: " + gl.toString());
+							Logger.debugPlacedGeneratorsManager("PlacedGeneratorsManager: Broken generator found on chunk load. Automatically fixing it: " + gl);
 						}
 					});
 				}
 					
-				Sched.at(gl.getLocation(), () -> {
-					Main.getInstance().getServer().getPluginManager().callEvent(new GeneratorLoadEvent(gl));
-				});
-
+				Sched.at(gl.getLocation(), () -> Main.getInstance().getServer().getPluginManager().callEvent(new GeneratorLoadEvent(gl)));
 			}
 			
 			loadedGenerators.get(ci).setFullyLoaded(true);
 			
 			long tasktimeTaken = System.currentTimeMillis()-taskTime;
-			Logger.debugPlacedGeneratorsManager("PlacedGeneratorsManager: Unloading chunk " + ci.toString() + " taken " + tasktimeTaken + "ms)");
+			Logger.debugPlacedGeneratorsManager("PlacedGeneratorsManager: Unloading chunk " + ci + " taken " + tasktimeTaken + "ms)");
 			
-			Logger.debugPlacedGeneratorsManager("PlacedGeneratorsManager: Chunk loaded: " + ci.toString());
+			Logger.debugPlacedGeneratorsManager("PlacedGeneratorsManager: Chunk loaded: " + ci);
 		}
 		
 	}
 	
 	public class ChunkUnloadTask extends ManagementTask {
 		
-		private ChunkInfo ci;
-		private long taskScheduleTime = System.currentTimeMillis();
+		private final ChunkInfo ci;
+		private final long taskScheduleTime = System.currentTimeMillis();
 		
 		public ChunkUnloadTask(ChunkInfo ci) {
 			this.ci = ci;
 			
-			Logger.debugPlacedGeneratorsManager("PlacedGeneratorsManager: Scheduling chunk unload: " + ci.toString());
+			Logger.debugPlacedGeneratorsManager("PlacedGeneratorsManager: Scheduling chunk unload: " + ci);
 		}
 
 		@Override
 		public void doTask() {
 			long timeTaken = System.currentTimeMillis()-taskScheduleTime;
-			Logger.debugPlacedGeneratorsManager("PlacedGeneratorsManager: Unloading chunk: " + ci.toString() + " (After " + timeTaken + "ms)");
+			Logger.debugPlacedGeneratorsManager("PlacedGeneratorsManager: Unloading chunk: " + ci + " (After " + timeTaken + "ms)");
 			if (timeTaken > 500) {
-				Logger.debugPlacedGeneratorsManager("PlacedGeneratorsManager: Waiting for chunk unload " + ci.toString() + " took more than 500ms! ("+timeTaken+"ms) Is the server overloaded?");
+				Logger.debugPlacedGeneratorsManager("PlacedGeneratorsManager: Waiting for chunk unload " + ci + " took more than 500ms! ("+timeTaken+"ms) Is the server overloaded?");
 			}
 			
 			long taskTime = System.currentTimeMillis();
@@ -221,7 +217,7 @@ public class PlacedGeneratorsManager {
 			
 			for (GeneratorLocation gl : generatorsToUnload) {
 
-				Logger.debugPlacedGeneratorsManager("PlacedGeneratorsManager: Unloading generator: " + gl.toString());
+				Logger.debugPlacedGeneratorsManager("PlacedGeneratorsManager: Unloading generator: " + gl);
 				
 				/*
 				 * Database
@@ -231,7 +227,7 @@ public class PlacedGeneratorsManager {
 				
 				Schedule schedule = Main.getSchedules().getSchedule(gl);
 				if (schedule != null) {
-					Logger.debugSchedulesManager("PlacedGeneratorsManager: Unloading schedule " + gl.toString());	
+					Logger.debugSchedulesManager("PlacedGeneratorsManager: Unloading schedule " + gl);	
 					Main.getDatabases().getDb().addSchedule(gl, schedule);
 				}
 				
@@ -244,9 +240,7 @@ public class PlacedGeneratorsManager {
 				if (schedule != null)
 					Main.getSchedules().remove(gl);
 					
-				Sched.at(gl.getLocation(), () -> {
-					Main.getInstance().getServer().getPluginManager().callEvent(new GeneratorUnloadEvent(gl));
-				});
+				Sched.at(gl.getLocation(), () -> Main.getInstance().getServer().getPluginManager().callEvent(new GeneratorUnloadEvent(gl)));
 				
 			}
 
@@ -254,9 +248,9 @@ public class PlacedGeneratorsManager {
 				loadedGenerators.remove(ci);
 			
 			long tasktimeTaken = System.currentTimeMillis()-taskTime;
-			Logger.debugPlacedGeneratorsManager("PlacedGeneratorsManager: Unloading chunk " + ci.toString() + " taken " + tasktimeTaken + "ms)");
+			Logger.debugPlacedGeneratorsManager("PlacedGeneratorsManager: Unloading chunk " + ci + " taken " + tasktimeTaken + "ms)");
 				
-			Logger.debugPlacedGeneratorsManager("PlacedGeneratorsManager: Chunk unloaded: " + ci.toString() + " | isInManager: " + loadedGenerators.containsKey(ci));
+			Logger.debugPlacedGeneratorsManager("PlacedGeneratorsManager: Chunk unloaded: " + ci + " | isInManager: " + loadedGenerators.containsKey(ci));
 
 		}
 	}
@@ -273,7 +267,7 @@ public class PlacedGeneratorsManager {
 	}
 	
 	public ArrayList<GeneratorLocation> getAll() {	
-		ArrayList<GeneratorLocation> all = new ArrayList<GeneratorLocation>();
+		ArrayList<GeneratorLocation> all = new ArrayList<>();
 		for (ChunkGeneratorLocations c : this.loadedGenerators.values())
 			all.addAll(c.getAll());
 		return all;
@@ -315,7 +309,7 @@ public class PlacedGeneratorsManager {
 		if (cgl != null) {
 			return cgl.getAll();
 		}
-		else return new ArrayList<GeneratorLocation>();
+		else return new ArrayList<>();
 	}
 	
 	/**
@@ -349,18 +343,15 @@ public class PlacedGeneratorsManager {
 	 */
 	
 	public void bulkRemoveGenerators(World world, int minX, int minY, int minZ, int maxX, int maxY, int maxZ, boolean dropGenerator) {
-		Sched.async(new Runnable() {
-			@Override
-			public void run() {
-				ArrayList<GeneratorLocation> generatorLocationsToRemove = Main.getDatabases().getDb().getGenerators(world, minX, minY, minZ, maxX, maxY, maxZ);
-				for (GeneratorLocation gloc : generatorLocationsToRemove) {
-					Sched.at(gloc.getLocation(), () -> {
-						Logger.info("Bulk generator removal: " + gloc.toString());
-						gloc.removeGenerator(dropGenerator, null);
-					});
-				}
-			}
-		});
+		Sched.async(() -> {
+            ArrayList<GeneratorLocation> generatorLocationsToRemove = Main.getDatabases().getDb().getGenerators(world, minX, minY, minZ, maxX, maxY, maxZ);
+            for (GeneratorLocation gloc : generatorLocationsToRemove) {
+                Sched.at(gloc.getLocation(), () -> {
+                    Logger.info("Bulk generator removal: " + gloc);
+                    gloc.removeGenerator(dropGenerator, null);
+                });
+            }
+        });
 	}
 	
 	/*
@@ -372,9 +363,7 @@ public class PlacedGeneratorsManager {
 		int y = location.getBlockY();
 		int z = location.getBlockZ();
 		String world  = location.getWorld().getName();
-		String string = world + "," + x + "," + y + "," + z;
-		
-		return string;
+		return world + "," + x + "," + y + "," + z;
 	}
 	
 	public Location stringToLocation (String string) {
@@ -405,15 +394,14 @@ public class PlacedGeneratorsManager {
 	public class ChunkGeneratorLocations {
 		
 		@Getter @Setter private boolean fullyLoaded = false;
-		private ConcurrentHashMap<Location, GeneratorLocation> locations = new ConcurrentHashMap<Location, GeneratorLocation>();
+		private final ConcurrentHashMap<Location, GeneratorLocation> locations = new ConcurrentHashMap<>();
 		
 		public void addLocation(GeneratorLocation gLocation) {
 			this.locations.put(gLocation.getLocation(), gLocation);
 		}
 		
 		public void removeLocation(GeneratorLocation gLocation) {
-			if (this.locations.containsKey(gLocation.getLocation()))
-				this.locations.remove(gLocation.getLocation());
+            this.locations.remove(gLocation.getLocation());
 		}
 		
 		public GeneratorLocation get(Location location) {
@@ -432,9 +420,7 @@ public class PlacedGeneratorsManager {
 		}
 		
 		public ArrayList<GeneratorLocation> getAll() {
-			ArrayList<GeneratorLocation> all = new ArrayList<GeneratorLocation>();
-			all.addAll(this.locations.values());
-			return all;
+			return new ArrayList<>(this.locations.values());
 		}
 		
 		public boolean isEmpty() {
@@ -443,15 +429,7 @@ public class PlacedGeneratorsManager {
 	}
 	
 	public ChunkInfo getChunkInfo(Chunk c) {
-		ChunkInfo ci = new ChunkInfo(c);
-		/*
-		for (ChunkInfo cii : this.loadedGenerators.keySet()) {
-			if (ci.equals(cii)) {
-				ci = cii;
-				break;
-			}
-		}*/
-		return ci;
+		return new ChunkInfo(c);
 	}
 	
 	@AllArgsConstructor

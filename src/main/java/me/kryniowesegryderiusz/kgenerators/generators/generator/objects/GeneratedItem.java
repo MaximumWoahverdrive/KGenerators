@@ -54,7 +54,7 @@ public class GeneratedItem extends AbstractGeneratedObject implements Listener {
 			this.disableGravity = (boolean) generatedObjectConfig.get("disable-gravity");
 
 		if (generatedObjectConfig.containsKey("item")) {
-			this.item = FilesUtils.loadItemStack((Map<?, ?>) generatedObjectConfig, "item",
+			this.item = FilesUtils.loadItemStack(generatedObjectConfig, "item",
 					"Generators file: GeneratedItem", false);
 		} else {
 			Logger.error("Generators file: Generator type indicates item, but item configuration wasnt found.");
@@ -94,7 +94,7 @@ public class GeneratedItem extends AbstractGeneratedObject implements Listener {
 
 		String s = "None";
 		if (this.getItem() != null)
-			s = "Item: " + this.getItem().toString();
+			s = "Item: " + this.getItem();
 		if (this.waitForPickUp)
 			s += " [waitForPickUp]";
 

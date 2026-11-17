@@ -13,7 +13,7 @@ public enum GeneratorType
 		if (s == null) s = "";
 		for (GeneratorType gen : GeneratorType.values())
 		{
-			if (gen.toString().toLowerCase().equals(s.toLowerCase())) return gen;
+			if (gen.toString().equalsIgnoreCase(s)) return gen;
 		}
 		Logger.error("Generators file: Generator type " + s + " doesnt exist! Using SINGLE!");
 		return GeneratorType.SINGLE;
