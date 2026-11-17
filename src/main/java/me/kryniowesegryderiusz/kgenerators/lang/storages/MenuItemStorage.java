@@ -13,7 +13,7 @@ public class MenuItemStorage {
 
 	private HashMap<String, MenuItem> lang = new HashMap<String, MenuItem>();
 	Config config;
-	ArrayList<Class<?>> classes = new ArrayList<Class<?>>();
+	ArrayList<Class<? extends Enum<?>>> classes = new ArrayList<>();
 
 	public MenuItemStorage(Config config) {
 		this.config = config;
@@ -43,11 +43,11 @@ public class MenuItemStorage {
 		return lang.values();
 	}
 
-	public <T extends Enum<T> & IMenuItemType> ArrayList<T> getAllEnums() {
-		ArrayList<T> enums = new ArrayList<T>();
-		for (Class c : this.classes) {
-			Class<T> cl = c;
-			for (T en : cl.getEnumConstants()) {
+	/** @return the constants of every registered menu item enum */
+	public ArrayList<Enum<?>> getAllEnums() {
+		ArrayList<Enum<?>> enums = new ArrayList<>();
+		for (Class<? extends Enum<?>> c : this.classes) {
+			for (Enum<?> en : c.getEnumConstants()) {
 				enums.add(en);
 			}
 		}
