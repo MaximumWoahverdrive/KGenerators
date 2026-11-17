@@ -93,6 +93,7 @@ tasks.shadowJar {
     relocate 'de.tr7zw.changeme.nbtapi', "${shaded}.nbtapi"
     relocate 'com.cryptomorin.xseries', "${shaded}.xseries"
     relocate 'com.zaxxer.hikari', "${shaded}.hikaricp"
+    relocate 'org.bstats', "${shaded}.bstats"
 }
 tasks.jar { enabled = false }
 tasks.assemble { dependsOn tasks.shadowJar }

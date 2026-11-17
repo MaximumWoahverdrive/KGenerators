@@ -6,6 +6,12 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.Callable;
 
+import org.bstats.bukkit.Metrics;
+import org.bstats.charts.AdvancedPie;
+import org.bstats.charts.DrilldownPie;
+import org.bstats.charts.SimplePie;
+import org.bstats.charts.SingleLineChart;
+
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -45,11 +51,11 @@ import me.kryniowesegryderiusz.kgenerators.logger.Logger;
 import me.kryniowesegryderiusz.kgenerators.multiversion.MultiVersionManager;
 import me.kryniowesegryderiusz.kgenerators.settings.Settings;
 import me.kryniowesegryderiusz.kgenerators.utils.FilesConverter;
-import me.kryniowesegryderiusz.kgenerators.utils.immutable.Metrics;
 
 public class Main extends JavaPlugin {
 
 	@Getter private static Main instance;
+	private Metrics metrics;
 	
 	@Getter private static Settings settings;
 	
@@ -117,6 +123,9 @@ public class Main extends JavaPlugin {
     	if (dependencies != null)
     		dependencies.onDisable();
     	
+    	if (metrics != null)
+    		metrics.shutdown();
+    	
     	Sched.cancelAll();
     }
     
@@ -183,12 +192,12 @@ public class Main extends JavaPlugin {
 			 */
 			Logger.debugPluginLoad("MainManager: Loading Metrix");
 			int pluginId = 7871;
-			Metrics metrics = new Metrics(this, pluginId);
-			metrics.addCustomChart(new Metrics.SingleLineChart("configured_generators", () -> Main.getGenerators().getAmount()));
-			metrics.addCustomChart(new Metrics.SingleLineChart("database_generators", () -> Main.getDatabases().getDb().getGeneratorsAmount()));
-			metrics.addCustomChart(new Metrics.SingleLineChart("loaded_generators", () -> Main.getPlacedGenerators().getLoadedGeneratorsAmount()));
-			metrics.addCustomChart(new Metrics.SimplePie("database_type", () -> {return Main.getSettings().getDbType().toString();}));
-			metrics.addCustomChart(new Metrics.AdvancedPie("features", new Callable<Map<String, Integer>>() {
+			metrics = new Metrics(this, pluginId);
+			metrics.addCustomChart(new SingleLineChart("configured_generators", () -> Main.getGenerators().getAmount()));
+			metrics.addCustomChart(new SingleLineChart("database_generators", () -> Main.getDatabases().getDb().getGeneratorsAmount()));
+			metrics.addCustomChart(new SingleLineChart("loaded_generators", () -> Main.getPlacedGenerators().getLoadedGeneratorsAmount()));
+			metrics.addCustomChart(new SimplePie("database_type", () -> {return Main.getSettings().getDbType().toString();}));
+			metrics.addCustomChart(new AdvancedPie("features", new Callable<Map<String, Integer>>() {
 				@Override
 				public Map<String, Integer> call() throws Exception {
 		            Map<String, Integer> valueMap = new HashMap<>();
@@ -199,7 +208,7 @@ public class Main extends JavaPlugin {
 		            return valueMap;
 				}
 			}));
-			metrics.addCustomChart(new Metrics.AdvancedPie("hooked_plugins", new Callable<Map<String, Integer>>() {
+			metrics.addCustomChart(new AdvancedPie("hooked_plugins", new Callable<Map<String, Integer>>() {
 				@Override
 				public Map<String, Integer> call() throws Exception {
 		            Map<String, Integer> valueMap = new HashMap<>();
@@ -211,7 +220,7 @@ public class Main extends JavaPlugin {
 		            return valueMap;
 				}
 			}));
-	        metrics.addCustomChart(new Metrics.DrilldownPie("complex_plugin_version", () -> {
+	        metrics.addCustomChart(new DrilldownPie("complex_plugin_version", () -> {
 	            Map<String, Map<String, Integer>> map = new HashMap<>();
 	            String[] sVersion = this.getDescription().getVersion().split("-");
 	            Map<String, Integer> entry = new HashMap<>();
@@ -219,7 +228,7 @@ public class Main extends JavaPlugin {
 	            map.put(sVersion[0], entry);
 	            return map;
 	        }));
-			metrics.addCustomChart(new Metrics.AdvancedPie("addons", new Callable<Map<String, Integer>>() {
+			metrics.addCustomChart(new AdvancedPie("addons", new Callable<Map<String, Integer>>() {
 				@Override
 				public Map<String, Integer> call() throws Exception {
 		            Map<String, Integer> valueMap = new HashMap<>();
