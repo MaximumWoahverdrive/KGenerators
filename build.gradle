@@ -64,6 +64,8 @@ allprojects {
         // repo.fancyplugins.de no longer resolves; FancyHolograms moved to FancyInnovations.
         maven { url = 'https://repo.fancyinnovations.com/releases' }
         maven { url = 'https://nexus.phoenixdevt.fr/repository/maven-public/' }
+        // eco, EcoItems
+        maven { url = 'https://repo.auxilor.io/repository/maven-public/' }
     }
 
     java {
