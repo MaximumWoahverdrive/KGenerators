@@ -1,96 +1,101 @@
 package me.kryniowesegryderiusz.kgenerators.listeners;
-import me.kryniowesegryderiusz.kgenerators.utils.Text;
-import me.kryniowesegryderiusz.kgenerators.utils.Sched;
-
-import org.bukkit.Material;
-import org.bukkit.entity.Player;
-import org.bukkit.event.EventHandler;
-import org.bukkit.event.EventPriority;
-import org.bukkit.event.Listener;
-import org.bukkit.event.Event.Result;
-import org.bukkit.event.inventory.CraftItemEvent;
-import org.bukkit.event.inventory.PrepareItemCraftEvent;
-import org.bukkit.inventory.ItemStack;
 
 import me.kryniowesegryderiusz.kgenerators.Main;
 import me.kryniowesegryderiusz.kgenerators.generators.generator.objects.Generator;
 import me.kryniowesegryderiusz.kgenerators.lang.Lang;
 import me.kryniowesegryderiusz.kgenerators.lang.enums.Message;
 import me.kryniowesegryderiusz.kgenerators.logger.Logger;
+import me.kryniowesegryderiusz.kgenerators.utils.Sched;
+import me.kryniowesegryderiusz.kgenerators.utils.Text;
+import org.bukkit.Material;
+import org.bukkit.entity.Player;
+import org.bukkit.event.Event.Result;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
+import org.bukkit.event.Listener;
+import org.bukkit.event.inventory.CraftItemEvent;
+import org.bukkit.event.inventory.PrepareItemCraftEvent;
+import org.bukkit.inventory.ItemStack;
 
 public class CraftingListeners implements Listener {
-	
-	@EventHandler(priority = EventPriority.HIGHEST)
-	public void onCraftItem(final CraftItemEvent e) {
 
-		try {
+    @EventHandler(priority = EventPriority.HIGHEST)
+    public void onCraftItem(final CraftItemEvent e) {
 
-			if (!(e.getWhoClicked() instanceof Player p) || e.isCancelled()) {
-				return;
-			}
+        try {
+
+            if (!(e.getWhoClicked() instanceof Player p) || e.isCancelled()) {
+                return;
+            }
 
             Generator resultGenerator = Main.getGenerators().get(e.getRecipe().getResult());
-			
-			/*
-			 * Check for crafting something with generator
-			 */
-			for (ItemStack i : e.getInventory().getMatrix()) {
-				if (i != null 
-						&& Main.getGenerators().get(i) != null 
-						&& e.getCurrentItem() != null
-						&& resultGenerator == null) {
-					Lang.getMessageStorage().send(p, Message.GENERATORS_CRAFTING_CANT_USE);
-					e.setResult(Result.DENY);
-					closeInv(p);
-					return;
-				}
-			}
-			
-			/*
-			 * Permission check
-			 */
-			if (Main.getRecipes().isEnabled()
-					&& resultGenerator != null) {
-				String permission = "kgenerators.craft." + resultGenerator.getId();
-				if (!p.hasPermission(permission)) {
-					Lang.getMessageStorage().send(p, Message.GENERATORS_CRAFTING_NO_PERMISSION, "<generator>",
-							Text.name(resultGenerator.getGeneratorItem().getItemMeta()), "<permission>", permission);
-					e.setResult(Result.DENY);
-					closeInv(p);
-				}
-			}
 
-		} catch (Exception exception) {
-			Logger.error(exception);
-		}
-	}
+            /*
+             * Check for crafting something with generator
+             */
+            for (ItemStack i : e.getInventory().getMatrix()) {
+                if (i != null
+                        && Main.getGenerators().get(i) != null
+                        && e.getCurrentItem() != null
+                        && resultGenerator == null) {
+                    Lang.getMessageStorage().send(p, Message.GENERATORS_CRAFTING_CANT_USE);
+                    e.setResult(Result.DENY);
+                    closeInv(p);
+                    return;
+                }
+            }
 
-	private void closeInv(Player p) {
-		Sched.entity(p, p::closeInventory);
-	}
-	
-	@EventHandler(priority = EventPriority.MONITOR)
-	public void onPrepareItemCraft(PrepareItemCraftEvent e) {
+            /*
+             * Permission check
+             */
+            if (Main.getRecipes().isEnabled() && resultGenerator != null) {
+                String permission = "kgenerators.craft." + resultGenerator.getId();
+                if (!p.hasPermission(permission)) {
+                    Lang.getMessageStorage()
+                            .send(
+                                    p,
+                                    Message.GENERATORS_CRAFTING_NO_PERMISSION,
+                                    "<generator>",
+                                    Text.name(resultGenerator.getGeneratorItem().getItemMeta()),
+                                    "<permission>",
+                                    permission);
+                    e.setResult(Result.DENY);
+                    closeInv(p);
+                }
+            }
 
-		try {
-			/*
-			 * PreCheck for trying craft something with generator
-			 */
-			for (Generator g : Main.getGenerators().getAll()) {
-				for (ItemStack i : e.getInventory().getMatrix()) {
-					if (i != null && i.isSimilar(g.getGeneratorItem()) && e.getInventory().getResult() != null
-							&& Main.getGenerators().get(e.getInventory().getResult()) == null) {
-						Lang.getMessageStorage().send(e.getInventory().getViewers().get(0),
-								Message.GENERATORS_CRAFTING_CANT_USE);
-						e.getInventory().setResult(new ItemStack(Material.AIR));
-						return;
-					}
-				}
-			}
+        } catch (Exception exception) {
+            Logger.error(exception);
+        }
+    }
 
-		} catch (Exception exception) {
-			Logger.error(exception);
-		}
-	}
+    private void closeInv(Player p) {
+        Sched.entity(p, p::closeInventory);
+    }
 
+    @EventHandler(priority = EventPriority.MONITOR)
+    public void onPrepareItemCraft(PrepareItemCraftEvent e) {
+
+        try {
+            /*
+             * PreCheck for trying craft something with generator
+             */
+            for (Generator g : Main.getGenerators().getAll()) {
+                for (ItemStack i : e.getInventory().getMatrix()) {
+                    if (i != null
+                            && i.isSimilar(g.getGeneratorItem())
+                            && e.getInventory().getResult() != null
+                            && Main.getGenerators().get(e.getInventory().getResult()) == null) {
+                        Lang.getMessageStorage()
+                                .send(e.getInventory().getViewers().get(0), Message.GENERATORS_CRAFTING_CANT_USE);
+                        e.getInventory().setResult(new ItemStack(Material.AIR));
+                        return;
+                    }
+                }
+            }
+
+        } catch (Exception exception) {
+            Logger.error(exception);
+        }
+    }
 }

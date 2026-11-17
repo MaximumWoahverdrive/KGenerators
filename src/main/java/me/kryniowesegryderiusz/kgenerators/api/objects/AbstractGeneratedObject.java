@@ -1,136 +1,131 @@
 package me.kryniowesegryderiusz.kgenerators.api.objects;
 
 import java.util.Map;
-
-import org.jetbrains.annotations.Nullable;
-
-import org.bukkit.inventory.ItemStack;
-
 import lombok.Getter;
 import me.kryniowesegryderiusz.kgenerators.api.interfaces.IGeneratorLocation;
 import me.kryniowesegryderiusz.kgenerators.generators.generator.objects.CustomDrops;
 import me.kryniowesegryderiusz.kgenerators.logger.Logger;
+import org.bukkit.inventory.ItemStack;
+import org.jetbrains.annotations.Nullable;
 
 public abstract class AbstractGeneratedObject {
-	
-	@Getter private final String type;
-	@Getter private Double chance = 0.0;
-	
-	@Nullable @Getter private CustomDrops customDrops;
-	
-	public AbstractGeneratedObject(String type) {
-		this.type = type;
-	}
-	
-	/**
-	 * Compares two generated objects if they are equal.
-	 * @param generatedObject the generated object to compare with
-	 * @return true if its same object in different instances
-	 */
-	public boolean equals(AbstractGeneratedObject generatedObject) {
-		if (!generatedObject.getType().equals(this.type))
-			return false;
-		return this.compareSameType(generatedObject);
-	}
-	
-	/**
-	 * Loads GeneratorObject from config
-	 * @param generatedObjectConfig config map of this generated object, with its chance and type-specific values
-	 * @return true if loading was successful
-	 */
-	public boolean load(Map<?, ?> generatedObjectConfig) {
-		
-		try {
-			if (generatedObjectConfig.get("chance") != null) {
-				Object obj = generatedObjectConfig.get("chance");
-				if (obj instanceof Double d)
-					this.chance = d;
-				else if (obj instanceof Integer i)
-					this.chance = (double) i;
-				else {
-					Logger.error("Generators file: Cant load chance (" + obj + ") for one generation! Using 0%");
-					return false;
-				}
-			} else {
-				Logger.error("Generators file: Cant load chance for one generation! Using 0%");
-				return false;
-			}
-			
-			if (!this.loadTypeSpecific(generatedObjectConfig))
-				return false;
-			
-			CustomDrops cd = new CustomDrops();
-			if (cd.loadCustomDrops(generatedObjectConfig))
-				this.customDrops = cd;
-			
-			Logger.debugPluginLoad("Generators file: Loaded GeneratedObject: " + this);
-			
-		} catch (Exception e) {
-			Logger.error("Generators file: Cant load GeneratedObject: " + this.toStringSimple());
-			Logger.error(e);
-			return false;
-		}
-		return true;
 
-	}
-	
-	public String toStringSimple() {
-		return "Type: " + this.type + " | Chance: " + this.chance;
-	}
-	
-	public String toString() {
-		return this.toStringSimple() 
-				+ " | " + this.toStringSpecific() 
-				+ (this.customDrops == null ? "" : " | CustomDrops: " + this.customDrops);
-	}
-	
-	/*
-	 * Regenerates generator
-	 * @param GeneratorLocation
-	 */
-	public abstract void regenerate(IGeneratorLocation generatorLocation);
-	
-	/**
-	 * Gets item displayed in chances gui
-	 * @return ItemStack
-	 */
-	public abstract ItemStack getGuiItem();
-	
-	/**
-	 * Gets GeneratedObjects specific info for logging purposes
-	 * @return type-specific description of this object
-	 */
-	protected abstract String toStringSpecific();
-	
-	/**
-	 * Compares GeneratedObjects that have same type;
-	 * @param generatedObject the generated object of the same type to compare with
-	 * @return true if its same object in different instances
-	 */
-	protected abstract boolean compareSameType(AbstractGeneratedObject generatedObject);
-	
-	/**
-	 * Loads values specific for GeneratorObject
-	 * @param generatedObjectConfig config map of this generated object
-	 * @return true if loading was successful
-	 */
-	protected abstract boolean loadTypeSpecific(Map<?, ?> generatedObjectConfig);
-	
-	
-	/**
-	 * Determines, whether generator is able to regenerate
-	 * @return true if GeneratedObject is fully collected
-	 */
-	public boolean isReady() {
-		return true;
-	}
-	
-	/**
-	 * Determines, whether some block is similar to this generated object
-	 * @param itemStackBlock item stack of the block to compare
-	 * @return true if the block matches this generated object; always false by default
-	 */
-	public boolean isBlockSimilar(ItemStack itemStackBlock) {
-		return false;
-	}
+    @Getter
+    private final String type;
+
+    @Getter
+    private Double chance = 0.0;
+
+    @Nullable
+    @Getter
+    private CustomDrops customDrops;
+
+    public AbstractGeneratedObject(String type) {
+        this.type = type;
+    }
+
+    /**
+     * Compares two generated objects if they are equal.
+     * @param generatedObject the generated object to compare with
+     * @return true if its same object in different instances
+     */
+    public boolean equals(AbstractGeneratedObject generatedObject) {
+        if (!generatedObject.getType().equals(this.type)) return false;
+        return this.compareSameType(generatedObject);
+    }
+
+    /**
+     * Loads GeneratorObject from config
+     * @param generatedObjectConfig config map of this generated object, with its chance and type-specific values
+     * @return true if loading was successful
+     */
+    public boolean load(Map<?, ?> generatedObjectConfig) {
+
+        try {
+            if (generatedObjectConfig.get("chance") != null) {
+                Object obj = generatedObjectConfig.get("chance");
+                if (obj instanceof Double d) this.chance = d;
+                else if (obj instanceof Integer i) this.chance = (double) i;
+                else {
+                    Logger.error("Generators file: Cant load chance (" + obj + ") for one generation! Using 0%");
+                    return false;
+                }
+            } else {
+                Logger.error("Generators file: Cant load chance for one generation! Using 0%");
+                return false;
+            }
+
+            if (!this.loadTypeSpecific(generatedObjectConfig)) return false;
+
+            CustomDrops cd = new CustomDrops();
+            if (cd.loadCustomDrops(generatedObjectConfig)) this.customDrops = cd;
+
+            Logger.debugPluginLoad("Generators file: Loaded GeneratedObject: " + this);
+
+        } catch (Exception e) {
+            Logger.error("Generators file: Cant load GeneratedObject: " + this.toStringSimple());
+            Logger.error(e);
+            return false;
+        }
+        return true;
+    }
+
+    public String toStringSimple() {
+        return "Type: " + this.type + " | Chance: " + this.chance;
+    }
+
+    public String toString() {
+        return this.toStringSimple()
+                + " | " + this.toStringSpecific()
+                + (this.customDrops == null ? "" : " | CustomDrops: " + this.customDrops);
+    }
+
+    /*
+     * Regenerates generator
+     * @param GeneratorLocation
+     */
+    public abstract void regenerate(IGeneratorLocation generatorLocation);
+
+    /**
+     * Gets item displayed in chances gui
+     * @return ItemStack
+     */
+    public abstract ItemStack getGuiItem();
+
+    /**
+     * Gets GeneratedObjects specific info for logging purposes
+     * @return type-specific description of this object
+     */
+    protected abstract String toStringSpecific();
+
+    /**
+     * Compares GeneratedObjects that have same type;
+     * @param generatedObject the generated object of the same type to compare with
+     * @return true if its same object in different instances
+     */
+    protected abstract boolean compareSameType(AbstractGeneratedObject generatedObject);
+
+    /**
+     * Loads values specific for GeneratorObject
+     * @param generatedObjectConfig config map of this generated object
+     * @return true if loading was successful
+     */
+    protected abstract boolean loadTypeSpecific(Map<?, ?> generatedObjectConfig);
+
+    /**
+     * Determines, whether generator is able to regenerate
+     * @return true if GeneratedObject is fully collected
+     */
+    public boolean isReady() {
+        return true;
+    }
+
+    /**
+     * Determines, whether some block is similar to this generated object
+     * @param itemStackBlock item stack of the block to compare
+     * @return true if the block matches this generated object; always false by default
+     */
+    public boolean isBlockSimilar(ItemStack itemStackBlock) {
+        return false;
+    }
 }

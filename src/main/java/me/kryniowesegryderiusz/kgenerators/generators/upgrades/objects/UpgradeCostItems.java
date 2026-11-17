@@ -1,73 +1,74 @@
 package me.kryniowesegryderiusz.kgenerators.generators.upgrades.objects;
 
 import java.util.ArrayList;
-
-import org.bukkit.entity.Player;
-import org.bukkit.inventory.ItemStack;
-
 import me.kryniowesegryderiusz.kgenerators.api.exceptions.CannnotLoadUpgradeException;
 import me.kryniowesegryderiusz.kgenerators.api.interfaces.IUpgradeCost;
 import me.kryniowesegryderiusz.kgenerators.lang.Lang;
 import me.kryniowesegryderiusz.kgenerators.lang.enums.Message;
 import me.kryniowesegryderiusz.kgenerators.utils.FilesUtils;
 import me.kryniowesegryderiusz.kgenerators.utils.immutable.Config;
+import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
 
-public class UpgradeCostItems implements IUpgradeCost  {
-	
-	public UpgradeCostItems() {}
-	
-	private final ArrayList<ItemStack> items = new ArrayList<>();
+public class UpgradeCostItems implements IUpgradeCost {
 
-	@Override
-	public boolean checkRequirements(Player p, int amount) {
-		
-		for (ItemStack item : items) {
-			int found = 0;
-			for (ItemStack is : p.getInventory().getStorageContents()) {
-				if (is != null && is.isSimilar(item))
-					found += is.getAmount();
-			}
-			
-			if (found < item.getAmount()*amount)
-				return false;
-			
-		}
-		return true;
-	}
+    public UpgradeCostItems() {}
 
-	@Override
-	public void takeRequirements(Player p, int amount) {
-		for(ItemStack item : items) {
-			ItemStack is = item.clone();
-			is.setAmount(is.getAmount()*amount);
-			p.getInventory().removeItem(is);
-		}
-	}
+    private final ArrayList<ItemStack> items = new ArrayList<>();
 
-	@Override
-	public boolean load(Config config, String generatorId) throws CannnotLoadUpgradeException {
-		if (!config.contains(generatorId+".items"))
-			return false;
+    @Override
+    public boolean checkRequirements(Player p, int amount) {
 
-		if (config.getConfigurationSection(generatorId+".items") == null)
-			throw new CannnotLoadUpgradeException("items should be a section of items");
+        for (ItemStack item : items) {
+            int found = 0;
+            for (ItemStack is : p.getInventory().getStorageContents()) {
+                if (is != null && is.isSimilar(item)) found += is.getAmount();
+            }
 
-		for (String s : config.getConfigurationSection(generatorId+".items").getKeys(false)) {
-			items.add(FilesUtils.loadItemStack(config, generatorId+".items", s, false));
-		}
+            if (found < item.getAmount() * amount) return false;
+        }
+        return true;
+    }
 
-		return true;
-	}
+    @Override
+    public void takeRequirements(Player p, int amount) {
+        for (ItemStack item : items) {
+            ItemStack is = item.clone();
+            is.setAmount(is.getAmount() * amount);
+            p.getInventory().removeItem(is);
+        }
+    }
 
-	@Override
-	public String getCostFormatted(int amount) {
-		String cost = "";
-		
-		for (ItemStack is : items) {
-			if (!cost.isEmpty()) cost+=Lang.getMessageStorage().get(Message.UPGRADES_COSTS_SEPARATOR, false);
-			cost+= Lang.getMessageStorage().get(Message.GENERATORS_ANY_OBJECT_AMOUNT, false, "<amount>", is.getAmount()*amount+"", "<object>", Lang.getCustomNamesStorage().getItemTypeName(is));
-		}
-		
-		return cost;	
-	}
+    @Override
+    public boolean load(Config config, String generatorId) throws CannnotLoadUpgradeException {
+        if (!config.contains(generatorId + ".items")) return false;
+
+        if (config.getConfigurationSection(generatorId + ".items") == null)
+            throw new CannnotLoadUpgradeException("items should be a section of items");
+
+        for (String s : config.getConfigurationSection(generatorId + ".items").getKeys(false)) {
+            items.add(FilesUtils.loadItemStack(config, generatorId + ".items", s, false));
+        }
+
+        return true;
+    }
+
+    @Override
+    public String getCostFormatted(int amount) {
+        String cost = "";
+
+        for (ItemStack is : items) {
+            if (!cost.isEmpty()) cost += Lang.getMessageStorage().get(Message.UPGRADES_COSTS_SEPARATOR, false);
+            cost += Lang.getMessageStorage()
+                    .get(
+                            Message.GENERATORS_ANY_OBJECT_AMOUNT,
+                            false,
+                            "<amount>",
+                            is.getAmount() * amount + "",
+                            "<object>",
+                            Lang.getCustomNamesStorage().getItemTypeName(is));
+        }
+
+        return cost;
+    }
 }

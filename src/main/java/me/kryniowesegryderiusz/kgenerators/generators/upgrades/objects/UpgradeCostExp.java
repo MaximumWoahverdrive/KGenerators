@@ -1,40 +1,38 @@
 package me.kryniowesegryderiusz.kgenerators.generators.upgrades.objects;
 
-import org.bukkit.entity.Player;
-
 import me.kryniowesegryderiusz.kgenerators.api.exceptions.CannnotLoadUpgradeException;
 import me.kryniowesegryderiusz.kgenerators.api.interfaces.IUpgradeCost;
 import me.kryniowesegryderiusz.kgenerators.lang.Lang;
 import me.kryniowesegryderiusz.kgenerators.lang.enums.Message;
 import me.kryniowesegryderiusz.kgenerators.utils.immutable.Config;
+import org.bukkit.entity.Player;
 
-public class UpgradeCostExp implements IUpgradeCost  {
-	
-	public UpgradeCostExp() {}
-	
-	int cost;
+public class UpgradeCostExp implements IUpgradeCost {
 
-	@Override
-	public boolean checkRequirements(Player p, int amount) {
-		return this.cost*amount <= p.getTotalExperience();
-	}
+    public UpgradeCostExp() {}
 
-	@Override
-	public void takeRequirements(Player p, int amount) {
-		p.giveExp(-this.cost*amount);
-	}
+    int cost;
 
-	@Override
-	public boolean load(Config config, String generatorId) throws CannnotLoadUpgradeException {
-		if (!config.contains(generatorId+".exp"))
-			return false;
-				
-		cost = config.getInt(generatorId+".exp");
-		return true;
-	}
+    @Override
+    public boolean checkRequirements(Player p, int amount) {
+        return this.cost * amount <= p.getTotalExperience();
+    }
 
-	@Override
-	public String getCostFormatted(int amount) {
-		return amount*this.cost + " " + Lang.getMessageStorage().get(Message.UPGRADES_COST_EXP);
-	}
+    @Override
+    public void takeRequirements(Player p, int amount) {
+        p.giveExp(-this.cost * amount);
+    }
+
+    @Override
+    public boolean load(Config config, String generatorId) throws CannnotLoadUpgradeException {
+        if (!config.contains(generatorId + ".exp")) return false;
+
+        cost = config.getInt(generatorId + ".exp");
+        return true;
+    }
+
+    @Override
+    public String getCostFormatted(int amount) {
+        return amount * this.cost + " " + Lang.getMessageStorage().get(Message.UPGRADES_COST_EXP);
+    }
 }

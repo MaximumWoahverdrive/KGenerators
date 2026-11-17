@@ -1,55 +1,51 @@
 package me.kryniowesegryderiusz.kgenerators.dependencies.objects;
 
-import java.util.Map;
-
-import org.bukkit.inventory.ItemStack;
-
 import com.nexomc.nexo.api.NexoBlocks;
 import com.nexomc.nexo.api.NexoItems;
-
+import java.util.Map;
 import lombok.Getter;
 import me.kryniowesegryderiusz.kgenerators.api.interfaces.IGeneratorLocation;
 import me.kryniowesegryderiusz.kgenerators.api.objects.AbstractGeneratedObject;
 import me.kryniowesegryderiusz.kgenerators.logger.Logger;
+import org.bukkit.inventory.ItemStack;
 
 public class GeneratedNexoBlock extends AbstractGeneratedObject {
-	
-	@Getter private String material;
 
-	public GeneratedNexoBlock() {
-		super("nexo_block");
-	}
+    @Getter
+    private String material;
 
-	@Override
-	public void regenerate(IGeneratorLocation generatorLocation) {
-		NexoBlocks.place(material, generatorLocation.getGeneratedBlockLocation());
-		
-	}
+    public GeneratedNexoBlock() {
+        super("nexo_block");
+    }
 
-	@Override
-	public ItemStack getGuiItem() {
-		return NexoItems.itemFromId(this.material).build();
-	}
+    @Override
+    public void regenerate(IGeneratorLocation generatorLocation) {
+        NexoBlocks.place(material, generatorLocation.getGeneratedBlockLocation());
+    }
 
-	@Override
-	protected String toStringSpecific() {
-		return "Material: " + this.material;
-	}
+    @Override
+    public ItemStack getGuiItem() {
+        return NexoItems.itemFromId(this.material).build();
+    }
 
-	@Override
-	protected boolean compareSameType(AbstractGeneratedObject generatedObject) {
-		return this.material.equals(((GeneratedNexoBlock) generatedObject).getMaterial());
-	}
+    @Override
+    protected String toStringSpecific() {
+        return "Material: " + this.material;
+    }
 
-	@Override
-	protected boolean loadTypeSpecific(Map<?, ?> generatedObjectConfig) {
-		if (generatedObjectConfig.containsKey("material")) {
-			this.material = (String) generatedObjectConfig.get("material");
-		} else {
-			Logger.error("Generators file: Cant load GeneratedNexoBlock. Material is not set!");
-			return false;
-		}
-		return true;
-	}
+    @Override
+    protected boolean compareSameType(AbstractGeneratedObject generatedObject) {
+        return this.material.equals(((GeneratedNexoBlock) generatedObject).getMaterial());
+    }
 
+    @Override
+    protected boolean loadTypeSpecific(Map<?, ?> generatedObjectConfig) {
+        if (generatedObjectConfig.containsKey("material")) {
+            this.material = (String) generatedObjectConfig.get("material");
+        } else {
+            Logger.error("Generators file: Cant load GeneratedNexoBlock. Material is not set!");
+            return false;
+        }
+        return true;
+    }
 }

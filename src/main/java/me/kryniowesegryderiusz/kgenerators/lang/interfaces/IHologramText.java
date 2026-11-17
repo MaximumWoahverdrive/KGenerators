@@ -4,6 +4,7 @@ import me.kryniowesegryderiusz.kgenerators.lang.objects.StringContent;
 
 public interface IHologramText {
 
-	String getKey();
-	StringContent getStringContent();
+    String getKey();
+
+    StringContent getStringContent();
 }

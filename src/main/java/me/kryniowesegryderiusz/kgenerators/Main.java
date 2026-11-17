@@ -1,21 +1,8 @@
 package me.kryniowesegryderiusz.kgenerators;
-import me.kryniowesegryderiusz.kgenerators.dependencies.hooks.WorldGuardHook;
-import me.kryniowesegryderiusz.kgenerators.utils.Sched;
-
-
-import java.util.HashMap;
-import java.util.Map;
-
-import org.bstats.bukkit.Metrics;
-import org.bstats.charts.AdvancedPie;
-import org.bstats.charts.DrilldownPie;
-import org.bstats.charts.SimplePie;
-import org.bstats.charts.SingleLineChart;
-
-import org.bukkit.Bukkit;
-import org.bukkit.plugin.java.JavaPlugin;
 
 import dev.lone.itemsadder.api.ItemsAdder;
+import java.util.HashMap;
+import java.util.Map;
 import lombok.Getter;
 import me.kryniowesegryderiusz.kgenerators.addons.Addons;
 import me.kryniowesegryderiusz.kgenerators.addons.objects.Addon;
@@ -27,6 +14,7 @@ import me.kryniowesegryderiusz.kgenerators.dependencies.DependenciesManager;
 import me.kryniowesegryderiusz.kgenerators.dependencies.enums.Dependency;
 import me.kryniowesegryderiusz.kgenerators.dependencies.hooks.FancyHologramsHook;
 import me.kryniowesegryderiusz.kgenerators.dependencies.hooks.ItemsAdderHook;
+import me.kryniowesegryderiusz.kgenerators.dependencies.hooks.WorldGuardHook;
 import me.kryniowesegryderiusz.kgenerators.generators.generator.GeneratorsManager;
 import me.kryniowesegryderiusz.kgenerators.generators.holograms.HologramsManager;
 import me.kryniowesegryderiusz.kgenerators.generators.locations.PlacedGeneratorsManager;
@@ -43,184 +31,213 @@ import me.kryniowesegryderiusz.kgenerators.listeners.BlockPlaceListener;
 import me.kryniowesegryderiusz.kgenerators.listeners.CraftingListeners;
 import me.kryniowesegryderiusz.kgenerators.listeners.EntityChangeBlockListener;
 import me.kryniowesegryderiusz.kgenerators.listeners.FurnaceSmeltListener;
-import me.kryniowesegryderiusz.kgenerators.listeners.InventoryClickListener;
 import me.kryniowesegryderiusz.kgenerators.listeners.GeneratorProtectionListeners;
+import me.kryniowesegryderiusz.kgenerators.listeners.InventoryClickListener;
 import me.kryniowesegryderiusz.kgenerators.listeners.PlayerInteractListener;
 import me.kryniowesegryderiusz.kgenerators.logger.Logger;
 import me.kryniowesegryderiusz.kgenerators.settings.Settings;
 import me.kryniowesegryderiusz.kgenerators.utils.FilesConverter;
+import me.kryniowesegryderiusz.kgenerators.utils.Sched;
+import org.bstats.bukkit.Metrics;
+import org.bstats.charts.AdvancedPie;
+import org.bstats.charts.DrilldownPie;
+import org.bstats.charts.SimplePie;
+import org.bstats.charts.SingleLineChart;
+import org.bukkit.Bukkit;
+import org.bukkit.plugin.java.JavaPlugin;
 
 public class Main extends JavaPlugin {
 
-	@Getter private static Main instance;
-	private Metrics metrics;
-	/** Set in onLoad on a server that is not Paper-based; the plugin then disables itself. */
-	private boolean unsupportedServer;
-	
-	@Getter private static Settings settings;
-	
-	@Getter private static GeneratorsManager generators;
-	@Getter private static HologramsManager holograms;
-	@Getter private static PlacedGeneratorsManager placedGenerators;
-	@Getter private static final PlayersManager players = new PlayersManager();
-	@Getter private static LimitsManager limits;
-	@Getter private static RecipesManager recipes;
-	@Getter private static SchedulesManager schedules;
-	@Getter private static UpgradesManager upgrades;
-	
-	@Getter private static DatabaseManager databases;
-	@Getter private static final DependenciesManager dependencies = new DependenciesManager();
-	@Getter private static MenusManager menus;
-	
+    @Getter
+    private static Main instance;
+
+    private Metrics metrics;
+    /** Set in onLoad on a server that is not Paper-based; the plugin then disables itself. */
+    private boolean unsupportedServer;
+
+    @Getter
+    private static Settings settings;
+
+    @Getter
+    private static GeneratorsManager generators;
+
+    @Getter
+    private static HologramsManager holograms;
+
+    @Getter
+    private static PlacedGeneratorsManager placedGenerators;
+
+    @Getter
+    private static final PlayersManager players = new PlayersManager();
+
+    @Getter
+    private static LimitsManager limits;
+
+    @Getter
+    private static RecipesManager recipes;
+
+    @Getter
+    private static SchedulesManager schedules;
+
+    @Getter
+    private static UpgradesManager upgrades;
+
+    @Getter
+    private static DatabaseManager databases;
+
+    @Getter
+    private static final DependenciesManager dependencies = new DependenciesManager();
+
+    @Getter
+    private static MenusManager menus;
+
     @Override
     public void onEnable() {
-    	
-    	if (unsupportedServer) {
-    		getServer().getPluginManager().disablePlugin(this);
-    		return;
-    	}
-    	
-    	dependencies.onEnableDependenciesCheck();
-    	if (Bukkit.getPluginManager().getPlugin("ItemsAdder") != null && !ItemsAdder.areItemsLoaded()) {
-    		Logger.warn("ItemsAdder is enabled, KGenerators loading postponed until IA is loaded");
-    		this.getServer().getPluginManager().registerEvents(new ItemsAdderHook().new ItemsAdderListeners(), this);
-    	} else {
-    		Logger.debugPluginLoad("KGenerators will finish loading once the server has started");
-    		Sched.global(() -> Main.getInstance().enable());
-    	}
+
+        if (unsupportedServer) {
+            getServer().getPluginManager().disablePlugin(this);
+            return;
+        }
+
+        dependencies.onEnableDependenciesCheck();
+        if (Bukkit.getPluginManager().getPlugin("ItemsAdder") != null && !ItemsAdder.areItemsLoaded()) {
+            Logger.warn("ItemsAdder is enabled, KGenerators loading postponed until IA is loaded");
+            this.getServer().getPluginManager().registerEvents(new ItemsAdderHook().new ItemsAdderListeners(), this);
+        } else {
+            Logger.debugPluginLoad("KGenerators will finish loading once the server has started");
+            Sched.global(() -> Main.getInstance().enable());
+        }
     }
 
     /** Whether this is Paper or a fork of it (Purpur, Folia, ...), recognised by Paper's configuration class. */
     private static boolean isPaper() {
-    	try {
-    		Class.forName("io.papermc.paper.configuration.GlobalConfiguration");
-    		return true;
-    	} catch (ClassNotFoundException e) {
-    		return false;
-    	}
+        try {
+            Class.forName("io.papermc.paper.configuration.GlobalConfiguration");
+            return true;
+        } catch (ClassNotFoundException e) {
+            return false;
+        }
     }
-    
-	@Override
+
+    @Override
     public void onLoad() {
-    	instance = this;
-    	
-    	Logger.setup();
-    	
-    	if (!isPaper()) {
-    		unsupportedServer = true;
-    		Logger.error("KGenerators Regenerated needs Paper or a Paper fork (Purpur, Folia, ...); plain Spigot/CraftBukkit is not supported. Use KGenerators 7.3.1 on this server, or switch to Paper.");
-    		return;
-    	}
-    	
-		settings = new Settings();
-		settings.reload();
-		FilesConverter.updateConfig(settings);
-    	
-    	// WorldGuard only accepts new flags while plugins load
-    	if (getServer().getPluginManager().getPlugin("WorldGuard") != null)
-    		WorldGuardHook.registerFlags();
+        instance = this;
+
+        Logger.setup();
+
+        if (!isPaper()) {
+            unsupportedServer = true;
+            Logger.error(
+                    "KGenerators Regenerated needs Paper or a Paper fork (Purpur, Folia, ...); plain Spigot/CraftBukkit is not supported. Use KGenerators 7.3.1 on this server, or switch to Paper.");
+            return;
+        }
+
+        settings = new Settings();
+        settings.reload();
+        FilesConverter.updateConfig(settings);
+
+        // WorldGuard only accepts new flags while plugins load
+        if (getServer().getPluginManager().getPlugin("WorldGuard") != null) WorldGuardHook.registerFlags();
     }
-    
+
     @Override
     public void onDisable() {
-    	if (unsupportedServer)
-    		return;
-    	
-    	Logger.info("Disabling KGenerators");
-    	
-    	instance.getServer().getPluginManager().callEvent(new PluginDisabledEvent());
-    	
-    	Logger.info("Safely closing menus.");
-    	if (menus != null)
-    		menus.closeAll();
-    	
-    	if (placedGenerators != null) {
-    		Logger.info("Saving " + placedGenerators.getLoadedGeneratorsAmount() + " running generators.");
-    		placedGenerators.onDisable();
-    	}
-    	
-    	Logger.info("Safely shutting down database.");
-    	if (databases != null && databases.getDb() != null)
-    		databases.getDb().closeConnection();
-    	
-    	if (dependencies != null)
-    		dependencies.onDisable();
-    	
-    	if (metrics != null)
-    		metrics.shutdown();
-    	
-    	Sched.cancelAll();
+        if (unsupportedServer) return;
+
+        Logger.info("Disabling KGenerators");
+
+        instance.getServer().getPluginManager().callEvent(new PluginDisabledEvent());
+
+        Logger.info("Safely closing menus.");
+        if (menus != null) menus.closeAll();
+
+        if (placedGenerators != null) {
+            Logger.info("Saving " + placedGenerators.getLoadedGeneratorsAmount() + " running generators.");
+            placedGenerators.onDisable();
+        }
+
+        Logger.info("Safely shutting down database.");
+        if (databases != null && databases.getDb() != null) databases.getDb().closeConnection();
+
+        if (dependencies != null) dependencies.onDisable();
+
+        if (metrics != null) metrics.shutdown();
+
+        Sched.cancelAll();
     }
-    
+
     public void reload() {
-    	Logger.info("Reload: KGenerators reload started");
-    	settings.reload();
-    	generators.reload();
-    	upgrades.reload();
-    	limits = new LimitsManager();
-    	Lang.loadFromFiles();
-    	this.getServer().getPluginManager().callEvent(new PluginReloadEvent());
-    	if (Main.getDependencies().isEnabled(Dependency.FANCY_HOLOGRAMS))
-    		FancyHologramsHook.loadConfigValues();
-    	Logger.info("Reload: KGenerators reloaded successfully");
+        Logger.info("Reload: KGenerators reload started");
+        settings.reload();
+        generators.reload();
+        upgrades.reload();
+        limits = new LimitsManager();
+        Lang.loadFromFiles();
+        this.getServer().getPluginManager().callEvent(new PluginReloadEvent());
+        if (Main.getDependencies().isEnabled(Dependency.FANCY_HOLOGRAMS)) FancyHologramsHook.loadConfigValues();
+        Logger.info("Reload: KGenerators reloaded successfully");
     }
-    
+
     public void enable() {
-    	try {
-    		
-			/* Commands setup */
-			this.getServer().getPluginCommand("kgenerators").setExecutor(new Commands());
-			this.getServer().getPluginCommand("kgenerators").setTabCompleter(new CommandTabCompleter());
-    		
-			/* Dependencies check */
-			dependencies.standardDependenciesCheck();
-			
-			/* Configs loader */
-			generators = new GeneratorsManager();
-			
-			Lang.loadFromFiles();
-			
-			recipes = new RecipesManager();
-			upgrades = new UpgradesManager();
-			limits = new LimitsManager();
-			
-			/* Database setup */
-			databases = new DatabaseManager(Main.getSettings().getDbType());
-			databases.getDb().updateTable();
-			
-			/* Other systems starter */
-			holograms = new HologramsManager();
-			schedules = new SchedulesManager();
-			menus = new MenusManager();
-			
-			/* Load from already loaded chunks */
-			placedGenerators = new PlacedGeneratorsManager();
-			
-			/* Listeners setup */
-			Logger.debugPluginLoad("MainManager: Loading listeners");
-			this.getServer().getPluginManager().registerEvents(new BlockBreakListener(), this);
-			this.getServer().getPluginManager().registerEvents(new BlockPlaceListener(), this);
-			this.getServer().getPluginManager().registerEvents(new CraftingListeners(), this);
-			this.getServer().getPluginManager().registerEvents(new BlockPistonListener(), this);
-			this.getServer().getPluginManager().registerEvents(new EntityChangeBlockListener(), this);
-			this.getServer().getPluginManager().registerEvents(new PlayerInteractListener(), this);
-			this.getServer().getPluginManager().registerEvents(new InventoryClickListener(), this);
-			this.getServer().getPluginManager().registerEvents(new FurnaceSmeltListener(), this);
-			this.getServer().getPluginManager().registerEvents(new GeneratorProtectionListeners(), this);
-			//Chunk listeners were moved to PlacedGeneratorsManager
-			
-			/* 
-			 * Metrix
-			 */
-			Logger.debugPluginLoad("MainManager: Loading Metrix");
-			// bStats plugin ID of KGenerators Regenerated (upstream used 7871)
-			int pluginId = 35398;
-			metrics = new Metrics(this, pluginId);
-			metrics.addCustomChart(new SingleLineChart("configured_generators", () -> Main.getGenerators().getAmount()));
-			metrics.addCustomChart(new SingleLineChart("database_generators", () -> Main.getDatabases().getDb().getGeneratorsAmount()));
-			metrics.addCustomChart(new SingleLineChart("loaded_generators", () -> Main.getPlacedGenerators().getLoadedGeneratorsAmount()));
-			metrics.addCustomChart(new SimplePie("database_type", () -> Main.getSettings().getDbType().toString()));
-			metrics.addCustomChart(new AdvancedPie("features", () -> {
+        try {
+
+            /* Commands setup */
+            this.getServer().getPluginCommand("kgenerators").setExecutor(new Commands());
+            this.getServer().getPluginCommand("kgenerators").setTabCompleter(new CommandTabCompleter());
+
+            /* Dependencies check */
+            dependencies.standardDependenciesCheck();
+
+            /* Configs loader */
+            generators = new GeneratorsManager();
+
+            Lang.loadFromFiles();
+
+            recipes = new RecipesManager();
+            upgrades = new UpgradesManager();
+            limits = new LimitsManager();
+
+            /* Database setup */
+            databases = new DatabaseManager(Main.getSettings().getDbType());
+            databases.getDb().updateTable();
+
+            /* Other systems starter */
+            holograms = new HologramsManager();
+            schedules = new SchedulesManager();
+            menus = new MenusManager();
+
+            /* Load from already loaded chunks */
+            placedGenerators = new PlacedGeneratorsManager();
+
+            /* Listeners setup */
+            Logger.debugPluginLoad("MainManager: Loading listeners");
+            this.getServer().getPluginManager().registerEvents(new BlockBreakListener(), this);
+            this.getServer().getPluginManager().registerEvents(new BlockPlaceListener(), this);
+            this.getServer().getPluginManager().registerEvents(new CraftingListeners(), this);
+            this.getServer().getPluginManager().registerEvents(new BlockPistonListener(), this);
+            this.getServer().getPluginManager().registerEvents(new EntityChangeBlockListener(), this);
+            this.getServer().getPluginManager().registerEvents(new PlayerInteractListener(), this);
+            this.getServer().getPluginManager().registerEvents(new InventoryClickListener(), this);
+            this.getServer().getPluginManager().registerEvents(new FurnaceSmeltListener(), this);
+            this.getServer().getPluginManager().registerEvents(new GeneratorProtectionListeners(), this);
+            // Chunk listeners were moved to PlacedGeneratorsManager
+
+            /*
+             * Metrix
+             */
+            Logger.debugPluginLoad("MainManager: Loading Metrix");
+            // bStats plugin ID of KGenerators Regenerated (upstream used 7871)
+            int pluginId = 35398;
+            metrics = new Metrics(this, pluginId);
+            metrics.addCustomChart(new SingleLineChart(
+                    "configured_generators", () -> Main.getGenerators().getAmount()));
+            metrics.addCustomChart(new SingleLineChart(
+                    "database_generators", () -> Main.getDatabases().getDb().getGeneratorsAmount()));
+            metrics.addCustomChart(new SingleLineChart(
+                    "loaded_generators", () -> Main.getPlacedGenerators().getLoadedGeneratorsAmount()));
+            metrics.addCustomChart(new SimplePie(
+                    "database_type", () -> Main.getSettings().getDbType().toString()));
+            metrics.addCustomChart(new AdvancedPie("features", () -> {
                 Map<String, Integer> valueMap = new HashMap<>();
                 if (Main.getLimits().hasLimits()) valueMap.put("Limits", 1);
                 if (Main.getRecipes().hasRecipes()) valueMap.put("Recipes", 1);
@@ -228,36 +245,36 @@ public class Main extends JavaPlugin {
                 if (Main.getSettings().isBlockDropToEq()) valueMap.put("DropToInventory", 1);
                 return valueMap;
             }));
-			metrics.addCustomChart(new AdvancedPie("hooked_plugins", () -> {
+            metrics.addCustomChart(new AdvancedPie("hooked_plugins", () -> {
                 Map<String, Integer> valueMap = new HashMap<>();
                 for (Dependency dep : Main.getDependencies().getDependencies()) {
                     valueMap.put(dep.toString(), 1);
                 }
                 return valueMap;
             }));
-	        metrics.addCustomChart(new DrilldownPie("complex_plugin_version", () -> {
-	            Map<String, Map<String, Integer>> map = new HashMap<>();
-	            // 7.3.0-r24.a6b5d0c -> 7.3.0 / r24.a6b5d0c; a tagged release (7.3.0) has no second part
-	            String[] sVersion = this.getPluginMeta().getVersion().split("-", 2);
-	            Map<String, Integer> entry = new HashMap<>();
-	            entry.put(sVersion.length > 1 ? sVersion[1] : "release", 1);
-	            map.put(sVersion[0], entry);
-	            return map;
-	        }));
-			metrics.addCustomChart(new AdvancedPie("addons", () -> {
+            metrics.addCustomChart(new DrilldownPie("complex_plugin_version", () -> {
+                Map<String, Map<String, Integer>> map = new HashMap<>();
+                // 7.3.0-r24.a6b5d0c -> 7.3.0 / r24.a6b5d0c; a tagged release (7.3.0) has no second part
+                String[] sVersion = this.getPluginMeta().getVersion().split("-", 2);
+                Map<String, Integer> entry = new HashMap<>();
+                entry.put(sVersion.length > 1 ? sVersion[1] : "release", 1);
+                map.put(sVersion[0], entry);
+                return map;
+            }));
+            metrics.addCustomChart(new AdvancedPie("addons", () -> {
                 Map<String, Integer> valueMap = new HashMap<>();
                 for (Addon a : Addons.getAddons()) {
                     valueMap.put(a.getName(), 1);
                 }
                 return valueMap;
             }));
-			
-			Logger.info("MainManager: KGenerators loaded successfully");
-			
-			this.getServer().getPluginManager().callEvent(new PluginEnabledEvent());
-	        
-		} catch (Exception e) {
-			Logger.error(e);
-		}    	
+
+            Logger.info("MainManager: KGenerators loaded successfully");
+
+            this.getServer().getPluginManager().callEvent(new PluginEnabledEvent());
+
+        } catch (Exception e) {
+            Logger.error(e);
+        }
     }
 }

@@ -4,93 +4,90 @@ import java.util.Collection;
 import java.util.LinkedHashMap;
 import java.util.Map.Entry;
 import java.util.Set;
-
-import org.bukkit.configuration.ConfigurationSection;
-import org.bukkit.configuration.InvalidConfigurationException;
-
 import me.kryniowesegryderiusz.kgenerators.Main;
 import me.kryniowesegryderiusz.kgenerators.generators.generator.objects.Generator;
 import me.kryniowesegryderiusz.kgenerators.generators.players.limits.objects.Limit;
 import me.kryniowesegryderiusz.kgenerators.logger.Logger;
 import me.kryniowesegryderiusz.kgenerators.utils.immutable.Config;
 import me.kryniowesegryderiusz.kgenerators.utils.immutable.ConfigManager;
+import org.bukkit.configuration.ConfigurationSection;
+import org.bukkit.configuration.InvalidConfigurationException;
 
 public class LimitsManager {
 
-	private final LinkedHashMap<String, Limit> limits = new LinkedHashMap<>();
+    private final LinkedHashMap<String, Limit> limits = new LinkedHashMap<>();
 
-	public LimitsManager() {
-		
-		Logger.debugPluginLoad("LimitsManager: Setting up manager");
-		
-		Config config;
+    public LimitsManager() {
 
-		try {
-			config = ConfigManager.getConfig("limits.yml", null, true, false);
-			config.loadConfig();
-		} catch (InvalidConfigurationException e) {
-			Logger.error("Generators file: You've missconfigured config.yml file. Check your spaces! More info below. Disabling plugin.");
-			Logger.error(e);
-			Main.getInstance().getServer().getPluginManager().disablePlugin(Main.getInstance());
-			return;
-		} catch (Exception e) {
-			Logger.error("Limits file: Cant load limits. Disabling plugin.");
-			Logger.error(e);
-			Main.getInstance().getServer().getPluginManager().disablePlugin(Main.getInstance());
-			return;
-		}
+        Logger.debugPluginLoad("LimitsManager: Setting up manager");
 
-		if (!config.contains("enabled") || !config.getBoolean("enabled")) {
-			Logger.info("Limits file: Limits are disabled. You can enable them in limits.yml!");
-			return;
-		}
+        Config config;
 
-		ConfigurationSection mainSection = config.getConfigurationSection("");
-		for (String id : mainSection.getKeys(false)) {
-			if (!id.equals("example_limit_group") && !id.equals("enabled")) {
-				new Limit(this, config, id);
-			}
-		}
-		
-		Logger.info("Limits file: Loaded " + this.limits.size() + " limits");
-	}
+        try {
+            config = ConfigManager.getConfig("limits.yml", null, true, false);
+            config.loadConfig();
+        } catch (InvalidConfigurationException e) {
+            Logger.error(
+                    "Generators file: You've missconfigured config.yml file. Check your spaces! More info below. Disabling plugin.");
+            Logger.error(e);
+            Main.getInstance().getServer().getPluginManager().disablePlugin(Main.getInstance());
+            return;
+        } catch (Exception e) {
+            Logger.error("Limits file: Cant load limits. Disabling plugin.");
+            Logger.error(e);
+            Main.getInstance().getServer().getPluginManager().disablePlugin(Main.getInstance());
+            return;
+        }
 
-	public void add(Limit limit) {
-		limits.put(limit.getId(), limit);
-	}
+        if (!config.contains("enabled") || !config.getBoolean("enabled")) {
+            Logger.info("Limits file: Limits are disabled. You can enable them in limits.yml!");
+            return;
+        }
 
-	public Limit get(String id) {
-		return limits.get(id);
-	}
+        ConfigurationSection mainSection = config.getConfigurationSection("");
+        for (String id : mainSection.getKeys(false)) {
+            if (!id.equals("example_limit_group") && !id.equals("enabled")) {
+                new Limit(this, config, id);
+            }
+        }
 
-	public Set<Entry<String, Limit>> getEntrySet() {
-		return limits.entrySet();
-	}
+        Logger.info("Limits file: Loaded " + this.limits.size() + " limits");
+    }
 
-	public Collection<Limit> getValues() {
-		return limits.values();
-	}
+    public void add(Limit limit) {
+        limits.put(limit.getId(), limit);
+    }
 
-	/**
-	 * Checks if any limit has only owner use in context of generator
-	 * 
-	 * @param g generator to check
-	 * @return true if any limit containing this generator is only owner use
-	 */
-	public boolean isOnlyOwnerUse(Generator g) {
-		for (Limit l : limits.values()) {
-			if (l.getGenerators().contains(g) && l.isOnlyOwnerUse())
-				return true;
-		}
-		return false;
-	}
+    public Limit get(String id) {
+        return limits.get(id);
+    }
 
-	public void clear() {
-		limits.clear();
-	}
+    public Set<Entry<String, Limit>> getEntrySet() {
+        return limits.entrySet();
+    }
 
-	public boolean hasLimits() {
-		return !this.limits.isEmpty();
-	}
+    public Collection<Limit> getValues() {
+        return limits.values();
+    }
 
+    /**
+     * Checks if any limit has only owner use in context of generator
+     *
+     * @param g generator to check
+     * @return true if any limit containing this generator is only owner use
+     */
+    public boolean isOnlyOwnerUse(Generator g) {
+        for (Limit l : limits.values()) {
+            if (l.getGenerators().contains(g) && l.isOnlyOwnerUse()) return true;
+        }
+        return false;
+    }
+
+    public void clear() {
+        limits.clear();
+    }
+
+    public boolean hasLimits() {
+        return !this.limits.isEmpty();
+    }
 }

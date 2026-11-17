@@ -1,79 +1,73 @@
 package me.kryniowesegryderiusz.kgenerators.generators.generator.objects;
 
-import org.bukkit.entity.Player;
-import org.bukkit.inventory.ItemStack;
-
 import lombok.Getter;
 import me.kryniowesegryderiusz.kgenerators.generators.locations.handlers.enums.ActionType;
 import me.kryniowesegryderiusz.kgenerators.generators.locations.handlers.enums.InteractionType;
 import me.kryniowesegryderiusz.kgenerators.logger.Logger;
 import me.kryniowesegryderiusz.kgenerators.utils.ItemUtils;
 import me.kryniowesegryderiusz.kgenerators.utils.immutable.Config;
+import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
 
 public class GeneratorAction {
 
-	@Getter
-	ActionType action;
-	@Getter
-	InteractionType interaction;
-	@Getter
-	ItemStack item = null;
-	@Getter
-	boolean sneak = false;
+    @Getter
+    ActionType action;
 
-	public GeneratorAction(ActionType action, Config config, String path) {
-		this.action = action;
+    @Getter
+    InteractionType interaction;
 
-		path += ".";
+    @Getter
+    ItemStack item = null;
 
-		if (config.contains(path + "mode")) {
-			this.interaction = InteractionType.Functions.getModeByString(config.getString(path + "mode"));
-			if (action != ActionType.PICKUP && this.interaction == InteractionType.BREAK) {
-				Logger.error(config.getFile().getName() + " " + path + ": You cannot set BREAK action to "
-						+ action.toString() + "! Using NONE!");
-				this.interaction = InteractionType.NONE;
-			}
-		} else {
-			Logger.warn(config.getFile().getName() + " " + path + ": Action mode for " + action.toString()
-					+ " is not set! Using NONE!");
-			this.interaction = InteractionType.NONE;
-		}
+    @Getter
+    boolean sneak = false;
 
-		if (config.contains(path + "item")) {
-			String item = (config.getString(path + "item"));
-			if (item == null)
-				Logger.error("Config file: " + path + "item should be an item name or ANY! Using ANY.");
-			else if (!item.equalsIgnoreCase("any"))
+    public GeneratorAction(ActionType action, Config config, String path) {
+        this.action = action;
 
-				this.item = (ItemUtils.parseItemStack(item, "Config file", false));
-		} else {
-			Logger.warn(config.getFile().getName() + " " + path + ": Action item for " + action.toString()
-					+ " is not set! Using ANY!");
-		}
+        path += ".";
 
-		if (config.contains(path + "sneak")) {
-			this.sneak = config.getBoolean(path + "sneak");
-		} else {
-			Logger.warn(config.getFile().getName() + " " + path + ": Sneak requirement for " + action.toString()
-					+ " is not set! Using FALSE!");
-		}
+        if (config.contains(path + "mode")) {
+            this.interaction = InteractionType.Functions.getModeByString(config.getString(path + "mode"));
+            if (action != ActionType.PICKUP && this.interaction == InteractionType.BREAK) {
+                Logger.error(config.getFile().getName() + " " + path + ": You cannot set BREAK action to "
+                        + action.toString() + "! Using NONE!");
+                this.interaction = InteractionType.NONE;
+            }
+        } else {
+            Logger.warn(config.getFile().getName() + " " + path + ": Action mode for " + action.toString()
+                    + " is not set! Using NONE!");
+            this.interaction = InteractionType.NONE;
+        }
 
-	}
+        if (config.contains(path + "item")) {
+            String item = (config.getString(path + "item"));
+            if (item == null) Logger.error("Config file: " + path + "item should be an item name or ANY! Using ANY.");
+            else if (!item.equalsIgnoreCase("any")) this.item = (ItemUtils.parseItemStack(item, "Config file", false));
+        } else {
+            Logger.warn(config.getFile().getName() + " " + path + ": Action item for " + action.toString()
+                    + " is not set! Using ANY!");
+        }
 
-	public GeneratorAction(ActionType action, InteractionType interaction, ItemStack item, boolean sneak) {
-		this.action = action;
-		this.interaction = interaction;
-		this.item = item;
-		this.sneak = sneak;
-	}
+        if (config.contains(path + "sneak")) {
+            this.sneak = config.getBoolean(path + "sneak");
+        } else {
+            Logger.warn(config.getFile().getName() + " " + path + ": Sneak requirement for " + action.toString()
+                    + " is not set! Using FALSE!");
+        }
+    }
 
-	public boolean requirementsMet(InteractionType gotInteraction, Player p) {
-		if (gotInteraction != this.interaction)
-			return false;
-		else if (item != null && p.getInventory().getItemInMainHand().getType() != item.getType())
-			return false;
-		else
-			return this.sneak == p.isSneaking();
-	}
+    public GeneratorAction(ActionType action, InteractionType interaction, ItemStack item, boolean sneak) {
+        this.action = action;
+        this.interaction = interaction;
+        this.item = item;
+        this.sneak = sneak;
+    }
 
+    public boolean requirementsMet(InteractionType gotInteraction, Player p) {
+        if (gotInteraction != this.interaction) return false;
+        else if (item != null && p.getInventory().getItemInMainHand().getType() != item.getType()) return false;
+        else return this.sneak == p.isSneaking();
+    }
 }

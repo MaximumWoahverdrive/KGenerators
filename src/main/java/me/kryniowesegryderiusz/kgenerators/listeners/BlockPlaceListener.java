@@ -1,43 +1,48 @@
 package me.kryniowesegryderiusz.kgenerators.listeners;
 
-import org.bukkit.entity.Player;
-import org.bukkit.event.EventHandler;
-import org.bukkit.event.EventPriority;
-import org.bukkit.event.Listener;
-import org.bukkit.event.block.BlockPlaceEvent;
-
 import me.kryniowesegryderiusz.kgenerators.Main;
 import me.kryniowesegryderiusz.kgenerators.generators.generator.objects.Generator;
 import me.kryniowesegryderiusz.kgenerators.generators.locations.objects.GeneratorLocation;
 import me.kryniowesegryderiusz.kgenerators.lang.Lang;
 import me.kryniowesegryderiusz.kgenerators.lang.enums.Message;
 import me.kryniowesegryderiusz.kgenerators.logger.Logger;
+import org.bukkit.entity.Player;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
+import org.bukkit.event.Listener;
+import org.bukkit.event.block.BlockPlaceEvent;
 
 public class BlockPlaceListener implements Listener {
 
-	@EventHandler(priority = EventPriority.HIGH)
-	public void onBlockPlace(final BlockPlaceEvent e) {
-		try {
-			if (e.isCancelled())
-				return;
-			
-			Player player = e.getPlayer();
+    @EventHandler(priority = EventPriority.HIGH)
+    public void onBlockPlace(final BlockPlaceEvent e) {
+        try {
+            if (e.isCancelled()) return;
 
-			if (Main.getPlacedGenerators().getLoaded(e.getBlock().getLocation()) != null) {
-				Lang.getMessageStorage().send(player, Message.GENERATORS_PLACE_CANT_PLACE_BLOCK);
-				e.setCancelled(true);
-				return;
-			}
+            Player player = e.getPlayer();
 
-			Generator generator = Main.getGenerators().get(e.getItemInHand());
-			if (generator != null) {
-				if (!new GeneratorLocation(-1, generator, e.getBlock().getLocation(),
-						Main.getPlacedGenerators().new ChunkInfo(e.getBlock().getChunk()), Main.getPlayers().getPlayer(player), null).placeGenerator(player)) {
-					e.setCancelled(true);
-				}
-			}
-		} catch (Exception exception) {
-			Logger.error(exception);
-		}
-	}
+            if (Main.getPlacedGenerators().getLoaded(e.getBlock().getLocation()) != null) {
+                Lang.getMessageStorage().send(player, Message.GENERATORS_PLACE_CANT_PLACE_BLOCK);
+                e.setCancelled(true);
+                return;
+            }
+
+            Generator generator = Main.getGenerators().get(e.getItemInHand());
+            if (generator != null) {
+                if (!new GeneratorLocation(
+                                -1,
+                                generator,
+                                e.getBlock().getLocation(),
+                                Main.getPlacedGenerators()
+                                .new ChunkInfo(e.getBlock().getChunk()),
+                                Main.getPlayers().getPlayer(player),
+                                null)
+                        .placeGenerator(player)) {
+                    e.setCancelled(true);
+                }
+            }
+        } catch (Exception exception) {
+            Logger.error(exception);
+        }
+    }
 }

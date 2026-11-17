@@ -1,12 +1,10 @@
 package me.kryniowesegryderiusz.kgenerators.settings;
 
+import com.cryptomorin.xseries.XMaterial;
+import com.cryptomorin.xseries.XSound;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
-
-import org.bukkit.Material;
-import org.bukkit.World;
-import org.bukkit.configuration.InvalidConfigurationException;
 import lombok.Getter;
 import lombok.Setter;
 import me.kryniowesegryderiusz.kgenerators.Main;
@@ -21,204 +19,200 @@ import me.kryniowesegryderiusz.kgenerators.settings.objects.Sound;
 import me.kryniowesegryderiusz.kgenerators.utils.ItemUtils;
 import me.kryniowesegryderiusz.kgenerators.utils.immutable.Config;
 import me.kryniowesegryderiusz.kgenerators.utils.immutable.ConfigManager;
-import com.cryptomorin.xseries.XMaterial;
-import com.cryptomorin.xseries.XSound;
+import org.bukkit.Material;
+import org.bukkit.World;
+import org.bukkit.configuration.InvalidConfigurationException;
 
 public class Settings {
 
-	@Setter
-	@Getter
-	private ArrayList<XMaterial> generatingWhitelist = new ArrayList<>();
+    @Setter
+    @Getter
+    private ArrayList<XMaterial> generatingWhitelist = new ArrayList<>();
 
-	@Setter
-	@Getter
-	private String lang = "en";
+    @Setter
+    @Getter
+    private String lang = "en";
 
-	@Setter
-	@Getter
-	private boolean actionbarMessages = true;
+    @Setter
+    @Getter
+    private boolean actionbarMessages = true;
 
-	@Getter
-	private final Actions actions = new Actions();
+    @Getter
+    private final Actions actions = new Actions();
 
-	@Setter
-	@Getter
-	private short explosionHandler = 0;
+    @Setter
+    @Getter
+    private short explosionHandler = 0;
 
-	@Setter
-	@Getter
-	private boolean pickUpToEq = true;
-	@Setter
-	@Getter
-	private boolean blockDropToEq = false;
-	@Setter
-	@Getter
-	private boolean expDropToEq = false;
+    @Setter
+    @Getter
+    private boolean pickUpToEq = true;
 
-	@Getter
-	private final ArrayList<String> disabledWorlds = new ArrayList<>();
+    @Setter
+    @Getter
+    private boolean blockDropToEq = false;
 
-	@Setter
-	@Getter
-	private int generationCheckFrequency = 10;
-	@Setter
-	@Getter
-	private int hologramUpdateFrequency = 20;
-	@Setter
-	@Getter
-	private int guiUpdateFrequency = 20;
+    @Setter
+    @Getter
+    private boolean expDropToEq = false;
 
-	@Setter
-	@Getter
-	private HashMap<ActionType, GeneratorAction> guis = new HashMap<>();
+    @Getter
+    private final ArrayList<String> disabledWorlds = new ArrayList<>();
 
-	@Setter
-	@Getter
-	private Sound placeSound = new Sound(XSound.BLOCK_ANVIL_LAND);
-	@Setter
-	@Getter
-	private Sound pickupSound = new Sound(XSound.ENTITY_BAT_TAKEOFF);
-	@Setter
-	@Getter
-	private Sound upgradeSound = new Sound(XSound.ENTITY_PLAYER_LEVELUP);
+    @Setter
+    @Getter
+    private int generationCheckFrequency = 10;
 
-	@Setter
-	@Getter
-	private DatabaseType dbType = DatabaseType.SQLITE;
-	@Setter
-	@Getter
-	private SQLConfig sqlConfig;
+    @Setter
+    @Getter
+    private int hologramUpdateFrequency = 20;
 
-	@Getter
-	private boolean adjustDelayOnUnloadedChunks = true;
+    @Setter
+    @Getter
+    private int guiUpdateFrequency = 20;
 
-	@Getter
-	private boolean asyncChunkLoading = true;
-	
-	@Setter @Getter
-	private GeneratorItemMatcher generatorItemMatcher = new GeneratorItemMatcher();
-	
-	
-	@Getter
-	private boolean pluginLoadDebug = true;
-	@Getter
-	private boolean playersDebug = true;
-	@Getter
-	private boolean placedGeneratorsManagerDebug = false;
-	@Getter
-	private boolean schedulesManagerDebug = false;
-	
-	@Getter
-	private boolean warnings = true;
-	
-	@SuppressWarnings("unchecked")
-	public void reload() {
-		Logger.info("Settings: Loading settings");
+    @Setter
+    @Getter
+    private HashMap<ActionType, GeneratorAction> guis = new HashMap<>();
 
-		Config config;
+    @Setter
+    @Getter
+    private Sound placeSound = new Sound(XSound.BLOCK_ANVIL_LAND);
 
-		if (!new File(Main.getInstance().getDataFolder(), "config.yml").exists()) {
-			Logger.info("Config file: Generating config.yml");
-			Main.getInstance().saveResource("config.yml", false);
-		}
-		try {
-			config = ConfigManager.getConfig("config.yml", null, false, false);
-			config.loadConfig();
-		} catch (InvalidConfigurationException e) {
-			Logger.error("Generators file: You've missconfigured config.yml file. Check your spaces! More info below. Disabling plugin.");
-			Logger.error(e);
-			Main.getInstance().getServer().getPluginManager().disablePlugin(Main.getInstance());
-			return;
-		} catch (Exception e) {
-			Logger.error("Config file: Cant load config. Disabling plugin.");
-			Logger.error(e);
-			Main.getInstance().getServer().getPluginManager().disablePlugin(Main.getInstance());
-			return;
-		}
-		
-		if (config.contains("debug.plugin-load"))
-			this.pluginLoadDebug = config.getBoolean("debug.plugin-load");
-		if (config.contains("debug.players"))
-			this.playersDebug = config.getBoolean("debug.players");
-		if (config.contains("debug.placed-generators-manager"))
-			this.placedGeneratorsManagerDebug = config.getBoolean("debug.placed-generators-manager");
-		if (config.contains("debug.schedules"))
-			this.schedulesManagerDebug = config.getBoolean("debug.schedules");
-		if (config.contains("debug.warnings"))
-			this.warnings = config.getBoolean("debug.warnings");
+    @Setter
+    @Getter
+    private Sound pickupSound = new Sound(XSound.ENTITY_BAT_TAKEOFF);
 
-		if (config.contains("can-generate-instead")) {
-			ArrayList<XMaterial> generatingWhitelist = new ArrayList<>();
-			ArrayList<String> tempListString = (ArrayList<String>) config.getList("can-generate-instead");
+    @Setter
+    @Getter
+    private Sound upgradeSound = new Sound(XSound.ENTITY_PLAYER_LEVELUP);
 
-			for (String s : tempListString) {
-				XMaterial xm = ItemUtils.getXMaterial(s, "config.yml can-generate-instead", true);
-				generatingWhitelist.add(xm);
-			}
-			this.setGeneratingWhitelist(generatingWhitelist);
-		}
+    @Setter
+    @Getter
+    private DatabaseType dbType = DatabaseType.SQLITE;
 
-		if (config.contains("lang"))
-			this.setLang(config.getString("lang"));
+    @Setter
+    @Getter
+    private SQLConfig sqlConfig;
 
-		if (config.contains("generators-actionbar-messages"))
-			this.setActionbarMessages(config.getBoolean("generators-actionbar-messages"));
+    @Getter
+    private boolean adjustDelayOnUnloadedChunks = true;
 
-		this.getActions().load(config, "");
+    @Getter
+    private boolean asyncChunkLoading = true;
 
-		if (config.contains("explosion-handler"))
-			this.setExplosionHandler((short) config.getInt("explosion-handler"));
+    @Setter
+    @Getter
+    private GeneratorItemMatcher generatorItemMatcher = new GeneratorItemMatcher();
 
-		if (config.contains("count-delay-on-unloaded-chunks"))
-			this.adjustDelayOnUnloadedChunks = config.getBoolean("count-delay-on-unloaded-chunks");
+    @Getter
+    private boolean pluginLoadDebug = true;
 
-		if (config.contains("intervals.hologram-update"))
-			this.setHologramUpdateFrequency(config.getInt("intervals.hologram-update"));
-		if (config.contains("intervals.generation-check"))
-			this.setGenerationCheckFrequency(config.getInt("intervals.generation-check"));
-		if (config.contains("intervals.gui-update"))
-			this.setGuiUpdateFrequency(config.getInt("intervals.gui-update"));
+    @Getter
+    private boolean playersDebug = true;
 
-		if (config.contains("pick-up-to-eq"))
-			this.setPickUpToEq(config.getBoolean("pick-up-to-eq"));
+    @Getter
+    private boolean placedGeneratorsManagerDebug = false;
 
-		if (config.contains("drop-to-eq"))
-			this.setBlockDropToEq(config.getBoolean("drop-to-eq"));
-		else if (config.contains("block-drop-to-eq"))
-			this.setBlockDropToEq(config.getBoolean("block-drop-to-eq"));
-		
-		if (config.contains("exp-drop-to-eq"))
-			this.setExpDropToEq(config.getBoolean("exp-drop-to-eq"));
+    @Getter
+    private boolean schedulesManagerDebug = false;
 
-		if (config.contains("disabled-worlds"))
-			this.getDisabledWorlds().addAll((ArrayList<String>) config.getList("disabled-worlds"));
+    @Getter
+    private boolean warnings = true;
 
-		if (config.contains("sounds.place"))
-			this.setPlaceSound(new Sound(config, "sounds.place"));
+    @SuppressWarnings("unchecked")
+    public void reload() {
+        Logger.info("Settings: Loading settings");
 
-		if (config.contains("sounds.pick-up"))
-			this.setPickupSound(new Sound(config, "sounds.pick-up"));
+        Config config;
 
-		if (config.contains("sounds.upgrade"))
-			this.setUpgradeSound(new Sound(config, "sounds.upgrade"));
+        if (!new File(Main.getInstance().getDataFolder(), "config.yml").exists()) {
+            Logger.info("Config file: Generating config.yml");
+            Main.getInstance().saveResource("config.yml", false);
+        }
+        try {
+            config = ConfigManager.getConfig("config.yml", null, false, false);
+            config.loadConfig();
+        } catch (InvalidConfigurationException e) {
+            Logger.error(
+                    "Generators file: You've missconfigured config.yml file. Check your spaces! More info below. Disabling plugin.");
+            Logger.error(e);
+            Main.getInstance().getServer().getPluginManager().disablePlugin(Main.getInstance());
+            return;
+        } catch (Exception e) {
+            Logger.error("Config file: Cant load config. Disabling plugin.");
+            Logger.error(e);
+            Main.getInstance().getServer().getPluginManager().disablePlugin(Main.getInstance());
+            return;
+        }
 
-		if (config.contains("database.dbtype"))
-			this.setDbType(DatabaseType.Functions.getTypeByString(config.getString("database.dbtype")));
-		
-		if (config.contains("async-chunk-loading"))
-			this.asyncChunkLoading = config.getBoolean("async-chunk-loading");
-		
-		this.generatorItemMatcher.load(config);
+        if (config.contains("debug.plugin-load")) this.pluginLoadDebug = config.getBoolean("debug.plugin-load");
+        if (config.contains("debug.players")) this.playersDebug = config.getBoolean("debug.players");
+        if (config.contains("debug.placed-generators-manager"))
+            this.placedGeneratorsManagerDebug = config.getBoolean("debug.placed-generators-manager");
+        if (config.contains("debug.schedules")) this.schedulesManagerDebug = config.getBoolean("debug.schedules");
+        if (config.contains("debug.warnings")) this.warnings = config.getBoolean("debug.warnings");
 
-		this.setSqlConfig(new SQLConfig(config));
-	}
+        if (config.contains("can-generate-instead")) {
+            ArrayList<XMaterial> generatingWhitelist = new ArrayList<>();
+            ArrayList<String> tempListString = (ArrayList<String>) config.getList("can-generate-instead");
 
-	public boolean isWorldDisabled(World world) {
-		return this.disabledWorlds.contains(world.getName());
-	}
+            for (String s : tempListString) {
+                XMaterial xm = ItemUtils.getXMaterial(s, "config.yml can-generate-instead", true);
+                generatingWhitelist.add(xm);
+            }
+            this.setGeneratingWhitelist(generatingWhitelist);
+        }
 
-	public boolean isOnWhitelist(Material type) {
-		return this.generatingWhitelist.contains(XMaterial.matchXMaterial(type));
-	}
+        if (config.contains("lang")) this.setLang(config.getString("lang"));
 
+        if (config.contains("generators-actionbar-messages"))
+            this.setActionbarMessages(config.getBoolean("generators-actionbar-messages"));
+
+        this.getActions().load(config, "");
+
+        if (config.contains("explosion-handler")) this.setExplosionHandler((short) config.getInt("explosion-handler"));
+
+        if (config.contains("count-delay-on-unloaded-chunks"))
+            this.adjustDelayOnUnloadedChunks = config.getBoolean("count-delay-on-unloaded-chunks");
+
+        if (config.contains("intervals.hologram-update"))
+            this.setHologramUpdateFrequency(config.getInt("intervals.hologram-update"));
+        if (config.contains("intervals.generation-check"))
+            this.setGenerationCheckFrequency(config.getInt("intervals.generation-check"));
+        if (config.contains("intervals.gui-update")) this.setGuiUpdateFrequency(config.getInt("intervals.gui-update"));
+
+        if (config.contains("pick-up-to-eq")) this.setPickUpToEq(config.getBoolean("pick-up-to-eq"));
+
+        if (config.contains("drop-to-eq")) this.setBlockDropToEq(config.getBoolean("drop-to-eq"));
+        else if (config.contains("block-drop-to-eq")) this.setBlockDropToEq(config.getBoolean("block-drop-to-eq"));
+
+        if (config.contains("exp-drop-to-eq")) this.setExpDropToEq(config.getBoolean("exp-drop-to-eq"));
+
+        if (config.contains("disabled-worlds"))
+            this.getDisabledWorlds().addAll((ArrayList<String>) config.getList("disabled-worlds"));
+
+        if (config.contains("sounds.place")) this.setPlaceSound(new Sound(config, "sounds.place"));
+
+        if (config.contains("sounds.pick-up")) this.setPickupSound(new Sound(config, "sounds.pick-up"));
+
+        if (config.contains("sounds.upgrade")) this.setUpgradeSound(new Sound(config, "sounds.upgrade"));
+
+        if (config.contains("database.dbtype"))
+            this.setDbType(DatabaseType.Functions.getTypeByString(config.getString("database.dbtype")));
+
+        if (config.contains("async-chunk-loading")) this.asyncChunkLoading = config.getBoolean("async-chunk-loading");
+
+        this.generatorItemMatcher.load(config);
+
+        this.setSqlConfig(new SQLConfig(config));
+    }
+
+    public boolean isWorldDisabled(World world) {
+        return this.disabledWorlds.contains(world.getName());
+    }
+
+    public boolean isOnWhitelist(Material type) {
+        return this.generatingWhitelist.contains(XMaterial.matchXMaterial(type));
+    }
 }

@@ -5,13 +5,6 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map.Entry;
 import java.util.Set;
-
-import org.jetbrains.annotations.Nullable;
-
-import org.bukkit.configuration.ConfigurationSection;
-import org.bukkit.configuration.InvalidConfigurationException;
-import org.bukkit.inventory.ItemStack;
-
 import lombok.Getter;
 import me.kryniowesegryderiusz.kgenerators.Main;
 import me.kryniowesegryderiusz.kgenerators.api.objects.AbstractGeneratedObject;
@@ -27,165 +20,171 @@ import me.kryniowesegryderiusz.kgenerators.generators.generator.objects.Generato
 import me.kryniowesegryderiusz.kgenerators.logger.Logger;
 import me.kryniowesegryderiusz.kgenerators.utils.immutable.Config;
 import me.kryniowesegryderiusz.kgenerators.utils.immutable.ConfigManager;
+import org.bukkit.configuration.ConfigurationSection;
+import org.bukkit.configuration.InvalidConfigurationException;
+import org.bukkit.inventory.ItemStack;
+import org.jetbrains.annotations.Nullable;
 
 public class GeneratorsManager {
 
-	private final LinkedHashMap<String, Generator> generators = new LinkedHashMap<>();
+    private final LinkedHashMap<String, Generator> generators = new LinkedHashMap<>();
 
-	@Getter
-	private final GeneratedObjectsManager generatedObjectsManager;
+    @Getter
+    private final GeneratedObjectsManager generatedObjectsManager;
 
-	public GeneratorsManager() {
-		Logger.debugPluginLoad("GeneratorsManager: Setting up manager");
-		this.generatedObjectsManager = new GeneratedObjectsManager();
-		this.generatedObjectsManager.registerGeneratedObject(GeneratedBlock.class);
-		this.generatedObjectsManager.registerGeneratedObject(GeneratedItem.class);
-		this.generatedObjectsManager.registerGeneratedObject(GeneratedEntity.class);
-		if (Main.getDependencies().isEnabled(Dependency.ITEMS_ADDER))
-			this.generatedObjectsManager.registerGeneratedObject(GeneratedItemsAdderBlock.class);
-		if (Main.getDependencies().isEnabled(Dependency.ORAXEN))
-			this.generatedObjectsManager.registerGeneratedObject(GeneratedOraxenBlock.class);
-		if (Main.getDependencies().isEnabled(Dependency.NEXO))
-			this.generatedObjectsManager.registerGeneratedObject(GeneratedNexoBlock.class);
-		this.reload();
-	}
+    public GeneratorsManager() {
+        Logger.debugPluginLoad("GeneratorsManager: Setting up manager");
+        this.generatedObjectsManager = new GeneratedObjectsManager();
+        this.generatedObjectsManager.registerGeneratedObject(GeneratedBlock.class);
+        this.generatedObjectsManager.registerGeneratedObject(GeneratedItem.class);
+        this.generatedObjectsManager.registerGeneratedObject(GeneratedEntity.class);
+        if (Main.getDependencies().isEnabled(Dependency.ITEMS_ADDER))
+            this.generatedObjectsManager.registerGeneratedObject(GeneratedItemsAdderBlock.class);
+        if (Main.getDependencies().isEnabled(Dependency.ORAXEN))
+            this.generatedObjectsManager.registerGeneratedObject(GeneratedOraxenBlock.class);
+        if (Main.getDependencies().isEnabled(Dependency.NEXO))
+            this.generatedObjectsManager.registerGeneratedObject(GeneratedNexoBlock.class);
+        this.reload();
+    }
 
-	public void add(String id, Generator generator) {
-		generators.put(id, generator);
-	}
+    public void add(String id, Generator generator) {
+        generators.put(id, generator);
+    }
 
-	@Nullable
-	public Generator get(String id) {
-		return generators.get(id);
-	}
+    @Nullable
+    public Generator get(String id) {
+        return generators.get(id);
+    }
 
-	@Nullable
-	public Generator get(ItemStack item) {
-		return Main.getSettings().getGeneratorItemMatcher().getGenerator(item);
-	}
+    @Nullable
+    public Generator get(ItemStack item) {
+        return Main.getSettings().getGeneratorItemMatcher().getGenerator(item);
+    }
 
-	public Collection<Generator> getAll() {
-		return generators.values();
-	}
+    public Collection<Generator> getAll() {
+        return generators.values();
+    }
 
-	public Set<Entry<String, Generator>> getEntrySet() {
-		return generators.entrySet();
-	}
+    public Set<Entry<String, Generator>> getEntrySet() {
+        return generators.entrySet();
+    }
 
-	public Set<Entry<String, Generator>> getSpecifiedEntrySet(int firstGeneratorNr, int numberOfGenerators) {
-		LinkedHashMap<String, Generator> gens = new LinkedHashMap<>();
-		int nr = 0;
-		for (Entry<String, Generator> e : generators.entrySet()) {
-			if (nr >= firstGeneratorNr) {
-				if (nr < firstGeneratorNr + numberOfGenerators)
-					gens.put(e.getKey(), e.getValue());
-				else
-					break;
-			}
-			nr++;
-		}
-		return gens.entrySet();
-	}
+    public Set<Entry<String, Generator>> getSpecifiedEntrySet(int firstGeneratorNr, int numberOfGenerators) {
+        LinkedHashMap<String, Generator> gens = new LinkedHashMap<>();
+        int nr = 0;
+        for (Entry<String, Generator> e : generators.entrySet()) {
+            if (nr >= firstGeneratorNr) {
+                if (nr < firstGeneratorNr + numberOfGenerators) gens.put(e.getKey(), e.getValue());
+                else break;
+            }
+            nr++;
+        }
+        return gens.entrySet();
+    }
 
-	public boolean exists(String id) {
-		return generators.containsKey(id);
-	}
+    public boolean exists(String id) {
+        return generators.containsKey(id);
+    }
 
-	/**
-	 * Checks if generator item exists in other generator
-	 * 
-	 * @param generatorId the generator to skip when comparing
-	 * @param item the generator item to look for
-	 * @return generatorId of doubled recipe, otherwise null
-	 */
-	public String exactGeneratorItemExists(String generatorId, ItemStack item) {
-		for (Entry<String, Generator> entry : getEntrySet()) {
-			if (entry.getValue().getGeneratorItem().equals(item) && !entry.getKey().equals(generatorId))
-				return entry.getKey();
-		}
-		return null;
-	}
+    /**
+     * Checks if generator item exists in other generator
+     *
+     * @param generatorId the generator to skip when comparing
+     * @param item the generator item to look for
+     * @return generatorId of doubled recipe, otherwise null
+     */
+    public String exactGeneratorItemExists(String generatorId, ItemStack item) {
+        for (Entry<String, Generator> entry : getEntrySet()) {
+            if (entry.getValue().getGeneratorItem().equals(item)
+                    && !entry.getKey().equals(generatorId)) return entry.getKey();
+        }
+        return null;
+    }
 
-	public int getAmount() {
-		return generators.size();
-	}
+    public int getAmount() {
+        return generators.size();
+    }
 
-	public int getAmount(GeneratorType type) {
-		int amount = 0;
-		for (Entry<String, Generator> g : getEntrySet()) {
-			if (g.getValue().getType() == type) {
-				amount++;
-			}
-		}
-		return amount;
-	}
+    public int getAmount(GeneratorType type) {
+        int amount = 0;
+        for (Entry<String, Generator> g : getEntrySet()) {
+            if (g.getValue().getType() == type) {
+                amount++;
+            }
+        }
+        return amount;
+    }
 
-	public void reload() {
-		
-		LinkedHashMap<String, Generator> oldGenerators = new LinkedHashMap<>(generators);
+    public void reload() {
 
-		generators.clear();
+        LinkedHashMap<String, Generator> oldGenerators = new LinkedHashMap<>(generators);
 
-		Config config;
+        generators.clear();
 
-		try {
-			config = ConfigManager.getConfig("generators.yml", null, true, false);
-			config.loadConfig();
-		} catch (InvalidConfigurationException e) {
-			Logger.error("Generators file: You've missconfigured generators.yml file. Check your spaces! More info below. Disabling plugin.");
-			Logger.error(e);
-			Main.getInstance().getServer().getPluginManager().disablePlugin(Main.getInstance());
-			return;
-		} catch (Exception e) {
-			Logger.error("Generators file: Cant load generators config. Disabling plugin.");
-			Logger.error(e);
-			Main.getInstance().getServer().getPluginManager().disablePlugin(Main.getInstance());
-			return;
-		}
+        Config config;
 
-		ConfigurationSection mainSection = config.getConfigurationSection("");
-		for (String generatorID : mainSection.getKeys(false)) {
-			if (!generatorID.equals("example_generator")) {
-				if (oldGenerators.containsKey(generatorID)) {
-					Logger.debugPluginLoad("Generators file: " + generatorID + " is already loaded - updating it!");
-					oldGenerators.get(generatorID).loadConfiguration(this, config, generatorID);
-					generators.put(generatorID, oldGenerators.get(generatorID));
-				} else
-					new Generator(this, config, generatorID);
-			}
-		}
-
-		Logger.info("Generators file: Loaded " + this.generators.size() + " generators!");
-	}
-
-	public class GeneratedObjectsManager {
-
-		private final HashMap<String, Class<?>> generatedObjects = new HashMap<>();
-
-		public <T extends AbstractGeneratedObject> void registerGeneratedObject(Class<T> c) {
-			try {
-				AbstractGeneratedObject ago = c.getDeclaredConstructor().newInstance();
-				this.generatedObjects.put(ago.getType(), c);
-				Logger.debugPluginLoad("GeneratedObjectsManager: Loaded " + c.getSimpleName() + " with type " + ago.getType());
-			} catch (Exception | Error e) {
-				Logger.error("GeneratedObjectsManager: Cannot initialise GeneratedObject: " + c.getSimpleName());
-				Logger.error(e);
-			}
+        try {
+            config = ConfigManager.getConfig("generators.yml", null, true, false);
+            config.loadConfig();
+        } catch (InvalidConfigurationException e) {
+            Logger.error(
+                    "Generators file: You've missconfigured generators.yml file. Check your spaces! More info below. Disabling plugin.");
+            Logger.error(e);
+            Main.getInstance().getServer().getPluginManager().disablePlugin(Main.getInstance());
+            return;
+        } catch (Exception e) {
+            Logger.error("Generators file: Cant load generators config. Disabling plugin.");
+            Logger.error(e);
+            Main.getInstance().getServer().getPluginManager().disablePlugin(Main.getInstance());
+            return;
         }
 
-		public AbstractGeneratedObject getNewObject(String type) {
-			if (type != null && !type.isEmpty() && this.generatedObjects.containsKey(type)) {
-				try {
-					return (AbstractGeneratedObject) this.generatedObjects.get(type).getDeclaredConstructor().newInstance();
-				} catch (ReflectiveOperationException e) {
-					Logger.error("Generators file: Cant create new GeneratedObject with type: " + type);
-					Logger.error(e);
-				}
-			} else {
-				Logger.error("Generators file: There isnt any possible object with type: " + type
-						+ "! GeneratedObject not loaded. Possible types: " + this.generatedObjects.keySet());
-			}
-			return null;
-		}
-	}
+        ConfigurationSection mainSection = config.getConfigurationSection("");
+        for (String generatorID : mainSection.getKeys(false)) {
+            if (!generatorID.equals("example_generator")) {
+                if (oldGenerators.containsKey(generatorID)) {
+                    Logger.debugPluginLoad("Generators file: " + generatorID + " is already loaded - updating it!");
+                    oldGenerators.get(generatorID).loadConfiguration(this, config, generatorID);
+                    generators.put(generatorID, oldGenerators.get(generatorID));
+                } else new Generator(this, config, generatorID);
+            }
+        }
+
+        Logger.info("Generators file: Loaded " + this.generators.size() + " generators!");
+    }
+
+    public class GeneratedObjectsManager {
+
+        private final HashMap<String, Class<?>> generatedObjects = new HashMap<>();
+
+        public <T extends AbstractGeneratedObject> void registerGeneratedObject(Class<T> c) {
+            try {
+                AbstractGeneratedObject ago = c.getDeclaredConstructor().newInstance();
+                this.generatedObjects.put(ago.getType(), c);
+                Logger.debugPluginLoad(
+                        "GeneratedObjectsManager: Loaded " + c.getSimpleName() + " with type " + ago.getType());
+            } catch (Exception | Error e) {
+                Logger.error("GeneratedObjectsManager: Cannot initialise GeneratedObject: " + c.getSimpleName());
+                Logger.error(e);
+            }
+        }
+
+        public AbstractGeneratedObject getNewObject(String type) {
+            if (type != null && !type.isEmpty() && this.generatedObjects.containsKey(type)) {
+                try {
+                    return (AbstractGeneratedObject) this.generatedObjects
+                            .get(type)
+                            .getDeclaredConstructor()
+                            .newInstance();
+                } catch (ReflectiveOperationException e) {
+                    Logger.error("Generators file: Cant create new GeneratedObject with type: " + type);
+                    Logger.error(e);
+                }
+            } else {
+                Logger.error("Generators file: There isnt any possible object with type: " + type
+                        + "! GeneratedObject not loaded. Possible types: " + this.generatedObjects.keySet());
+            }
+            return null;
+        }
+    }
 }

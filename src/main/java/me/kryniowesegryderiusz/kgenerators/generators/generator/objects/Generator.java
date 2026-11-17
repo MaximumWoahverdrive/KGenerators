@@ -1,301 +1,300 @@
 package me.kryniowesegryderiusz.kgenerators.generators.generator.objects;
 
-import me.kryniowesegryderiusz.kgenerators.utils.Text;
+import com.cryptomorin.xseries.XEnchantment;
+import com.cryptomorin.xseries.XMaterial;
 import java.util.ArrayList;
-import java.util.List;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Random;
 import java.util.Set;
-
-import org.bukkit.World;
-import com.cryptomorin.xseries.XEnchantment;
-import org.bukkit.inventory.ItemFlag;
-import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.ItemMeta;
-
 import lombok.Getter;
 import lombok.Setter;
 import me.kryniowesegryderiusz.kgenerators.Main;
 import me.kryniowesegryderiusz.kgenerators.api.objects.AbstractGeneratedObject;
-import me.kryniowesegryderiusz.kgenerators.utils.ItemData;
 import me.kryniowesegryderiusz.kgenerators.generators.generator.GeneratorsManager;
 import me.kryniowesegryderiusz.kgenerators.generators.generator.enums.GeneratorType;
 import me.kryniowesegryderiusz.kgenerators.generators.upgrades.objects.Upgrade;
 import me.kryniowesegryderiusz.kgenerators.logger.Logger;
 import me.kryniowesegryderiusz.kgenerators.settings.objects.Actions;
 import me.kryniowesegryderiusz.kgenerators.utils.FilesUtils;
+import me.kryniowesegryderiusz.kgenerators.utils.ItemData;
 import me.kryniowesegryderiusz.kgenerators.utils.ItemUtils;
+import me.kryniowesegryderiusz.kgenerators.utils.Text;
 import me.kryniowesegryderiusz.kgenerators.utils.immutable.Config;
 import me.kryniowesegryderiusz.kgenerators.utils.immutable.RandomSelector;
 import me.kryniowesegryderiusz.kgenerators.utils.objects.CustomBlockData;
-import com.cryptomorin.xseries.XMaterial;
+import org.bukkit.World;
+import org.bukkit.inventory.ItemFlag;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 
 public class Generator {
 
-	@Getter
-	private String id;
-	private ItemStack generatorItem;
-	@Getter
-	@Setter
-	private int delay;
-	@Getter
-	private GeneratorType type = GeneratorType.SINGLE;
-	private final LinkedHashMap<AbstractGeneratedObject, Double> chances = new LinkedHashMap<>();
+    @Getter
+    private String id;
 
-	@Getter
-	private CustomBlockData placeholder;
-	@Getter
-	private boolean generateImmediatelyAfterPlace = true;
-	@Getter
-	private boolean allowPistonPush = true;
-	@Getter
-	private boolean hologram = false;
-	@Getter
-	private Actions actions = null;
-	@Getter
-	private final ArrayList<String> disabledWorlds = new ArrayList<>();
+    private ItemStack generatorItem;
 
-	@Getter
-	private boolean secondMultiple = false;
-	private double fullChance = 0.0;
-	@Getter
-	boolean loaded = false;
+    @Getter
+    @Setter
+    private int delay;
 
-	public Generator(GeneratorsManager generatorsManager, Config config, String generatorID) {
-		if (!this.loadConfiguration(generatorsManager, config, generatorID)) {
-			Logger.error("Generators file: Couldnt load " + generatorID);
-		} else {
-			generatorsManager.add(generatorID, this);
-		}
-	}
+    @Getter
+    private GeneratorType type = GeneratorType.SINGLE;
 
-	/**
-	 * Loads this generator's settings from the generators config.
-	 * @param generatorsManager the manager used to look up generated objects and duplicate generator items
-	 * @param config the generators config
-	 * @param generatorID the generator's id, which is also its config path
-	 * @return true if generator loaded properly
-	 */
-	@SuppressWarnings("unchecked")
-	public boolean loadConfiguration(GeneratorsManager generatorsManager, Config config, String generatorID) {
+    private final LinkedHashMap<AbstractGeneratedObject, Double> chances = new LinkedHashMap<>();
 
-		boolean error = false;
+    @Getter
+    private CustomBlockData placeholder;
 
-		/*
-		 * Required options
-		 */
+    @Getter
+    private boolean generateImmediatelyAfterPlace = true;
 
-		this.id = generatorID;
+    @Getter
+    private boolean allowPistonPush = true;
 
-		this.delay = config.getInt(generatorID + ".delay");
-		double sm = (double) delay / 20;
-		if (sm == Math.floor(sm))
-			secondMultiple = true;
+    @Getter
+    private boolean hologram = false;
 
-		this.type = GeneratorType.getGeneratorTypeByString(config.getString(generatorID + ".type"));
+    @Getter
+    private Actions actions = null;
 
-		/*
-		 * Generator item
-		 */
-		if (config.contains(generatorID + ".generator-item")) {
-			this.generatorItem = FilesUtils.loadItemStack(config, generatorID, "generator-item", true);
-		} else if (config.contains(generatorID + ".generator")) {
-			Logger.error("Generator " + generatorID
-					+ " uses old generator item configuration that will be not supported in the future!");
-			Logger.error(
-					"Check https://github.com/MaximumWoahverdrive/KGenerators/blob/master/core/src/main/resources/generators.yml#L14 for new configuration options!");
+    @Getter
+    private final ArrayList<String> disabledWorlds = new ArrayList<>();
 
-			boolean glow = true;
-			if (config.contains(generatorID + ".glow")) {
-				glow = config.getBoolean(generatorID + ".glow");
-			}
-			this.generatorItem = ItemUtils.parseItemStack(config.getString(generatorID + ".generator"),
-					"Generators file", true);
-			ArrayList<String> lore = new ArrayList<>();
-			ItemMeta meta = this.generatorItem.getItemMeta();
-			String name = config.getString(generatorID + ".name");
-			if (name != null)
-				Text.setName(meta, Text.colorize(name));
-			List<?> loreGot = config.getList(generatorID + ".lore");
-			if (loreGot != null) {
-				for (Object l : loreGot)
-					lore.add(Text.colorize(String.valueOf(l)));
-			}
-			Text.setLore(meta, lore);
-			lore.clear();
-			if (glow)
-				meta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
-			this.generatorItem.setItemMeta(meta);
-			if (glow)
-				this.generatorItem.addUnsafeEnchantment(XEnchantment.FORTUNE.get(), 1);
-		} else {
-			Logger.error("Generator " + generatorID + " is lacking generator-item configuration");
-			error = true;
-		}
+    @Getter
+    private boolean secondMultiple = false;
 
-		if (this.generatorItem != null)
-			ItemData.setString(generatorItem, ItemData.GENERATOR_ID, generatorID);
+    private double fullChance = 0.0;
 
-		/*
-		 * Generates section
-		 */
+    @Getter
+    boolean loaded = false;
 
-		chances.clear();
-		fullChance = 0.0;
+    public Generator(GeneratorsManager generatorsManager, Config config, String generatorID) {
+        if (!this.loadConfiguration(generatorsManager, config, generatorID)) {
+            Logger.error("Generators file: Couldnt load " + generatorID);
+        } else {
+            generatorsManager.add(generatorID, this);
+        }
+    }
 
-		if (config.contains(generatorID + ".generates"))
-			for (Map<?, ?> generatedObjectConfig : config.getMapList(generatorID + ".generates")) {
+    /**
+     * Loads this generator's settings from the generators config.
+     * @param generatorsManager the manager used to look up generated objects and duplicate generator items
+     * @param config the generators config
+     * @param generatorID the generator's id, which is also its config path
+     * @return true if generator loaded properly
+     */
+    @SuppressWarnings("unchecked")
+    public boolean loadConfiguration(GeneratorsManager generatorsManager, Config config, String generatorID) {
 
-				AbstractGeneratedObject ago = generatorsManager.getGeneratedObjectsManager()
-						.getNewObject((String) generatedObjectConfig.get("type"));
-				if (ago != null && ago.load(generatedObjectConfig)) {
-					this.chances.put(ago, ago.getChance());
-					this.fullChance += ago.getChance();
-				}
+        boolean error = false;
 
-			}
-		else if (config.contains(generatorID + ".chances")) {
-			Logger.error("Generator " + generatorID
-					+ " has OLD generates (chances) section set, which allow only block generation!");
-			Logger.error(
-					"Check https://github.com/MaximumWoahverdrive/KGenerators/blob/master/core/src/main/resources/generators.yml#L32 for new generators.yml look!");
-		} else {
-			Logger.error("Generators file: " + generatorID + " doesnt have generating section!");
-			error = true;
-		}
+        /*
+         * Required options
+         */
 
-		if (this.chances.isEmpty()) {
-			Logger.error("Generators file: " + generatorID + " doesnt have any generating objects set!");
-			error = true;
-		}
+        this.id = generatorID;
 
-		/*
-		 * Optional options
-		 */
+        this.delay = config.getInt(generatorID + ".delay");
+        double sm = (double) delay / 20;
+        if (sm == Math.floor(sm)) secondMultiple = true;
 
-		if (config.contains(generatorID + ".placeholder")
-				&& !config.getString(generatorID + ".placeholder").isEmpty()) {
-			this.placeholder = CustomBlockData.load(config.getString(generatorID + ".placeholder"), "Generators file");
-			if (this.placeholder.getXMaterial() == XMaterial.AIR)
-				this.placeholder = null;
-		}
+        this.type = GeneratorType.getGeneratorTypeByString(config.getString(generatorID + ".type"));
 
-		if (config.contains(generatorID + ".generate-immediately-after-place")
-				&& !config.getString(generatorID + ".generate-immediately-after-place").isEmpty()) {
-			this.generateImmediatelyAfterPlace = config.getBoolean(generatorID + ".generate-immediately-after-place");
-		}
+        /*
+         * Generator item
+         */
+        if (config.contains(generatorID + ".generator-item")) {
+            this.generatorItem = FilesUtils.loadItemStack(config, generatorID, "generator-item", true);
+        } else if (config.contains(generatorID + ".generator")) {
+            Logger.error("Generator " + generatorID
+                    + " uses old generator item configuration that will be not supported in the future!");
+            Logger.error(
+                    "Check https://github.com/MaximumWoahverdrive/KGenerators/blob/master/core/src/main/resources/generators.yml#L14 for new configuration options!");
 
-		if (config.contains(generatorID + ".allow-piston-push")) {
-			this.allowPistonPush = config.getBoolean(generatorID + ".allow-piston-push");
-		}
+            boolean glow = true;
+            if (config.contains(generatorID + ".glow")) {
+                glow = config.getBoolean(generatorID + ".glow");
+            }
+            this.generatorItem =
+                    ItemUtils.parseItemStack(config.getString(generatorID + ".generator"), "Generators file", true);
+            ArrayList<String> lore = new ArrayList<>();
+            ItemMeta meta = this.generatorItem.getItemMeta();
+            String name = config.getString(generatorID + ".name");
+            if (name != null) Text.setName(meta, Text.colorize(name));
+            List<?> loreGot = config.getList(generatorID + ".lore");
+            if (loreGot != null) {
+                for (Object l : loreGot) lore.add(Text.colorize(String.valueOf(l)));
+            }
+            Text.setLore(meta, lore);
+            lore.clear();
+            if (glow) meta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
+            this.generatorItem.setItemMeta(meta);
+            if (glow) this.generatorItem.addUnsafeEnchantment(XEnchantment.FORTUNE.get(), 1);
+        } else {
+            Logger.error("Generator " + generatorID + " is lacking generator-item configuration");
+            error = true;
+        }
 
-		if (config.contains(generatorID + ".hologram")) {
-			this.hologram = config.getBoolean(generatorID + ".hologram");
-		}
+        if (this.generatorItem != null) ItemData.setString(generatorItem, ItemData.GENERATOR_ID, generatorID);
 
-		if (config.contains(generatorID + ".disabled-worlds")) {
-			this.getDisabledWorlds().addAll((ArrayList<String>) config.getList(generatorID + ".disabled-worlds"));
-		}
+        /*
+         * Generates section
+         */
 
-		if (config.contains(generatorID + ".actions")) {
-			this.actions = new Actions();
-			this.actions.load(config, generatorID);
-		}
+        chances.clear();
+        fullChance = 0.0;
 
-		String doubledGeneratorId = generatorsManager.exactGeneratorItemExists(generatorID, this.getGeneratorItem());
-		if (doubledGeneratorId != null) {
-			Logger.error("Generators file: " + generatorID + " has same generator item as " + doubledGeneratorId);
-			Logger.error("Generators file: Couldnt load " + generatorID);
-			error = true;
-		}
+        if (config.contains(generatorID + ".generates"))
+            for (Map<?, ?> generatedObjectConfig : config.getMapList(generatorID + ".generates")) {
 
-		if (error) {
-			Logger.error("Generators file: An error appeared, while loading configuration for " + generatorID);
-			return false;
-		} else {
-			Logger.debugPluginLoad("Generators file: Loaded properly " + type + " " + generatorID
-					+ " generating variety of " + this.chances.size() + " objects every " + delay + " ticks");
-			return true;
-		}
+                AbstractGeneratedObject ago = generatorsManager
+                        .getGeneratedObjectsManager()
+                        .getNewObject((String) generatedObjectConfig.get("type"));
+                if (ago != null && ago.load(generatedObjectConfig)) {
+                    this.chances.put(ago, ago.getChance());
+                    this.fullChance += ago.getChance();
+                }
+            }
+        else if (config.contains(generatorID + ".chances")) {
+            Logger.error("Generator " + generatorID
+                    + " has OLD generates (chances) section set, which allow only block generation!");
+            Logger.error(
+                    "Check https://github.com/MaximumWoahverdrive/KGenerators/blob/master/core/src/main/resources/generators.yml#L32 for new generators.yml look!");
+        } else {
+            Logger.error("Generators file: " + generatorID + " doesnt have generating section!");
+            error = true;
+        }
 
-	}
+        if (this.chances.isEmpty()) {
+            Logger.error("Generators file: " + generatorID + " doesnt have any generating objects set!");
+            error = true;
+        }
 
-	public boolean doesChancesContain(AbstractGeneratedObject generatedObject) {
-		for (Entry<AbstractGeneratedObject, Double> e : chances.entrySet()) {
-			if (e.getKey().equals(generatedObject))
-				return true;
-		}
-		return false;
-	}
+        /*
+         * Optional options
+         */
 
-	public double getChancePercent(AbstractGeneratedObject ago) {
-		double chance = chances.get(ago);
-		double fullchance = this.fullChance;
-		return (chance / fullchance) * 100;
-	}
+        if (config.contains(generatorID + ".placeholder")
+                && !config.getString(generatorID + ".placeholder").isEmpty()) {
+            this.placeholder = CustomBlockData.load(config.getString(generatorID + ".placeholder"), "Generators file");
+            if (this.placeholder.getXMaterial() == XMaterial.AIR) this.placeholder = null;
+        }
 
-	public String getChancePercentFormatted(AbstractGeneratedObject ago) {
-		Double percent = this.getChancePercent(ago);
-		if (percent.isInfinite())
-			return "100";
-		return String.format("%.2f", percent);
-	}
+        if (config.contains(generatorID + ".generate-immediately-after-place")
+                && !config.getString(generatorID + ".generate-immediately-after-place")
+                        .isEmpty()) {
+            this.generateImmediatelyAfterPlace = config.getBoolean(generatorID + ".generate-immediately-after-place");
+        }
 
-	public Set<Entry<AbstractGeneratedObject, Double>> getChancesEntryset() {
-		return this.chances.entrySet();
-	}
+        if (config.contains(generatorID + ".allow-piston-push")) {
+            this.allowPistonPush = config.getBoolean(generatorID + ".allow-piston-push");
+        }
 
-	public Set<AbstractGeneratedObject> getGeneratedObjects() {
-		return this.chances.keySet();
-	}
+        if (config.contains(generatorID + ".hologram")) {
+            this.hologram = config.getBoolean(generatorID + ".hologram");
+        }
 
-	public AbstractGeneratedObject drawGeneratedObject() {
-		RandomSelector<AbstractGeneratedObject> selector = RandomSelector.weighted(this.chances.keySet(),
-				this.chances::get);
-		return selector.next(new Random());
-	}
+        if (config.contains(generatorID + ".disabled-worlds")) {
+            this.getDisabledWorlds().addAll((ArrayList<String>) config.getList(generatorID + ".disabled-worlds"));
+        }
 
-	public ItemStack getGeneratorItem() {
-		return this.generatorItem.clone();
-	}
+        if (config.contains(generatorID + ".actions")) {
+            this.actions = new Actions();
+            this.actions.load(config, generatorID);
+        }
 
-	public String getGeneratorItemName() {
-		return Text.name(this.generatorItem.getItemMeta());
-	}
+        String doubledGeneratorId = generatorsManager.exactGeneratorItemExists(generatorID, this.getGeneratorItem());
+        if (doubledGeneratorId != null) {
+            Logger.error("Generators file: " + generatorID + " has same generator item as " + doubledGeneratorId);
+            Logger.error("Generators file: Couldnt load " + generatorID);
+            error = true;
+        }
 
-	public Upgrade getUpgrade() {
-		return Main.getUpgrades().getUpgrade(id);
-	}
+        if (error) {
+            Logger.error("Generators file: An error appeared, while loading configuration for " + generatorID);
+            return false;
+        } else {
+            Logger.debugPluginLoad("Generators file: Loaded properly " + type + " " + generatorID
+                    + " generating variety of " + this.chances.size() + " objects every " + delay + " ticks");
+            return true;
+        }
+    }
 
-	public boolean isWorldDisabled(World w) {
-		return Main.getSettings().isWorldDisabled(w) || this.disabledWorlds.contains(w.getName());
-	}
+    public boolean doesChancesContain(AbstractGeneratedObject generatedObject) {
+        for (Entry<AbstractGeneratedObject, Double> e : chances.entrySet()) {
+            if (e.getKey().equals(generatedObject)) return true;
+        }
+        return false;
+    }
 
-	public boolean isPlaceholder(ItemStack item) {
-		return this.placeholder != null && this.placeholder.isSimilar(item);
-	}
+    public double getChancePercent(AbstractGeneratedObject ago) {
+        double chance = chances.get(ago);
+        double fullchance = this.fullChance;
+        return (chance / fullchance) * 100;
+    }
 
-	public int getGeneratedObjectId(AbstractGeneratedObject ago1) {
+    public String getChancePercentFormatted(AbstractGeneratedObject ago) {
+        Double percent = this.getChancePercent(ago);
+        if (percent.isInfinite()) return "100";
+        return String.format("%.2f", percent);
+    }
 
-		int id = -1;
-		for (AbstractGeneratedObject ago2 : this.chances.keySet()) {
-			id++;
-			if (ago1 == ago2) {
-				return id;
-			}
-		}
-		return -1;
-	}
+    public Set<Entry<AbstractGeneratedObject, Double>> getChancesEntryset() {
+        return this.chances.entrySet();
+    }
 
-	public AbstractGeneratedObject getGeneratedObjectById(int id) {
-		int i = -1;
-		for (AbstractGeneratedObject ago : this.chances.keySet()) {
-			i++;
-			if (id == i)
-				return ago;
-		}
-		return null;
-	}
+    public Set<AbstractGeneratedObject> getGeneratedObjects() {
+        return this.chances.keySet();
+    }
+
+    public AbstractGeneratedObject drawGeneratedObject() {
+        RandomSelector<AbstractGeneratedObject> selector =
+                RandomSelector.weighted(this.chances.keySet(), this.chances::get);
+        return selector.next(new Random());
+    }
+
+    public ItemStack getGeneratorItem() {
+        return this.generatorItem.clone();
+    }
+
+    public String getGeneratorItemName() {
+        return Text.name(this.generatorItem.getItemMeta());
+    }
+
+    public Upgrade getUpgrade() {
+        return Main.getUpgrades().getUpgrade(id);
+    }
+
+    public boolean isWorldDisabled(World w) {
+        return Main.getSettings().isWorldDisabled(w) || this.disabledWorlds.contains(w.getName());
+    }
+
+    public boolean isPlaceholder(ItemStack item) {
+        return this.placeholder != null && this.placeholder.isSimilar(item);
+    }
+
+    public int getGeneratedObjectId(AbstractGeneratedObject ago1) {
+
+        int id = -1;
+        for (AbstractGeneratedObject ago2 : this.chances.keySet()) {
+            id++;
+            if (ago1 == ago2) {
+                return id;
+            }
+        }
+        return -1;
+    }
+
+    public AbstractGeneratedObject getGeneratedObjectById(int id) {
+        int i = -1;
+        for (AbstractGeneratedObject ago : this.chances.keySet()) {
+            i++;
+            if (id == i) return ago;
+        }
+        return null;
+    }
 }

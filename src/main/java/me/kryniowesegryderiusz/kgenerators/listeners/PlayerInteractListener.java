@@ -1,5 +1,9 @@
 package me.kryniowesegryderiusz.kgenerators.listeners;
 
+import me.kryniowesegryderiusz.kgenerators.Main;
+import me.kryniowesegryderiusz.kgenerators.generators.locations.handlers.enums.InteractionType;
+import me.kryniowesegryderiusz.kgenerators.generators.locations.objects.GeneratorLocation;
+import me.kryniowesegryderiusz.kgenerators.logger.Logger;
 import org.bukkit.Location;
 import org.bukkit.event.Event;
 import org.bukkit.event.EventHandler;
@@ -9,45 +13,35 @@ import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.EquipmentSlot;
 
-import me.kryniowesegryderiusz.kgenerators.Main;
-import me.kryniowesegryderiusz.kgenerators.generators.locations.handlers.enums.InteractionType;
-import me.kryniowesegryderiusz.kgenerators.generators.locations.objects.GeneratorLocation;
-import me.kryniowesegryderiusz.kgenerators.logger.Logger;
-
 public class PlayerInteractListener implements Listener {
 
-	@EventHandler(priority = EventPriority.HIGH)
-	public void onPlayerInteract(PlayerInteractEvent e) {
+    @EventHandler(priority = EventPriority.HIGH)
+    public void onPlayerInteract(PlayerInteractEvent e) {
 
-		try {
+        try {
 
-			if (e.getHand() != EquipmentSlot.HAND)
-				return;
+            if (e.getHand() != EquipmentSlot.HAND) return;
 
-			if (e.useInteractedBlock() == Event.Result.DENY || e.getClickedBlock() == null)
-				return;
+            if (e.useInteractedBlock() == Event.Result.DENY || e.getClickedBlock() == null) return;
 
-			Location location = e.getClickedBlock().getLocation();
-			Location upperLocation = location.clone().add(0, 1, 0);
+            Location location = e.getClickedBlock().getLocation();
+            Location upperLocation = location.clone().add(0, 1, 0);
 
-			GeneratorLocation gLocation = Main.getPlacedGenerators().getLoaded(location);
-			if (gLocation == null)
-				gLocation = Main.getPlacedGenerators().getLoaded(upperLocation);
-			// Material#isInteractable is deprecated on 26.x, but what replaces it does not exist on 1.19.4
-			else if (e.getAction() == Action.RIGHT_CLICK_BLOCK
-					&& e.getClickedBlock().getType().isInteractable())
-				e.setUseInteractedBlock(Event.Result.DENY);
-			
-			if (gLocation == null)
-				return;
+            GeneratorLocation gLocation = Main.getPlacedGenerators().getLoaded(location);
+            if (gLocation == null) gLocation = Main.getPlacedGenerators().getLoaded(upperLocation);
+            // Material#isInteractable is deprecated on 26.x, but what replaces it does not exist on 1.19.4
+            else if (e.getAction() == Action.RIGHT_CLICK_BLOCK
+                    && e.getClickedBlock().getType().isInteractable()) e.setUseInteractedBlock(Event.Result.DENY);
 
-			if (e.getAction() == Action.LEFT_CLICK_BLOCK)
-				e.setCancelled(gLocation.handleAction(InteractionType.LEFT_CLICK, e.getPlayer()));
-			else if (e.getAction() == Action.RIGHT_CLICK_BLOCK)
-				e.setCancelled(gLocation.handleAction(InteractionType.RIGHT_CLICK, e.getPlayer()));
+            if (gLocation == null) return;
 
-		} catch (Exception exception) {
-			Logger.error(exception);
-		}
-	}
+            if (e.getAction() == Action.LEFT_CLICK_BLOCK)
+                e.setCancelled(gLocation.handleAction(InteractionType.LEFT_CLICK, e.getPlayer()));
+            else if (e.getAction() == Action.RIGHT_CLICK_BLOCK)
+                e.setCancelled(gLocation.handleAction(InteractionType.RIGHT_CLICK, e.getPlayer()));
+
+        } catch (Exception exception) {
+            Logger.error(exception);
+        }
+    }
 }

@@ -9,18 +9,18 @@ import org.bukkit.entity.Player;
  */
 public interface PaymentUpgradeCost {
 
-	/**
-	 * Takes the payment.
-	 * @param p player who pays
-	 * @param amount number of generators being upgraded
-	 * @return whether the payment went through
-	 */
-	boolean pay(Player p, int amount);
+    /**
+     * Takes the payment.
+     * @param p player who pays
+     * @param amount number of generators being upgraded
+     * @return whether the payment went through
+     */
+    boolean pay(Player p, int amount);
 
-	/**
-	 * Gives back a payment made with {@link #pay(Player, int)}.
-	 * @param p player who paid
-	 * @param amount number of generators that were being upgraded
-	 */
-	void refund(Player p, int amount);
+    /**
+     * Gives back a payment made with {@link #pay(Player, int)}.
+     * @param p player who paid
+     * @param amount number of generators that were being upgraded
+     */
+    void refund(Player p, int amount);
 }
