@@ -105,7 +105,19 @@ public class PlacedGeneratorsManager {
 	}
 	
 	public void unloadChunk(Chunk c) {
-		managementQueue.add(new ChunkUnloadTask(c));
+		managementQueue.add(new ChunkUnloadTask(getChunkInfo(c)));
+	}
+
+	/**
+	 * Unloads every generator in {@code world}. A world can be unloaded without its chunks
+	 * getting their own unload events, which would leave its generators loaded (and their
+	 * regenerations scheduled) against a world that is gone.
+	 */
+	public void unloadWorld(World world) {
+		for (ChunkInfo ci : loadedGenerators.keySet()) {
+			if (ci.getWorld().equals(world))
+				managementQueue.add(new ChunkUnloadTask(ci));
+		}
 	}
 	
 
@@ -188,8 +200,8 @@ public class PlacedGeneratorsManager {
 		private ChunkInfo ci;
 		private long taskScheduleTime = System.currentTimeMillis();
 		
-		public ChunkUnloadTask(Chunk c) {
-			this.ci = getChunkInfo(c);
+		public ChunkUnloadTask(ChunkInfo ci) {
+			this.ci = ci;
 			
 			Logger.debugPlacedGeneratorsManager("PlacedGeneratorsManager: Scheduling chunk unload: " + ci.toString());
 		}
