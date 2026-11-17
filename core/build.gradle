@@ -5,21 +5,21 @@ dependencies {
     // NBT-API: KGenerators is the only plugin here that needs it, so it is bundled rather than a separate plugin.
     // 2.16.1 is the version verified to load NMS support 'MC26_2'.
     implementation 'de.tr7zw:item-nbt-api:2.16.1'
-    // 13.3.1 could not parse Minecraft 26's version scheme; 13.7.1 can.
+    // 13.3.1 could not parse Minecraft 26's version scheme; 13.7.1 and later can.
     // api: core's public methods take and return XMaterial, which the version adapters compile against.
-    api 'com.github.cryptomorin:XSeries:13.7.1'
+    api 'com.github.cryptomorin:XSeries:14.0.0'
     // 4.0.3 is HikariCP's last Java 8 release; 5.x and later need Java 11.
     implementation 'com.zaxxer:HikariCP:4.0.3'
-    implementation 'org.slf4j:slf4j-api:2.0.6'
+    implementation 'org.slf4j:slf4j-api:2.0.20'
     // Usage statistics; Folia-aware since 3.1
     implementation 'org.bstats:bstats-bukkit:3.2.1'
-    implementation 'org.slf4j:slf4j-simple:2.0.6'
+    implementation 'org.slf4j:slf4j-simple:2.0.20'
 
     // Paper API for the region/entity/global/async schedulers (Folia, also present on Paper)
     compileOnly 'io.papermc.paper:paper-api:1.21.5-R0.1-SNAPSHOT'
 
-    compileOnly 'org.projectlombok:lombok:1.18.32'
-    annotationProcessor 'org.projectlombok:lombok:1.18.32'
+    compileOnly 'org.projectlombok:lombok:1.18.48'
+    annotationProcessor 'org.projectlombok:lombok:1.18.48'
 
     compileOnly platform('com.intellectualsites.bom:bom-newest:1.47')
     compileOnly 'com.intellectualsites.plotsquared:plotsquared-core'
