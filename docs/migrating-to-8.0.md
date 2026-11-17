@@ -43,6 +43,20 @@ as raw NBT tags: `key:value` becomes `kgenerators:key`, and `namespace:key:value
 these values as raw NBT tags, it will no longer find them; plugins that use the persistent data
 container can read them under the new keys.
 
+## Behaviour fixes
+
+- **`physics:` on generated blocks now works.** It was ignored before, so blocks were always placed
+  without physics. It now defaults to off, so generators that don't set it behave as before;
+  `physics: true` now actually applies physics.
+- **Upgrades paid with Vault money or PlayerPoints** no longer go through when the economy plugin
+  refuses the payment; anything already taken is refunded.
+- **`/kgen list`** no longer puts the message prefix on every line.
+- **Commands that only players can use** now tell the console so (new message
+  `commands.any.player-only`, added to existing language files automatically) instead of printing to
+  the server log.
+- **Malformed config values** (an item with no material, a non-list `generators:` in limits, a
+  non-text sound name, ...) are reported as errors instead of stopping the file from loading.
+
 ## Text
 
 Colour codes work as before (`&` codes and `#RRGGBB` hex colours). Two differences:

@@ -71,6 +71,7 @@ messages:
       generator-doesnt-exist: '&cThat generator doesn''t exist'
       menu-doesnt-exist: '&cThat menu doesn''t exist'
       console-only: '&cThis command can be executed only from console!'
+      player-only: '&cThis command can be executed only by a player!'
       not-a-integer: '&c''<variable>'' should be integer!'
       not-a-floating-point-number: '&c''<variable>'' should be floating point number!'
       world-doesnt-exist: '&cWorld ''<world>'' doesn''t exist'

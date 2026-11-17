@@ -83,8 +83,8 @@ public class CustomEntityData {
 			} else {
 				Map<?, ?> map;
 				
-				if (configMap.get(keyName) instanceof String)
-					map = (Map<?, ?>) ((MemorySection) configMap.get(keyName)).getValues(false);
+				if (configMap.get(keyName) instanceof MemorySection section)
+					map = section.getValues(false);
 				else map = (Map<?, ?>) configMap.get(keyName);
 				
 				if (map != null && map.containsKey("type")) {

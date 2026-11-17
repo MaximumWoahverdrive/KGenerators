@@ -5,11 +5,13 @@ import org.bukkit.entity.Player;
 import me.kryniowesegryderiusz.kgenerators.api.exceptions.CannnotLoadUpgradeException;
 import me.kryniowesegryderiusz.kgenerators.api.interfaces.IUpgradeCost;
 import me.kryniowesegryderiusz.kgenerators.dependencies.hooks.PlayerPointsHook;
+import me.kryniowesegryderiusz.kgenerators.generators.upgrades.objects.PaymentUpgradeCost;
+import me.kryniowesegryderiusz.kgenerators.logger.Logger;
 import me.kryniowesegryderiusz.kgenerators.lang.Lang;
 import me.kryniowesegryderiusz.kgenerators.lang.enums.Message;
 import me.kryniowesegryderiusz.kgenerators.utils.immutable.Config;
 
-public class PlayerPointsUpgradeCost implements IUpgradeCost {
+public class PlayerPointsUpgradeCost implements IUpgradeCost, PaymentUpgradeCost {
 	
 	public PlayerPointsUpgradeCost() {}
 	
@@ -31,7 +33,18 @@ public class PlayerPointsUpgradeCost implements IUpgradeCost {
 
 	@Override
 	public void takeRequirements(Player p, int amount) {
-		PlayerPointsHook.takePlayerPoints(p, this.cost*amount);
+		if (!pay(p, amount))
+			Logger.warn("Upgrades: PlayerPoints refused to take " + this.cost * amount + " points from " + p.getName());
+	}
+
+	@Override
+	public boolean pay(Player p, int amount) {
+		return PlayerPointsHook.takePlayerPoints(p, this.cost * amount);
+	}
+
+	@Override
+	public void refund(Player p, int amount) {
+		PlayerPointsHook.givePlayerPoints(p, this.cost * amount);
 	}
 
 	@Override

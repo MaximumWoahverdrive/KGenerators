@@ -10,7 +10,7 @@ import me.kryniowesegryderiusz.kgenerators.dependencies.hooks.VaultHook;
 import me.kryniowesegryderiusz.kgenerators.logger.Logger;
 import me.kryniowesegryderiusz.kgenerators.utils.immutable.Config;
 
-public class UpgradeCostMoney implements IUpgradeCost  {
+public class UpgradeCostMoney implements IUpgradeCost, PaymentUpgradeCost {
 	
 	public UpgradeCostMoney() {}
 	
@@ -23,7 +23,18 @@ public class UpgradeCostMoney implements IUpgradeCost  {
 
 	@Override
 	public void takeRequirements(Player p, int amount) {
-		VaultHook.takeMoney(p, this.cost*amount);
+		if (!pay(p, amount))
+			Logger.warn("Upgrades: The economy plugin refused to take " + this.cost * amount + " from " + p.getName());
+	}
+
+	@Override
+	public boolean pay(Player p, int amount) {
+		return VaultHook.takeMoney(p, this.cost * amount);
+	}
+
+	@Override
+	public void refund(Player p, int amount) {
+		VaultHook.giveMoney(p, this.cost * amount);
 	}
 
 	@Override

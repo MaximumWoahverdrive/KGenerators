@@ -168,7 +168,7 @@ public class MenuItem implements Cloneable {
 			if (config.contains(path + ".name"))
 				setName(config.getString(path + ".name"));
 			this.lore.clear();
-			if (config.contains(path + ".lore"))
+			if (config.getList(path + ".lore") != null)
 				addLore((ArrayList<String>) config.getList(path + ".lore"));
 			if (config.contains(path + ".glow"))
 				this.glow = config.getBoolean(path + ".glow");

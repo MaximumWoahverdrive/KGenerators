@@ -143,6 +143,11 @@ public class FilesUtils {
 				item = ItemUtils.parseItemStack((String) map.get("type"), place, isBlockCheck);
 			else if (map.containsKey("material"))
 				item = ItemUtils.parseItemStack((String) map.get("material"), place, isBlockCheck);
+
+			if (item == null) {
+				Logger.error(place + ": Item has no material set! Using STONE!");
+				item = XMaterial.STONE.parseItem();
+			}
 			
 			if (map.containsKey("enchants")) {
 				for (String s : (ArrayList<String>) map.get("enchants")) {

@@ -63,7 +63,7 @@ public class Commands implements CommandExecutor {
 								"kgenerators.getall");
 					}
 				} else {
-					System.out.println("[KGenerators] Use that command as player!");
+					Lang.getMessageStorage().send(sender, Message.COMMANDS_ANY_ONLY_PLAYER);
 				}
 				break;
 			case "list":
@@ -84,7 +84,7 @@ public class Commands implements CommandExecutor {
 					if (sender instanceof Player player) {
                         Main.getMenus().openLimitsMenu(player);
 					} else {
-						System.out.println("[KGenerators] Use that command as player!");
+						Lang.getMessageStorage().send(sender, Message.COMMANDS_ANY_ONLY_PLAYER);
 					}
 				} else {
 					Lang.getMessageStorage().send(sender, Message.COMMANDS_LIMITS_NO_PERMISSION, "<permission>",
@@ -205,7 +205,7 @@ public class Commands implements CommandExecutor {
 								"kgenerators.timeLeft");
 					}
 				} else {
-					System.out.println("[KGenerators] Use that command as player!");
+					Lang.getMessageStorage().send(sender, Message.COMMANDS_ANY_ONLY_PLAYER);
 				}
 				break;
 			case "upgrade":
@@ -226,7 +226,7 @@ public class Commands implements CommandExecutor {
 						if (sender instanceof Player player)
 							Main.getMenus().openMainMenu(player);
 						else
-							System.out.println("[KGenerators] Use that command as player!");
+							Lang.getMessageStorage().send(sender, Message.COMMANDS_ANY_ONLY_PLAYER);
 					} else if (sender.hasPermission("kgenerators.menu.others")) {
 
 						Player player = Bukkit.getPlayer(args[1]);
@@ -289,12 +289,17 @@ public class Commands implements CommandExecutor {
 				
 				if (args[1].equalsIgnoreCase("worldedit")) {
 					
-					if (!(sender instanceof Player)) {
-						System.out.println("[KGenerators] Use that command as player!");
+					if (!(sender instanceof Player selectingPlayer)) {
+						Lang.getMessageStorage().send(sender, Message.COMMANDS_ANY_ONLY_PLAYER);
 						return false;
 					}
 					
-					ArrayList<Location> playerSelection = WorldEditHook.getPlayerSelection((Player) sender);
+					if (!Main.getGenerators().exists(args[2])) {
+						Lang.getMessageStorage().send(sender, Message.COMMANDS_ANY_GENERATOR_DOESNT_EXIST);
+						return false;
+					}
+
+					ArrayList<Location> playerSelection = WorldEditHook.getPlayerSelection(selectingPlayer);
 					
 					int amount = 0;
 					
@@ -372,11 +377,10 @@ public class Commands implements CommandExecutor {
 
 				if (args[1].equalsIgnoreCase("worldedit")) {
 
-					if (!(sender instanceof Player)) {
-						System.out.println("[KGenerators] Use that command as player!");
+					if (!(sender instanceof Player p)) {
+						Lang.getMessageStorage().send(sender, Message.COMMANDS_ANY_ONLY_PLAYER);
 						return false;
 					}
-					Player p = (Player) sender;
 
                     ArrayList<GeneratorLocation> gls = WorldEditHook.getGeneratorsInRange(p);
 					if (gls != null) {

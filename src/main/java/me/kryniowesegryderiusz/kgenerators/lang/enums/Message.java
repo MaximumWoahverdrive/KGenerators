@@ -67,6 +67,7 @@ public enum Message implements IMessage {
 	COMMANDS_ANY_GENERATOR_DOESNT_EXIST("commands.any.generator-doesnt-exist", "&cThat generator doesn't exist"),
 	COMMANDS_ANY_MENU_DOESNT_EXIST("commands.any.menu-doesnt-exist", "&cThat menu doesn't exist"),
 	COMMANDS_ANY_ONLY_CONSOLE("commands.any.console-only", "&cThis command can be executed only from console!"),
+	COMMANDS_ANY_ONLY_PLAYER("commands.any.player-only", "&cThis command can be executed only by a player!"),
 	COMMANDS_ANY_NOT_A_INTEGER("commands.any.not-a-integer", "&c'<variable>' should be integer!"),
 	COMMANDS_ANY_NOT_A_FLOATING_POINT_NUMBER("commands.any.not-a-floating-point-number", "&c'<variable>' should be floating point number!"),
 	COMMANDS_ANY_WORLD_DOESNT_EXIST("commands.any.world-doesnt-exist", "&cWorld '<world>' doesn't exist"),

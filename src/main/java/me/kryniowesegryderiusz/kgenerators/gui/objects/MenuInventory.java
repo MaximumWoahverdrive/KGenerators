@@ -93,7 +93,7 @@ public class MenuInventory {
 	{
 		if (config.contains(path))
 		{
-			if (config.contains(path+".name")) this.name = Text.colorize(config.getString(path+".name"));
+			if (config.getString(path+".name") != null) this.name = Text.colorize(config.getString(path+".name"));
 			if (config.contains(path+".slots")) this.slots = (short) config.getInt(path+".slots");
 		}
 		else

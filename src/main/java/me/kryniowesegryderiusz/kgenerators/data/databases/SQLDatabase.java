@@ -131,6 +131,7 @@ public class SQLDatabase implements IDatabase {
 			conn = dataSource.getConnection();
 		} catch (Exception e) {
 			Logger.error(e);
+			return;
 		}
 		
 		PreparedStatement stat = null;
@@ -164,7 +165,7 @@ public class SQLDatabase implements IDatabase {
 				stat.close();
 
 				
-				stat = dataSource.getConnection().prepareStatement("UPDATE " + PLACED_TABLE
+				stat = conn.prepareStatement("UPDATE " + PLACED_TABLE
 						+ " SET `chunk_x` = ?, `chunk_z` = ? WHERE `world` = ? AND `x` = ? AND `y` = ? AND `z` = ?");
 				for (GeneratorLocation gl : this.getGenerators()) {
 					stat.setInt(1, gl.getChunkInfo().getX());

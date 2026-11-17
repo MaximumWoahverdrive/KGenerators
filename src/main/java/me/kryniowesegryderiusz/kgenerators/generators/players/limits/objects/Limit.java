@@ -2,6 +2,7 @@ package me.kryniowesegryderiusz.kgenerators.generators.players.limits.objects;
 
 import me.kryniowesegryderiusz.kgenerators.utils.Text;
 import java.util.ArrayList;
+import java.util.List;
 
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -55,8 +56,14 @@ public class Limit {
 		}
 
 		if (config.contains(id + ".generators")) {
-			ArrayList<String> gensIds = (ArrayList<String>) config.getList(id + ".generators");
-			for (String s : gensIds) {
+			List<?> gensIds = config.getList(id + ".generators");
+			if (gensIds == null) {
+				Logger.error("Limits file: " + id + " generators should be a list of generator ids!");
+				gensIds = new ArrayList<>();
+				error = true;
+			}
+			for (Object o : gensIds) {
+				String s = String.valueOf(o);
 				Generator g = Main.getGenerators().get(s);
 				if (g != null) {
 					this.generators.add(g);

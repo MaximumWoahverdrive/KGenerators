@@ -21,7 +21,7 @@ public class GeneratedBlock extends AbstractGeneratedObject {
 
 	@Getter private CustomBlockData customBlockData;
 	
-	@Getter private boolean physics = true;
+	@Getter private boolean physics = false;
 	@Getter private int age;
 	
 	@Override

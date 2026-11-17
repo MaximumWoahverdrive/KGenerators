@@ -21,7 +21,7 @@ public final class BlockUtils {
 	}
 
 	public static void setBlock(Location location, Material material, boolean physics) {
-		location.getBlock().setType(material, false);
+		location.getBlock().setType(material, physics);
 	}
 
 	public static void setBlock(Location location, Material material) {

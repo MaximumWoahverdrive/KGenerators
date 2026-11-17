@@ -49,6 +49,9 @@ public class UpgradeCostItems implements IUpgradeCost  {
 		if (!config.contains(generatorId+".items"))
 			return false;
 
+		if (config.getConfigurationSection(generatorId+".items") == null)
+			throw new CannnotLoadUpgradeException("items should be a section of items");
+
 		for (String s : config.getConfigurationSection(generatorId+".items").getKeys(false)) {
 			items.add(FilesUtils.loadItemStack(config, generatorId+".items", s, false));
 		}

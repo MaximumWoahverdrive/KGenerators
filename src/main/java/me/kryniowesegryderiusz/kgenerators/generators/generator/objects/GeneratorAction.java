@@ -41,7 +41,9 @@ public class GeneratorAction {
 
 		if (config.contains(path + "item")) {
 			String item = (config.getString(path + "item"));
-			if (!item.toLowerCase().equals("any"))
+			if (item == null)
+				Logger.error("Config file: " + path + "item should be an item name or ANY! Using ANY.");
+			else if (!item.equalsIgnoreCase("any"))
 
 				this.item = (ItemUtils.parseItemStack(item, "Config file", false));
 		} else {

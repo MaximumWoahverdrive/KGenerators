@@ -26,8 +26,13 @@ public class PlayerPointsHook {
 		return ppAPI.look(p.getUniqueId());
 	}
 
-	public static void takePlayerPoints(Player p, int amount) {
-		ppAPI.take(p.getUniqueId(), amount);
+	/** @return whether PlayerPoints took the points */
+	public static boolean takePlayerPoints(Player p, int amount) {
+		return ppAPI.take(p.getUniqueId(), amount);
+	}
+
+	public static void givePlayerPoints(Player p, int amount) {
+		ppAPI.give(p.getUniqueId(), amount);
 	}
 
 }

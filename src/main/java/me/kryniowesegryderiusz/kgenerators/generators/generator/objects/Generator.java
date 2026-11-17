@@ -113,15 +113,15 @@ public class Generator {
 			}
 			this.generatorItem = ItemUtils.parseItemStack(config.getString(generatorID + ".generator"),
 					"Generators file", true);
-			ArrayList<String> loreGot = new ArrayList<String>();
-			ArrayList<String> lore = new ArrayList<String>();
-			ItemMeta meta = (ItemMeta) this.generatorItem.getItemMeta();
-			Text.setName(meta, 
-					Text.colorize(config.getString(generatorID + ".name")));
-			loreGot = (ArrayList<String>) config.getList(generatorID + ".lore");
-			for (String l : loreGot) {
-				l = Text.colorize(l);
-				lore.add(l);
+			ArrayList<String> lore = new ArrayList<>();
+			ItemMeta meta = this.generatorItem.getItemMeta();
+			String name = config.getString(generatorID + ".name");
+			if (name != null)
+				Text.setName(meta, Text.colorize(name));
+			List<?> loreGot = config.getList(generatorID + ".lore");
+			if (loreGot != null) {
+				for (Object l : loreGot)
+					lore.add(Text.colorize(String.valueOf(l)));
 			}
 			Text.setLore(meta, lore);
 			lore.clear();

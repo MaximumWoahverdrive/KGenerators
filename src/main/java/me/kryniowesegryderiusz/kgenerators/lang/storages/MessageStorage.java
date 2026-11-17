@@ -41,11 +41,11 @@ public class MessageStorage {
 
 	private void checkLine(String key, String value) {
 		String keyAdjusted = "messages." + key;
-		if (config.contains(keyAdjusted)) {
+		if (config.getString(keyAdjusted) != null) {
 			lang.put(key, Text.colorize(config.getString(keyAdjusted)));
 		} else {
 			try {
-				lang.put(key, value);
+				lang.put(key, Text.colorize(value));
 				config.set(keyAdjusted, value);
 				config.saveConfig();
 			} catch (IOException ex) {
@@ -85,7 +85,7 @@ public class MessageStorage {
 	public <T extends Enum<T> & IMessage> void send(CommandSender sender, T m, boolean forceChat, boolean prefix,
 			String... replacables) {
 
-		String message = this.get(m, true, replacables);
+		String message = this.get(m, prefix, replacables);
 
 		if (message != null) {
 			String[] splittedMessage = message.split("\n");
@@ -95,9 +95,10 @@ public class MessageStorage {
 				
 				if (sender instanceof Player player) mess = PlaceholderAPIHook.translatePlaceholders(player, mess);
 
-				if (m.getKey().split("\\.")[0].contains("generators") && Main.getSettings().isActionbarMessages()
-						&& !forceChat) {
-					((Player) sender).sendActionBar(Text.component(mess));
+				// Only players have an action bar; anyone else (the console) gets it as chat
+				if (sender instanceof Player player && m.getKey().split("\\.")[0].contains("generators")
+						&& Main.getSettings().isActionbarMessages() && !forceChat) {
+					player.sendActionBar(Text.component(mess));
 				} else {
 					sender.sendMessage(Text.component(mess));
 				}

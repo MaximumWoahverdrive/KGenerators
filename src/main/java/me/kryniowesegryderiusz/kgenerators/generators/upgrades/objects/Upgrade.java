@@ -1,6 +1,7 @@
 package me.kryniowesegryderiusz.kgenerators.generators.upgrades.objects;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -118,8 +119,24 @@ public class Upgrade {
 			}
 		}
 		
+		// Payments through other plugins can still be refused, so take them first and stop if one is
+		List<PaymentUpgradeCost> paid = new ArrayList<>();
 		for (IUpgradeCost uc : upgradeCosts) {
-			uc.takeRequirements(p, amount);
+			if (uc instanceof PaymentUpgradeCost payment) {
+				if (!payment.pay(p, amount)) {
+					for (PaymentUpgradeCost done : paid)
+						done.refund(p, amount);
+					Lang.getMessageStorage().send(p, Message.UPGRADES_COST_NOT_FULFILLED,
+							"<cost>", uc.getCostFormatted(amount));
+					return false;
+				}
+				paid.add(payment);
+			}
+		}
+
+		for (IUpgradeCost uc : upgradeCosts) {
+			if (!(uc instanceof PaymentUpgradeCost))
+				uc.takeRequirements(p, amount);
 		}
 		
 		Main.getSettings().getUpgradeSound().play(p);
