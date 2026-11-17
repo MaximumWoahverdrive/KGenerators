@@ -150,8 +150,8 @@ public class UpgradesManager {
 
 			for (Class<? extends IUpgradeCost> c : upgradeCosts) {
 				try {
-					newUpgradeCosts.add(c.newInstance());
-				} catch (InstantiationException | IllegalAccessException e) {
+					newUpgradeCosts.add(c.getDeclaredConstructor().newInstance());
+				} catch (ReflectiveOperationException e) {
 					Logger.error("Upgrades: Cannot prepare upgrade cost list for " + c.getSimpleName());
 					Logger.error(e);
 				}

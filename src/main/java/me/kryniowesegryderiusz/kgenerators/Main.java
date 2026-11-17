@@ -251,7 +251,7 @@ public class Main extends JavaPlugin {
 	        metrics.addCustomChart(new DrilldownPie("complex_plugin_version", () -> {
 	            Map<String, Map<String, Integer>> map = new HashMap<>();
 	            // 7.3.0-r24.a6b5d0c -> 7.3.0 / r24.a6b5d0c; a tagged release (7.3.0) has no second part
-	            String[] sVersion = this.getDescription().getVersion().split("-", 2);
+	            String[] sVersion = this.getPluginMeta().getVersion().split("-", 2);
 	            Map<String, Integer> entry = new HashMap<>();
 	            entry.put(sVersion.length > 1 ? sVersion[1] : "release", 1);
 	            map.put(sVersion[0], entry);

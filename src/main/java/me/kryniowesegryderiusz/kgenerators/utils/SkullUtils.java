@@ -4,6 +4,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.UUID;
 
 import org.bukkit.Material;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.block.Block;
 import org.bukkit.block.Skull;
 import org.bukkit.inventory.ItemStack;
@@ -18,10 +19,10 @@ public final class SkullUtils {
 
 	private SkullUtils() {}
 	
-	public static ItemStack itemFromName(String name) {
+	public static ItemStack itemFromPlayer(OfflinePlayer player) {
 		ItemStack is = new ItemStack(org.bukkit.Material.PLAYER_HEAD);
 		SkullMeta meta = (SkullMeta) is.getItemMeta();
-		meta.setOwner(name);
+		meta.setOwningPlayer(player);
 		is.setItemMeta(meta);
 		return is;
 	}
@@ -45,6 +46,7 @@ public final class SkullUtils {
 		}
 
         Skull skull = (Skull) block.getState();
+        // Skull#setPlayerProfile is deprecated on 26.x, but what replaces it does not exist on 1.19.4
         skull.setPlayerProfile(getProfile(skullBase64));
         skull.update(true);
 		

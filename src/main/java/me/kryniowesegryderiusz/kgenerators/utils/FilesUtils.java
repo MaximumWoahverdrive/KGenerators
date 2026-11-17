@@ -188,6 +188,7 @@ public class FilesUtils {
 				}
 			}
 
+			// setCustomModelData is deprecated on 1.21.4+, but its replacement does not exist on older versions
 			if (map.containsKey("custom-model-data"))
 				meta.setCustomModelData((int) map.get("custom-model-data"));
 

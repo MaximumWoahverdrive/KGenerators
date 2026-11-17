@@ -3,6 +3,8 @@ package me.kryniowesegryderiusz.kgenerators.generators.recipes.objects;
 import me.kryniowesegryderiusz.kgenerators.utils.Text;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
@@ -65,6 +67,7 @@ public class Recipe {
 					ItemStack item = FilesUtils.loadItemStack(file, generatorID + ".ingredients", ingredientsString,
 							false);
 
+					// ExactChoice is deprecated on 26.x, but what replaces it does not exist on 1.19.4
 					shapedRecipe.setIngredient(ingredientsChar, new RecipeChoice.ExactChoice(item));
 					this.addIngredient(ingredientsChar, item);
 				}
@@ -81,7 +84,8 @@ public class Recipe {
 
 	public Recipe(Generator generator, ShapedRecipe shaped) {
 		this.generator = generator;
-		ingredients.putAll(shaped.getIngredientMap());
+		for (Map.Entry<Character, RecipeChoice> e : shaped.getChoiceMap().entrySet())
+			ingredients.put(e.getKey(), toItem(e.getValue()));
 		for (String s : shaped.getShape()) {
 			shape.add(s);
 		}
@@ -97,9 +101,19 @@ public class Recipe {
 			ingredients.put(l, new ItemStack(Material.AIR));
 		}
 
-		for (int i = 0; i < shapeless.getIngredientList().size(); i++) {
-			ingredients.put(letters[i], shapeless.getIngredientList().get(i));
+		List<RecipeChoice> choices = shapeless.getChoiceList();
+		for (int i = 0; i < choices.size(); i++) {
+			ingredients.put(letters[i], toItem(choices.get(i)));
 		}
+	}
+
+	/** An item a recipe ingredient accepts: its first exact item or material, or air if the slot is empty. */
+	private static ItemStack toItem(RecipeChoice choice) {
+		if (choice instanceof RecipeChoice.ExactChoice && !((RecipeChoice.ExactChoice) choice).getChoices().isEmpty())
+			return ((RecipeChoice.ExactChoice) choice).getChoices().get(0).clone();
+		if (choice instanceof RecipeChoice.MaterialChoice && !((RecipeChoice.MaterialChoice) choice).getChoices().isEmpty())
+			return new ItemStack(((RecipeChoice.MaterialChoice) choice).getChoices().get(0));
+		return new ItemStack(Material.AIR);
 	}
 
 	public void addIngredient(char charr, ItemStack item) {

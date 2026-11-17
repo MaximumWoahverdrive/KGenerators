@@ -46,8 +46,8 @@ public class CustomNamesStorage {
 	public String getEnchantName(Enchantment enchant) {
 		String name = "";
 
-		if (customNames.get(XEnchantment.matchXEnchantment(enchant)) != null)
-			name = customNames.get(XEnchantment.matchXEnchantment(enchant));
+		if (customNames.get(XEnchantment.of(enchant)) != null)
+			name = customNames.get(XEnchantment.of(enchant));
 		else {
 			String type = enchant.getKey().getKey();
 			type = type.toLowerCase().replaceAll("_", " ");

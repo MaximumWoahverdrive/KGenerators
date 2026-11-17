@@ -47,7 +47,7 @@ public class LimitsMenu {
 			ItemStack item = limit.getItem().clone();
 			
 			if (item.getType() == Material.PLAYER_HEAD)
-				item = SkullUtils.itemFromName(player.getName());
+				item = SkullUtils.itemFromPlayer(player);
 			
 			MenuItem chanceMenuItem = Lang.getMenuItemStorage().get(MenuItemType.LIMITS_MENU_LIMIT);
 			if (chanceMenuItem.getItemType().contains("<limit_display_item>"))

@@ -188,13 +188,13 @@ public class Logger {
 				fileString += "\n";
 
 				fileString += "Server version: " + Main.getInstance().getServer().getVersion() + "\n";
-				fileString += "Plugin version: " + Main.getInstance().getDescription().getVersion() + "\n";
+				fileString += "Plugin version: " + Main.getInstance().getPluginMeta().getVersion() + "\n";
 				fileString += "Enabled dependencies: " + Main.getDependencies().getDependencies().toString() + "\n";
 				fileString += "Registered addons: " + Addons.getAddons().toString() + "\n";
 
 				fileString += "Enabled plugins: ";
 				for (Plugin plugin : Main.getInstance().getServer().getPluginManager().getPlugins())
-					fileString += plugin.getName() + " " + plugin.getDescription().getVersion() + ", ";
+					fileString += plugin.getName() + " " + plugin.getPluginMeta().getVersion() + ", ";
 
 				fileString += "\n\n";
 

@@ -85,7 +85,7 @@ public class Upgrade {
 	}
 	
 	public void handUpgrade(Player p) {
-		ItemStack item = p.getItemInHand();
+		ItemStack item = p.getInventory().getItemInMainHand();
 		Generator generator = Main.getGenerators().get(item);
 		if (generator == null) {
 			Lang.getMessageStorage().send(p, Message.UPGRADES_NOT_A_GENERATOR);
@@ -96,7 +96,7 @@ public class Upgrade {
 		if (this.upgrade(p, item.getAmount())) {
 			ItemStack newItem = this.getNextGenerator().getGeneratorItem();
 			newItem.setAmount(item.getAmount());
-			p.setItemInHand(newItem);
+			p.getInventory().setItemInMainHand(newItem);
 			Main.getInstance().getServer().getPluginManager().callEvent(new PostGeneratorUpgradeItemEvent(this, p, newItem));
 		}
 

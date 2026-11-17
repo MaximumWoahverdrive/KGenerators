@@ -167,7 +167,7 @@ public class GeneratorsManager {
 
 		public <T extends AbstractGeneratedObject> void registerGeneratedObject(Class<T> c) {
 			try {
-				AbstractGeneratedObject ago = c.newInstance();
+				AbstractGeneratedObject ago = c.getDeclaredConstructor().newInstance();
 				this.generatedObjects.put(ago.getType(), c);
 				Logger.debugPluginLoad("GeneratedObjectsManager: Loaded " + c.getSimpleName() + " with type " + ago.getType());
 			} catch (Exception e) {
@@ -182,8 +182,8 @@ public class GeneratorsManager {
 		public AbstractGeneratedObject getNewObject(String type) {
 			if (type != null && !type.isEmpty() && this.generatedObjects.containsKey(type)) {
 				try {
-					return (AbstractGeneratedObject) this.generatedObjects.get(type).newInstance();
-				} catch (InstantiationException | IllegalAccessException e) {
+					return (AbstractGeneratedObject) this.generatedObjects.get(type).getDeclaredConstructor().newInstance();
+				} catch (ReflectiveOperationException e) {
 					Logger.error("Generators file: Cant create new GeneratedObject with type: " + type);
 					Logger.error(e);
 				}

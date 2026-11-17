@@ -25,8 +25,8 @@ public class Addon {
 	private HashMap<String, AddonCommand> commands = new HashMap<String, AddonCommand>();
 
 	public Addon(Plugin plugin) {
-		this.name = plugin.getDescription().getName();
-		this.version = plugin.getDescription().getVersion();
+		this.name = plugin.getPluginMeta().getName();
+		this.version = plugin.getPluginMeta().getVersion();
 		Addons.register(this);
 		Logger.info("Addons manager: Registered " + this.toString() + " addon");
 	}

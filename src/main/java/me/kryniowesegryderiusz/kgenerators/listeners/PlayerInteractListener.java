@@ -33,6 +33,7 @@ public class PlayerInteractListener implements Listener {
 			GeneratorLocation gLocation = Main.getPlacedGenerators().getLoaded(location);
 			if (gLocation == null)
 				gLocation = Main.getPlacedGenerators().getLoaded(upperLocation);
+			// Material#isInteractable is deprecated on 26.x, but what replaces it does not exist on 1.19.4
 			else if (e.getAction() == Action.RIGHT_CLICK_BLOCK
 					&& e.getClickedBlock().getType().isInteractable())
 				e.setUseInteractedBlock(Event.Result.DENY);
