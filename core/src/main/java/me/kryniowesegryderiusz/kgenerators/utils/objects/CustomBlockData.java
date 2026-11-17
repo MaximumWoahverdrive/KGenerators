@@ -1,6 +1,7 @@
 package me.kryniowesegryderiusz.kgenerators.utils.objects;
 
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 
 import lombok.Getter;
@@ -11,17 +12,21 @@ import com.cryptomorin.xseries.XMaterial;
 public class CustomBlockData {
 
 	@Getter XMaterial xMaterial;
+	/** What gets placed: can differ from xMaterial.get() before 1.13, e.g. CROPS for WHEAT. */
+	private final Material blockMaterial;
 	
 	public CustomBlockData(XMaterial xMaterial){
 		this.xMaterial = xMaterial;
+		Material block = ItemUtils.getBlockMaterial(xMaterial);
+		this.blockMaterial = block != null ? block : xMaterial.get();
 	}
 	
 	public void setBlock(Location location) {
-		Main.getMultiVersion().getBlocksUtils().setBlock(location, xMaterial.get());
+		Main.getMultiVersion().getBlocksUtils().setBlock(location, blockMaterial);
 	}
 	
 	public void setBlock(Location location, boolean physics) {
-		Main.getMultiVersion().getBlocksUtils().setBlock(location, xMaterial.get(), physics);
+		Main.getMultiVersion().getBlocksUtils().setBlock(location, blockMaterial, physics);
 	}
 	
 	public ItemStack getItem() {
