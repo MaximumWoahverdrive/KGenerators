@@ -17,7 +17,6 @@ import me.kryniowesegryderiusz.kgenerators.lang.Lang;
 import me.kryniowesegryderiusz.kgenerators.lang.enums.MenuInventoryType;
 import me.kryniowesegryderiusz.kgenerators.lang.enums.MenuItemType;
 import me.kryniowesegryderiusz.kgenerators.lang.enums.Message;
-import me.kryniowesegryderiusz.kgenerators.lang.interfaces.IMenuInventoryType;
 import me.kryniowesegryderiusz.kgenerators.logger.Logger;
 import me.kryniowesegryderiusz.kgenerators.utils.Sched;
 import org.bukkit.entity.Player;
@@ -140,22 +139,9 @@ public class MenusManager implements Listener {
         p.openInventory(menu);
     }
 
-    public <T extends Enum<T> & IMenuInventoryType> boolean isVieving(Player p, T enumMenuInventory) {
-        return guis.containsKey(p) && guis.get(p).getMenuInventory() == enumMenuInventory;
-    }
-
-    public <T extends Enum<T> & IMenuInventoryType> T getVieving(Player p) {
-        if (guis.containsKey(p)) return (T) guis.get(p).getMenuInventory();
-        return null;
-    }
-
-    public <T extends Enum<T> & IMenuInventoryType> Player isSomeoneVieving(
-            T enumMenuInventory, GeneratorLocation gLocation) {
-        for (Entry<Player, MenuPlayer> e : guis.entrySet()) {
-            if (e.getValue().getMenuInventory() == enumMenuInventory
-                    && e.getValue().getGLocation() == gLocation) return e.getKey();
-        }
-        return null;
+    public Enum<?> getVieving(Player p) {
+        MenuPlayer mp = guis.get(p);
+        return mp != null ? mp.getMenuInventory() : null;
     }
 
     public void closeAll() {

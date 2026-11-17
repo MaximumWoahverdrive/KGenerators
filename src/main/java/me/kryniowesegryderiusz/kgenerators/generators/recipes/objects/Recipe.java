@@ -42,7 +42,6 @@ public class Recipe {
      * @param file the recipes config
      * @param generatorID    aka path
      */
-    @SuppressWarnings("unchecked")
     public Recipe(RecipesManager recipesManager, Config file, String generatorID) {
         if (!generatorID.equals("example_generator") && !generatorID.equals("enabled")) {
             Generator generator = Main.getGenerators().get(generatorID);
@@ -57,7 +56,7 @@ public class Recipe {
                         new NamespacedKey(Main.getInstance(), "KGenerators_" + generator.getId()),
                         generator.getGeneratorItem());
 
-                ArrayList<String> shape = (ArrayList<String>) file.getList(generatorID + ".shape");
+                ArrayList<String> shape = new ArrayList<>(file.getStringList(generatorID + ".shape"));
                 shapedRecipe.shape(shape.get(0), shape.get(1), shape.get(2));
                 this.setShape(shape);
 

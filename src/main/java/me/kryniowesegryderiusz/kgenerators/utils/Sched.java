@@ -64,10 +64,6 @@ public final class Sched {
         BACKEND.global(task);
     }
 
-    public static Task globalLater(Runnable task, long delayTicks) {
-        return BACKEND.globalLater(task, Math.max(1L, delayTicks));
-    }
-
     public static Task globalTimer(Runnable task, long delayTicks, long periodTicks) {
         return BACKEND.globalTimer(task, Math.max(1L, delayTicks), Math.max(1L, periodTicks));
     }

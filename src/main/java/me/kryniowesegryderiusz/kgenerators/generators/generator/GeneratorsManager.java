@@ -12,7 +12,6 @@ import me.kryniowesegryderiusz.kgenerators.dependencies.enums.Dependency;
 import me.kryniowesegryderiusz.kgenerators.dependencies.objects.GeneratedItemsAdderBlock;
 import me.kryniowesegryderiusz.kgenerators.dependencies.objects.GeneratedNexoBlock;
 import me.kryniowesegryderiusz.kgenerators.dependencies.objects.GeneratedOraxenBlock;
-import me.kryniowesegryderiusz.kgenerators.generators.generator.enums.GeneratorType;
 import me.kryniowesegryderiusz.kgenerators.generators.generator.objects.GeneratedBlock;
 import me.kryniowesegryderiusz.kgenerators.generators.generator.objects.GeneratedEntity;
 import me.kryniowesegryderiusz.kgenerators.generators.generator.objects.GeneratedItem;
@@ -103,16 +102,6 @@ public class GeneratorsManager {
 
     public int getAmount() {
         return generators.size();
-    }
-
-    public int getAmount(GeneratorType type) {
-        int amount = 0;
-        for (Entry<String, Generator> g : getEntrySet()) {
-            if (g.getValue().getType() == type) {
-                amount++;
-            }
-        }
-        return amount;
     }
 
     public void reload() {

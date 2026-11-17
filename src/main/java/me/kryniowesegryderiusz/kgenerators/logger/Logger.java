@@ -20,6 +20,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Level;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import javax.net.ssl.HttpsURLConnection;
@@ -53,7 +54,7 @@ public class Logger {
                 else Main.getInstance().getLogger().info(message);
         } else if (object instanceof Exception exception) {
             message += exceptionStacktraceToString(exception);
-            exception.printStackTrace();
+            Main.getInstance().getLogger().log(Level.SEVERE, logType.getHeader(), exception);
         } else {
             message += object.toString();
             if (logType != LogType.DEBUG)
@@ -111,15 +112,12 @@ public class Logger {
     public static void logToFile(String message, String file) {
         try {
             File dataFolder = Main.getInstance().getDataFolder();
-            if (!dataFolder.exists()) {
-                dataFolder.mkdir();
+            if (!dataFolder.exists() && !dataFolder.mkdir()) {
+                Main.getInstance().getLogger().warning("Cannot create the plugin data folder " + dataFolder);
             }
 
             File saveTo = new File(Main.getInstance().getDataFolder(), file);
-            if (!saveTo.exists()) {
-                saveTo.createNewFile();
-            }
-
+            // FileWriter creates the file if it does not exist yet
             FileWriter fw = new FileWriter(saveTo, true);
 
             PrintWriter pw = new PrintWriter(fw);
@@ -134,7 +132,8 @@ public class Logger {
             pw.close();
 
         } catch (IOException e) {
-            e.printStackTrace();
+            // Not Logger.error: that would write to the log file again
+            Main.getInstance().getLogger().log(Level.SEVERE, "Cannot write to " + file, e);
         }
     }
 
@@ -158,56 +157,74 @@ public class Logger {
 
     public static void debugPaste(CommandSender sender) {
         Sched.async(() -> {
-            String fileString = "";
+            StringBuilder fileString = new StringBuilder();
 
             for (Map.Entry<Object, Object> e : System.getProperties().entrySet()) {
                 if (e.getKey().toString().contains("java.version"))
-                    fileString += "Java version: " + e.getValue().toString() + "\n";
+                    fileString.append("Java version: ").append(e.getValue()).append("\n");
                 else if (e.getKey().toString().contains("user.country"))
-                    fileString += "User country: " + e.getValue().toString() + "\n";
+                    fileString.append("User country: ").append(e.getValue()).append("\n");
                 else if (e.getKey().toString().contains("os.name"))
-                    fileString += "System: " + e.getValue().toString() + "\n";
+                    fileString.append("System: ").append(e.getValue()).append("\n");
             }
 
-            fileString += "\n";
+            fileString.append("\n");
 
-            fileString += "Server version: " + Main.getInstance().getServer().getVersion() + "\n";
-            fileString +=
-                    "Plugin version: " + Main.getInstance().getPluginMeta().getVersion() + "\n";
-            fileString += "Enabled dependencies: "
-                    + Main.getDependencies().getDependencies().toString() + "\n";
-            fileString += "Registered addons: " + Addons.getAddons().toString() + "\n";
+            fileString
+                    .append("Server version: ")
+                    .append(Main.getInstance().getServer().getVersion())
+                    .append("\n");
+            fileString
+                    .append("Plugin version: ")
+                    .append(Main.getInstance().getPluginMeta().getVersion())
+                    .append("\n");
+            fileString
+                    .append("Enabled dependencies: ")
+                    .append(Main.getDependencies().getDependencies())
+                    .append("\n");
+            fileString.append("Registered addons: ").append(Addons.getAddons()).append("\n");
 
-            fileString += "Enabled plugins: ";
+            fileString.append("Enabled plugins: ");
             for (Plugin plugin :
                     Main.getInstance().getServer().getPluginManager().getPlugins())
-                fileString += plugin.getName() + " " + plugin.getPluginMeta().getVersion() + ", ";
+                fileString
+                        .append(plugin.getName())
+                        .append(" ")
+                        .append(plugin.getPluginMeta().getVersion())
+                        .append(", ");
 
-            fileString += "\n\n";
+            fileString.append("\n\n");
 
-            fileString += "Loaded generators: " + Main.getPlacedGenerators().getLoadedGeneratorsAmount() + "/"
-                    + Main.getDatabases().getDb().getGeneratorsAmount() + "\n";
-            fileString += "Scheduled generators: " + Main.getSchedules().getAmount() + "\n";
+            fileString
+                    .append("Loaded generators: ")
+                    .append(Main.getPlacedGenerators().getLoadedGeneratorsAmount())
+                    .append("/")
+                    .append(Main.getDatabases().getDb().getGeneratorsAmount())
+                    .append("\n");
+            fileString
+                    .append("Scheduled generators: ")
+                    .append(Main.getSchedules().getAmount())
+                    .append("\n");
 
-            fileString += "\n\n";
+            fileString.append("\n\n");
 
             try {
-                fileString += getLinesFromFile(logFile) + "\n";
-                fileString += getLinesFromFile(configFile) + "\n";
-                fileString += getLinesFromFile(generatorsFile) + "\n";
-                fileString += getLinesFromFile(upgradesFile) + "\n";
-                fileString += getLinesFromFile(limitsFile) + "\n";
-                fileString += getLinesFromFile(recipesFile) + "\n";
+                fileString.append(getLinesFromFile(logFile)).append("\n");
+                fileString.append(getLinesFromFile(configFile)).append("\n");
+                fileString.append(getLinesFromFile(generatorsFile)).append("\n");
+                fileString.append(getLinesFromFile(upgradesFile)).append("\n");
+                fileString.append(getLinesFromFile(limitsFile)).append("\n");
+                fileString.append(getLinesFromFile(recipesFile)).append("\n");
 
                 for (Addon a : Addons.getAddons()) {
                     if (a.getConfigs() != null) {
                         for (String f : a.getConfigs()) {
-                            fileString += getLinesFromFile(f) + "\n";
+                            fileString.append(getLinesFromFile(f)).append("\n");
                         }
                     }
                 }
 
-                String url = postPaste(sender, fileString);
+                String url = postPaste(sender, fileString.toString());
                 if (url != null) {
                     Lang.getMessageStorage().send(sender, Message.COMMANDS_DEBUG_DONE, "<url>", url);
                 }
@@ -220,14 +237,14 @@ public class Logger {
     }
 
     private static String getLinesFromFile(String file) throws IOException {
-        String fileStrings = "########################################\n########## " + file
-                + " ##########\n########################################\n\n";
+        StringBuilder fileStrings = new StringBuilder("########################################\n########## " + file
+                + " ##########\n########################################\n\n");
         List<String> lines = Files.readAllLines(
                 Paths.get(Main.getInstance().getDataFolder().getPath(), file), Charset.defaultCharset());
         for (String l : lines) {
-            if (!l.contains("password")) fileStrings += l + "\n";
+            if (!l.contains("password")) fileStrings.append(l).append("\n");
         }
-        return fileStrings;
+        return fileStrings.toString();
     }
 
     /**

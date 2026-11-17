@@ -25,12 +25,14 @@ import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.Recipe;
+import org.jetbrains.annotations.NotNull;
 
 public class Commands implements CommandExecutor {
 
     @SuppressWarnings("deprecation")
     @Override
-    public boolean onCommand(final CommandSender sender, Command cmd, String label, String[] args) {
+    public boolean onCommand(
+            final @NotNull CommandSender sender, @NotNull Command cmd, @NotNull String label, String @NotNull [] args) {
         if (sender.hasPermission("kgenerators.commands") || sender instanceof ConsoleCommandSender) {
 
             if (args.length == 0) {

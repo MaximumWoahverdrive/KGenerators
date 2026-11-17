@@ -10,14 +10,8 @@ public class Config extends YamlConfiguration {
     @Getter
     File file;
 
-    File folder;
-
     public Config(File file) {
         super();
-        this.file = file;
-    }
-
-    void setFile(File file) {
         this.file = file;
     }
 

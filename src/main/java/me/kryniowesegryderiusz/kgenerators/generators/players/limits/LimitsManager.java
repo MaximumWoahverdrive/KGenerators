@@ -83,10 +83,6 @@ public class LimitsManager {
         return false;
     }
 
-    public void clear() {
-        limits.clear();
-    }
-
     public boolean hasLimits() {
         return !this.limits.isEmpty();
     }

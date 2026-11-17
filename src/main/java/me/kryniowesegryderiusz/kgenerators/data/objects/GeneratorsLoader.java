@@ -105,14 +105,16 @@ public class GeneratorsLoader {
             Logger.error("Database: An error occurred, while loading " + notLoaded + " placed generators!");
             if (!errWorlds.isEmpty()) {
                 Logger.error("Database: Cant load worlds: " + errWorlds);
-                String possible = "";
-                for (World world : Bukkit.getWorlds()) possible += world.getName() + ", ";
+                StringBuilder possible = new StringBuilder();
+                for (World world : Bukkit.getWorlds())
+                    possible.append(world.getName()).append(", ");
                 Logger.error("Database: Possible worlds: " + possible);
             }
             if (!errNotExist.isEmpty()) {
                 Logger.error("Database: There are no generators with ids: " + errNotExist);
-                String possible = "";
-                for (Entry<String, Generator> e : Main.getGenerators().getEntrySet()) possible += e.getKey() + ", ";
+                StringBuilder possible = new StringBuilder();
+                for (Entry<String, Generator> e : Main.getGenerators().getEntrySet())
+                    possible.append(e.getKey()).append(", ");
                 Logger.error("Database: Possible ids: " + possible);
             }
             if (!errNotSetId.isEmpty()) {

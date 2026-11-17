@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import lombok.Getter;
-import me.kryniowesegryderiusz.kgenerators.lang.interfaces.IMenuItemAdditionalLines;
 import me.kryniowesegryderiusz.kgenerators.logger.Logger;
 import me.kryniowesegryderiusz.kgenerators.utils.Text;
 import me.kryniowesegryderiusz.kgenerators.utils.immutable.Config;
@@ -15,8 +14,7 @@ public class StringContent implements Cloneable {
     @Getter
     ArrayList<String> lines = new ArrayList<>();
 
-    public <T extends Enum<T> & IMenuItemAdditionalLines> StringContent(
-            String path, Config config, StringContent defaultContent) {
+    public StringContent(String path, Config config, StringContent defaultContent) {
         this.load(path, config, defaultContent);
     }
 
@@ -53,20 +51,6 @@ public class StringContent implements Cloneable {
     public StringContent addLines(ArrayList<String> lines) {
         this.lines.addAll(lines);
         return this;
-    }
-
-    public StringContent addLine(String line) {
-        this.lines.add(line);
-        return this;
-    }
-
-    public String getLineWith(String key) {
-        String line = "";
-        for (String s : this.lines) {
-            if (s.contains(key)) line = s;
-        }
-
-        return line;
     }
 
     public void load(String path, Config config, StringContent defaultContent) {

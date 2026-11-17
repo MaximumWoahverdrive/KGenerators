@@ -50,7 +50,7 @@ public class MenuInventory {
         Inventory menu = Bukkit.createInventory(player, this.slots, Text.component(newName));
 
         for (Enum<?> en : Lang.getMenuItemStorage().getAllEnums()) {
-            T2 enumMenuItem = (T2) en;
+            IMenuItemType enumMenuItem = (IMenuItemType) en;
             if (enumMenuItem.getMenuInventory() == menuInventory && !exludedEnumMenuItems.contains(enumMenuItem)) {
                 MenuItem menuItem = Lang.getMenuItemStorage().get(enumMenuItem);
                 if (menuItem.isEnabled()) {
@@ -68,11 +68,6 @@ public class MenuInventory {
         }
 
         return menu;
-    }
-
-    public <T extends Enum<T> & IMenuInventoryType> Inventory getInv(
-            T menuInventory, Player player, String... replecables) {
-        return getInv(menuInventory, player, null, replecables);
     }
 
     public <T extends Enum<T> & IMenuInventoryType> void load(T en, Config config) {

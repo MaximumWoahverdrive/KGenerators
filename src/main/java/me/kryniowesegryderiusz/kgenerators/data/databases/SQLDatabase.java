@@ -9,7 +9,6 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.time.Instant;
 import java.util.ArrayList;
-import lombok.Getter;
 import me.kryniowesegryderiusz.kgenerators.Main;
 import me.kryniowesegryderiusz.kgenerators.data.enums.DatabaseType;
 import me.kryniowesegryderiusz.kgenerators.data.objects.GeneratorsLoader;
@@ -26,7 +25,6 @@ public class SQLDatabase implements IDatabase {
 
     private final DatabaseType dbType;
 
-    @Getter
     private HikariDataSource dataSource;
 
     private static final String PLACED_TABLE = "`kgen_placed`";

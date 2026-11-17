@@ -2,6 +2,7 @@ package me.kryniowesegryderiusz.kgenerators.api.events;
 
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * Event is fired after reload command.
@@ -14,7 +15,7 @@ public class PluginReloadEvent extends Event {
     private static final HandlerList HANDLERS = new HandlerList();
 
     @Override
-    public HandlerList getHandlers() {
+    public @NotNull HandlerList getHandlers() {
         return HANDLERS;
     }
 

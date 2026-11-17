@@ -6,6 +6,7 @@ import me.kryniowesegryderiusz.kgenerators.generators.locations.objects.Generato
 import org.bukkit.command.CommandSender;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * Event is fired, when generator is being removed from world.
@@ -27,7 +28,7 @@ public class PostGeneratorPlaceEvent extends Event {
     }
 
     @Override
-    public HandlerList getHandlers() {
+    public @NotNull HandlerList getHandlers() {
         return HANDLERS;
     }
 

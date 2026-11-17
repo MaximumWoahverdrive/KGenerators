@@ -120,7 +120,7 @@ public class PlacedGeneratorsManager {
         }
     }
 
-    public abstract class ManagementTask {
+    public abstract static class ManagementTask {
         public abstract void doTask();
     }
 
@@ -402,7 +402,7 @@ public class PlacedGeneratorsManager {
      * ChunkGeneratorLocations class
      */
 
-    public class ChunkGeneratorLocations {
+    public static class ChunkGeneratorLocations {
 
         @Getter
         @Setter

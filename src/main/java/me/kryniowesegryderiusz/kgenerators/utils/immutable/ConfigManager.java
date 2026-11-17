@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import me.kryniowesegryderiusz.kgenerators.Main;
+import me.kryniowesegryderiusz.kgenerators.logger.Logger;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public class ConfigManager {
@@ -15,7 +16,7 @@ public class ConfigManager {
     static {
         mainFolder = PLUGIN.getDataFolder();
         if (!mainFolder.exists()) {
-            mainFolder.mkdir();
+            if (!mainFolder.mkdir()) Logger.error("ConfigManager: Cannot create plugin folder " + mainFolder);
             mainFolder = PLUGIN.getDataFolder();
         }
     }
@@ -95,7 +96,7 @@ public class ConfigManager {
 
     public static File createNewFile(String fileName, File folder) throws IOException {
         File file = new File(folder, fileName);
-        file.createNewFile();
+        if (!file.createNewFile()) Logger.error("ConfigManager: Cannot create " + file + ", it already exists");
         return file;
     }
 
@@ -104,8 +105,8 @@ public class ConfigManager {
         File folder;
         if (directory != null && !directory.isEmpty()) {
             folder = new File(mainFolder + directory);
-            if (!folder.exists()) {
-                folder.mkdir();
+            if (!folder.exists() && !folder.mkdir()) {
+                Logger.error("ConfigManager: Cannot create folder " + folder);
             }
             return folder;
         } else {

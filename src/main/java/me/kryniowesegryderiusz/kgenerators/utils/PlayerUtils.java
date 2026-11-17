@@ -13,14 +13,6 @@ public class PlayerUtils {
      * Standard features
      */
 
-    public static void dropToInventory(Player p, ItemStack... items) {
-        dropToInventory(p, p.getLocation(), new ArrayList<>(Arrays.asList(items)));
-    }
-
-    public static void dropToInventory(Player p, ArrayList<ItemStack> items) {
-        dropToInventory(p, p.getLocation(), items);
-    }
-
     public static void dropToInventory(Player p, Location alternativeLocation, ItemStack... items) {
         dropToInventory(p, alternativeLocation, new ArrayList<>(Arrays.asList(items)));
     }

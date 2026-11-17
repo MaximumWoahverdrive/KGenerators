@@ -83,4 +83,8 @@ differences:
   - Colours and action bars: use Paper's Adventure API (`Player#sendActionBar`, components).
 - The `debug.multi-version` setting in `config.yml` no longer does anything and can be removed.
 - The unused `GeneratingType` and `UpgradeType` enums are removed.
+- A few unused internal methods were removed, among them `IDatabase.getDataSource()`,
+  `MenusManager.isVieving`/`isSomeoneVieving`, `RecipesManager.isGeneratorRecipe` and the
+  `ItemsAdderHook` block helpers. `MenusManager.getVieving` returns `Enum<?>`, and
+  `MenuItemStorage.get` takes an `IMenuItemType`.
 - `@Nullable` annotations come from `org.jetbrains.annotations` instead of `javax.annotation`.

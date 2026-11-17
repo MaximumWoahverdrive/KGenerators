@@ -94,7 +94,7 @@ public class DatabaseManager {
         });
     }
 
-    class MigratorInfo {
+    static class MigratorInfo {
 
         int amount;
         int migratedAmount = 0;

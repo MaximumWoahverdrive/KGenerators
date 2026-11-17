@@ -39,8 +39,4 @@ public class PlayersManager {
 
         return players.get(nick);
     }
-
-    public void clear() {
-        this.players.clear();
-    }
 }

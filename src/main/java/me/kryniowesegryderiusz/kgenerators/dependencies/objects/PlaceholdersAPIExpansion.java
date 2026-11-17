@@ -43,7 +43,7 @@ public class PlaceholdersAPIExpansion extends PlaceholderExpansion {
     }
 
     @Override
-    public String onRequest(OfflinePlayer player, String params) {
+    public String onRequest(OfflinePlayer player, @NotNull String params) {
 
         Player p = player.getPlayer();
 

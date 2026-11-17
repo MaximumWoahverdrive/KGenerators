@@ -34,7 +34,7 @@ public class MenuItemStorage {
         }
     }
 
-    public <T extends Enum<T> & IMenuItemType> MenuItem get(T m) {
+    public MenuItem get(IMenuItemType m) {
         return lang.get(m.getKey()).clone();
     }
 

@@ -55,20 +55,20 @@ public class UpgradeCostItems implements IUpgradeCost {
 
     @Override
     public String getCostFormatted(int amount) {
-        String cost = "";
+        StringBuilder cost = new StringBuilder();
 
         for (ItemStack is : items) {
-            if (!cost.isEmpty()) cost += Lang.getMessageStorage().get(Message.UPGRADES_COSTS_SEPARATOR, false);
-            cost += Lang.getMessageStorage()
+            if (!cost.isEmpty()) cost.append(Lang.getMessageStorage().get(Message.UPGRADES_COSTS_SEPARATOR, false));
+            cost.append(Lang.getMessageStorage()
                     .get(
                             Message.GENERATORS_ANY_OBJECT_AMOUNT,
                             false,
                             "<amount>",
                             is.getAmount() * amount + "",
                             "<object>",
-                            Lang.getCustomNamesStorage().getItemTypeName(is));
+                            Lang.getCustomNamesStorage().getItemTypeName(is)));
         }
 
-        return cost;
+        return cost.toString();
     }
 }

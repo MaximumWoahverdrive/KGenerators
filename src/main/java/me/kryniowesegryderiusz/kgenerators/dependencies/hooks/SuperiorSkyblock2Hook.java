@@ -26,10 +26,6 @@ public class SuperiorSkyblock2Hook implements Listener {
         OPEN_MENU_FLAG
     }
 
-    static IslandPrivilege KGENERATORS_PICKUP_FLAG;
-    static IslandPrivilege KGENERATORS_USE_FLAG;
-    static IslandPrivilege KGENERATORS_OPEN_MENU_FLAG;
-
     static boolean initialised = false;
 
     public static void setup() {

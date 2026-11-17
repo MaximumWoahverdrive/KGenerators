@@ -1,8 +1,6 @@
 package me.kryniowesegryderiusz.kgenerators.utils;
 
 import com.cryptomorin.xseries.XMaterial;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.EnumMap;
 import java.util.Map;
 import java.util.Optional;
@@ -16,7 +14,6 @@ import me.kryniowesegryderiusz.kgenerators.dependencies.hooks.OraxenHook;
 import me.kryniowesegryderiusz.kgenerators.logger.Logger;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.ItemMeta;
 
 public abstract class ItemUtils {
 
@@ -104,28 +101,6 @@ public abstract class ItemUtils {
             else s = split[0] + "}}";
         }
         return s;
-    }
-
-    public static ItemStack replaceLore(ItemStack item, String... replacables) {
-
-        if (!item.hasItemMeta() || !item.getItemMeta().hasLore()) return item;
-
-        ArrayList<String> reps = new ArrayList<>(Arrays.asList(replacables));
-        ArrayList<String> newLore = new ArrayList<>();
-
-        for (String s : Text.lore(item.getItemMeta())) {
-            String message = s;
-            for (int i = 0; i < reps.size(); i = i + 2) {
-                message = message.replace(reps.get(i), reps.get(i + 1));
-            }
-            newLore.add(message);
-        }
-
-        ItemMeta meta = item.getItemMeta();
-        Text.setLore(meta, newLore);
-        item.setItemMeta(meta);
-
-        return item;
     }
 
     public static ItemStack getItemStackFromMaterial(Material m) {

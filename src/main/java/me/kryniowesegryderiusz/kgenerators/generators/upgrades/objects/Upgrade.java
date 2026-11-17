@@ -150,13 +150,13 @@ public class Upgrade {
     }
 
     public String getCostsFormatted(int amount) {
-        String s = "";
+        StringBuilder s = new StringBuilder();
         for (int i = 0; i < this.upgradeCosts.size(); i++) {
-            s = s + this.upgradeCosts.get(i).getCostFormatted(amount);
+            s.append(this.upgradeCosts.get(i).getCostFormatted(amount));
             if (i != this.upgradeCosts.size() - 1)
-                s = s + Lang.getMessageStorage().get(Message.UPGRADES_COSTS_SEPARATOR, false);
+                s.append(Lang.getMessageStorage().get(Message.UPGRADES_COSTS_SEPARATOR, false));
         }
-        return s;
+        return s.toString();
     }
 
     public StringContent getCostsFormattedGUI() {

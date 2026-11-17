@@ -4,6 +4,7 @@ import lombok.Getter;
 import me.kryniowesegryderiusz.kgenerators.api.interfaces.IGeneratorLocation;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
+import org.jetbrains.annotations.NotNull;
 
 public class GeneratorLoadEvent extends Event {
 
@@ -17,7 +18,7 @@ public class GeneratorLoadEvent extends Event {
     }
 
     @Override
-    public HandlerList getHandlers() {
+    public @NotNull HandlerList getHandlers() {
         return HANDLERS;
     }
 

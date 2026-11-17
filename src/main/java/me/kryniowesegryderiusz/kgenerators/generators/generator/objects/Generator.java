@@ -87,7 +87,6 @@ public class Generator {
      * @param generatorID the generator's id, which is also its config path
      * @return true if generator loaded properly
      */
-    @SuppressWarnings("unchecked")
     public boolean loadConfiguration(GeneratorsManager generatorsManager, Config config, String generatorID) {
 
         boolean error = false;
@@ -199,7 +198,7 @@ public class Generator {
         }
 
         if (config.contains(generatorID + ".disabled-worlds")) {
-            this.getDisabledWorlds().addAll((ArrayList<String>) config.getList(generatorID + ".disabled-worlds"));
+            this.getDisabledWorlds().addAll(config.getStringList(generatorID + ".disabled-worlds"));
         }
 
         if (config.contains(generatorID + ".actions")) {

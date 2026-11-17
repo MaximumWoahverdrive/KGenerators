@@ -79,12 +79,6 @@ public class MenuItem implements Cloneable {
         if (loreLine != null) this.lore.add(Text.colorize(loreLine));
     }
 
-    public void addLore(String... lore) {
-        for (String s : lore) {
-            if (s != null) this.lore.add(Text.colorize(s));
-        }
-    }
-
     public void addLore(StringContent stringContent) {
         this.addLore(stringContent.getLines());
     }
@@ -159,7 +153,7 @@ public class MenuItem implements Cloneable {
             this.itemType = config.getString(path + ".item");
             if (config.contains(path + ".name")) setName(config.getString(path + ".name"));
             this.lore.clear();
-            if (config.getList(path + ".lore") != null) addLore((ArrayList<String>) config.getList(path + ".lore"));
+            if (config.isList(path + ".lore")) addLore(config.getStringList(path + ".lore"));
             if (config.contains(path + ".glow")) this.glow = config.getBoolean(path + ".glow");
             if (config.contains(path + ".slots")) this.slots = config.getString(path + ".slots");
             if (config.contains(path + ".enabled")) this.enabled = config.getBoolean(path + ".enabled");

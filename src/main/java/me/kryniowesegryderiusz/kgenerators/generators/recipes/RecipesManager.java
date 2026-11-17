@@ -1,7 +1,5 @@
 package me.kryniowesegryderiusz.kgenerators.generators.recipes;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
 import lombok.Getter;
@@ -13,9 +11,7 @@ import me.kryniowesegryderiusz.kgenerators.generators.recipes.objects.Recipe;
 import me.kryniowesegryderiusz.kgenerators.logger.Logger;
 import me.kryniowesegryderiusz.kgenerators.utils.immutable.Config;
 import me.kryniowesegryderiusz.kgenerators.utils.immutable.ConfigManager;
-import org.bukkit.Material;
 import org.bukkit.configuration.InvalidConfigurationException;
-import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.ShapedRecipe;
 import org.bukkit.inventory.ShapelessRecipe;
 
@@ -89,25 +85,7 @@ public class RecipesManager {
         return !this.recipes.isEmpty();
     }
 
-    public boolean isGeneratorRecipe(Generator generator, ArrayList<ItemStack> items) {
-        if (items.size() == 9 && this.get(generator) != null) {
-            ArrayList<ItemStack> recipeItems = this.get(generator).getRecipe();
-            for (int i = 0; i < 9; i++) {
-
-                ItemStack item = items.get(i);
-                if (item == null) item = new ItemStack(Material.AIR);
-                if (!item.isSimilar(recipeItems.get(i))) return false;
-            }
-            return true;
-        } else return false;
-    }
-
     public Collection<Recipe> getAll() {
         return this.recipes.values();
-    }
-
-    public boolean isGeneratorRecipe(Generator g, ItemStack[] items) {
-        ArrayList<ItemStack> recipeItemsArray = new ArrayList<>(Arrays.asList(items));
-        return this.isGeneratorRecipe(g, recipeItemsArray);
     }
 }

@@ -2,6 +2,7 @@ package me.kryniowesegryderiusz.kgenerators.generators.generator.objects;
 
 import com.cryptomorin.xseries.XEnchantment;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ThreadLocalRandom;
 import lombok.Getter;
@@ -64,7 +65,8 @@ public class CustomDrops {
             }
 
             if (customDropsConfig.containsKey("commands")) {
-                this.commands = (ArrayList<String>) customDropsConfig.get("commands");
+                this.commands = new ArrayList<>();
+                for (Object command : (List<?>) customDropsConfig.get("commands")) this.commands.add((String) command);
             }
 
             return true;

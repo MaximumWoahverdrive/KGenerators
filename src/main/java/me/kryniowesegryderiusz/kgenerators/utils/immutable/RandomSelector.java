@@ -2,17 +2,11 @@ package me.kryniowesegryderiusz.kgenerators.utils.immutable;
 
 import static com.google.common.base.Preconditions.checkArgument;
 import static java.util.Objects.requireNonNull;
-import static java.util.Spliterator.IMMUTABLE;
-import static java.util.Spliterator.ORDERED;
 
 import java.util.Collection;
-import java.util.Iterator;
 import java.util.Random;
-import java.util.Spliterators;
 import java.util.function.ToDoubleFunction;
 import java.util.function.ToIntFunction;
-import java.util.stream.Stream;
-import java.util.stream.StreamSupport;
 
 /**
  * A tool to randomly select elements from collections.
@@ -42,29 +36,6 @@ import java.util.stream.StreamSupport;
  * @param <T> the type of the elements to select from
  */
 public final class RandomSelector<T> {
-
-    /**
-     * Creates a new random selector based on a uniform distribution.
-     *
-     * <p>
-     * A copy of {@code elements} is kept, so any modification to {@code elements} will not be
-     * reflected in returned values.
-     *
-     * @param <T> the type of the elements
-     * @param elements the elements to select from; must not be null or empty
-     * @return a selector that picks each element with equal probability
-     * @throws IllegalArgumentException if {@code elements} is empty.
-     */
-    @SuppressWarnings("unchecked")
-    public static <T> RandomSelector<T> uniform(final Collection<T> elements) throws IllegalArgumentException {
-        requireNonNull(elements, "collection must not be null");
-        checkArgument(!elements.isEmpty(), "collection must not be empty");
-
-        final int size = elements.size();
-        final T[] els = elements.toArray((T[]) new Object[size]);
-
-        return new RandomSelector<>(els, r -> r.nextInt(size));
-    }
 
     /**
      * Creates a random selector among {@code elements} where the elements have a weight defined by
@@ -121,43 +92,6 @@ public final class RandomSelector<T> {
      */
     public T next(final Random random) {
         return elements[selection.applyAsInt(random)];
-    }
-
-    /**
-     * Returns a stream of elements using {@code random}. The stream must use a terminal operation to
-     * become closed and free the resources it's been using.
-     *
-     * <p>
-     * Even though this instance is thread-safe and for performance reasons, it is recommended to use
-     * a different stream per thread given that Random has performance drawbacks in multi-threaded
-     * environments.
-     *
-     * @param random the random number generator to use; must not be null
-     * @return an infinite stream of selected elements
-     */
-    public Stream<T> stream(final Random random) {
-        requireNonNull(random, "random must not be null");
-        return StreamSupport.stream(
-                Spliterators.spliteratorUnknownSize(new BaseIterator(random), IMMUTABLE | ORDERED), false);
-    }
-
-    private class BaseIterator implements Iterator<T> {
-
-        private final Random random;
-
-        BaseIterator(final Random random) {
-            this.random = random;
-        }
-
-        @Override
-        public boolean hasNext() {
-            return true;
-        }
-
-        @Override
-        public T next() {
-            return RandomSelector.this.next(this.random);
-        }
     }
 
     private static class RandomWeightedSelection implements ToIntFunction<Random> {

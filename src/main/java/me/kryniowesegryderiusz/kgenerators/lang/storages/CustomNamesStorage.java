@@ -1,11 +1,9 @@
 package me.kryniowesegryderiusz.kgenerators.lang.storages;
 
-import com.cryptomorin.xseries.XEnchantment;
 import com.cryptomorin.xseries.XMaterial;
 import java.util.HashMap;
 import me.kryniowesegryderiusz.kgenerators.utils.Text;
 import me.kryniowesegryderiusz.kgenerators.utils.immutable.Config;
-import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemStack;
 
 public class CustomNamesStorage {
@@ -36,21 +34,6 @@ public class CustomNamesStorage {
             type = type.substring(0, 1).toUpperCase() + type.substring(1);
             name = type;
         }
-        return name;
-    }
-
-    @SuppressWarnings("unlikely-arg-type")
-    public String getEnchantName(Enchantment enchant) {
-        String name;
-
-        if (customNames.get(XEnchantment.of(enchant)) != null) name = customNames.get(XEnchantment.of(enchant));
-        else {
-            String type = enchant.getKey().getKey();
-            type = type.toLowerCase().replace("_", " ");
-            type = type.substring(0, 1).toUpperCase() + type.substring(1);
-            name = type;
-        }
-
         return name;
     }
 }

@@ -25,7 +25,8 @@ public class FilesUtils {
 
     public static void mkdir(String dir) {
         File mainFolder = new File(Main.getInstance().getDataFolder() + "");
-        if (!mainFolder.exists()) mainFolder.mkdir();
+        if (!mainFolder.exists() && !mainFolder.mkdir())
+            Logger.error("FilesUtils: Cannot create plugin folder " + mainFolder);
 
         File file = new File(Main.getInstance().getDataFolder() + "/" + dir);
 

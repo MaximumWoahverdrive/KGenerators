@@ -5,6 +5,7 @@ import com.cryptomorin.xseries.XSound;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import lombok.Getter;
 import lombok.Setter;
 import me.kryniowesegryderiusz.kgenerators.Main;
@@ -120,7 +121,6 @@ public class Settings {
     @Getter
     private boolean warnings = true;
 
-    @SuppressWarnings("unchecked")
     public void reload() {
         Logger.info("Settings: Loading settings");
 
@@ -155,7 +155,7 @@ public class Settings {
 
         if (config.contains("can-generate-instead")) {
             ArrayList<XMaterial> generatingWhitelist = new ArrayList<>();
-            ArrayList<String> tempListString = (ArrayList<String>) config.getList("can-generate-instead");
+            List<String> tempListString = config.getStringList("can-generate-instead");
 
             for (String s : tempListString) {
                 XMaterial xm = ItemUtils.getXMaterial(s, "config.yml can-generate-instead", true);
@@ -190,7 +190,7 @@ public class Settings {
         if (config.contains("exp-drop-to-eq")) this.setExpDropToEq(config.getBoolean("exp-drop-to-eq"));
 
         if (config.contains("disabled-worlds"))
-            this.getDisabledWorlds().addAll((ArrayList<String>) config.getList("disabled-worlds"));
+            this.getDisabledWorlds().addAll(config.getStringList("disabled-worlds"));
 
         if (config.contains("sounds.place")) this.setPlaceSound(new Sound(config, "sounds.place"));
 

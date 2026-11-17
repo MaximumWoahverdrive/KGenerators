@@ -145,29 +145,29 @@ public class SchedulesManager {
         int delay = timeLeft(gLocation);
         if (delay <= 0) return "";
 
-        String s = "";
+        StringBuilder s = new StringBuilder();
 
         for (Entry<Integer, Message> e : times.entrySet()) {
             if (delay >= e.getKey()) {
                 int ticks = e.getKey();
                 int amount = Math.floorDiv(delay, ticks);
                 delay -= ticks * amount;
-                if (!s.isEmpty()) s += " ";
-                s += amount + Lang.getMessageStorage().get(e.getValue(), false);
+                if (!s.isEmpty()) s.append(" ");
+                s.append(amount).append(Lang.getMessageStorage().get(e.getValue(), false));
             }
         }
-        if (!s.isEmpty()) s += " ";
+        if (!s.isEmpty()) s.append(" ");
         if (removeMs || gLocation.getGenerator().isSecondMultiple()) {
             int d = (delay / 20);
-            s += String.valueOf(d);
+            s.append(d);
         } else {
             double d = ((double) delay / 20);
-            s += String.valueOf(d);
+            s.append(d);
         }
 
-        s += Lang.getMessageStorage().get(Message.COMMANDS_TIME_LEFT_FORMAT_SEC, false);
+        s.append(Lang.getMessageStorage().get(Message.COMMANDS_TIME_LEFT_FORMAT_SEC, false));
 
-        return s;
+        return s.toString();
     }
 
     public String timeLeftFormatted(GeneratorLocation generatorLocation) {

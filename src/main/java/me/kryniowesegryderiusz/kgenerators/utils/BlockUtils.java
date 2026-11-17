@@ -47,10 +47,6 @@ public final class BlockUtils {
         return ((Ageable) block.getBlockData()).getMaximumAge();
     }
 
-    public static int getAge(Block block) {
-        return ((Ageable) block.getBlockData()).getAge();
-    }
-
     public static void setAge(Block block, int age) {
         Ageable ageable = (Ageable) block.getBlockData();
         ageable.setAge(age);

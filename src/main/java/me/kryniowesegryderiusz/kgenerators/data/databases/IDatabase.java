@@ -1,6 +1,5 @@
 package me.kryniowesegryderiusz.kgenerators.data.databases;
 
-import com.zaxxer.hikari.HikariDataSource;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.Statement;
@@ -105,8 +104,6 @@ public interface IDatabase {
      * @param l block location of the generator to remove
      */
     void removeGenerator(Location l);
-
-    HikariDataSource getDataSource();
 
     /*
      * Scheduled generators table

@@ -18,7 +18,7 @@ public class MenuPlayer {
     Inventory inventory;
 
     @Getter
-    Object menuInventory;
+    Enum<?> menuInventory;
 
     /*
      * Additional info
