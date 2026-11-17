@@ -16,7 +16,7 @@ example_generator:
   #More options for item settings can be found here https://github.com/MaximumWoahverdrive/KGenerators/blob/master/docs/configuration-files/configuring-itemstack.md
   generator-item:
     material: GRASS
-    name: '&aExample #4fff47generator' #Hex colors are available only for 1.16+
+    name: '&aExample #4fff47generator' #Hex colors: #RRGGBB
     lore:
     - '&6This is example generator!'
     enchants:
