@@ -56,6 +56,8 @@ public class Main extends JavaPlugin {
 
 	@Getter private static Main instance;
 	private Metrics metrics;
+	/** Set in onLoad on a server that is not Paper-based; the plugin then disables itself. */
+	private boolean unsupportedServer;
 	
 	@Getter private static Settings settings;
 	
@@ -76,6 +78,11 @@ public class Main extends JavaPlugin {
     @Override
     public void onEnable() {
     	
+    	if (unsupportedServer) {
+    		getServer().getPluginManager().disablePlugin(this);
+    		return;
+    	}
+    	
     	dependencies.onEnableDependenciesCheck();
     	if (Bukkit.getPluginManager().getPlugin("ItemsAdder") != null && !ItemsAdder.areItemsLoaded()) {
     		Logger.warn("ItemsAdder is enabled, KGenerators loading postponed until IA is loaded");
@@ -88,11 +95,38 @@ public class Main extends JavaPlugin {
     	}
     }
 
+    /**
+     * Whether this is Paper or a fork of it (Purpur, Folia, ...), recognised by Paper's
+     * configuration class, which moved twice over the supported versions.
+     */
+    private static boolean isPaper() {
+    	String[] paperClasses = {
+    			"io.papermc.paper.configuration.GlobalConfiguration", // 1.19+
+    			"com.destroystokyo.paper.PaperConfig", // 1.9 - 1.18
+    			"org.github.paperspigot.PaperSpigotConfig", // 1.8
+    	};
+    	for (String c : paperClasses) {
+    		try {
+    			Class.forName(c);
+    			return true;
+    		} catch (ClassNotFoundException e) {
+    			// try the next one
+    		}
+    	}
+    	return false;
+    }
+    
 	@Override
     public void onLoad() {
     	instance = this;
     	
     	Logger.setup();
+    	
+    	if (!isPaper()) {
+    		unsupportedServer = true;
+    		Logger.error("KGenerators Regenerated needs Paper or a Paper fork (Purpur, Folia, ...); plain Spigot/CraftBukkit is not supported. Use KGenerators 7.3.1 on this server, or switch to Paper.");
+    		return;
+    	}
     	
 		settings = new Settings();
 		settings.reload();
@@ -103,6 +137,9 @@ public class Main extends JavaPlugin {
     
     @Override
     public void onDisable() {
+    	if (unsupportedServer)
+    		return;
+    	
     	Logger.info("Disabling KGenerators");
     	
     	instance.getServer().getPluginManager().callEvent(new PluginDisabledEvent());

@@ -12,7 +12,7 @@
 </p>
 
 <p align="center">
-  <b>Custom block generators for Spigot, Paper and Folia, from Minecraft 1.8.8 to 26.x.</br>
+  <b>Custom block generators for Paper and Folia, from Minecraft 1.8.8 to 26.x.</br>
   Skyblock, survival, prison or anywhere else: simple and multi-purpose.</b>
 </p>
 
@@ -39,8 +39,8 @@ On top of the original it adds:
 ## Download
 
 Get the latest jar from [Releases](https://github.com/MaximumWoahverdrive/KGenerators/releases)
-and put it in your server's `plugins/` folder. Java 8 or newer, whatever your Minecraft version
-needs.
+and put it in your server's `plugins/` folder. It needs Paper or a Paper fork (Purpur, Folia, ...);
+for plain Spigot use [7.3.1](https://github.com/MaximumWoahverdrive/KGenerators/releases/tag/7.3.1).
 
 ## Documentation
 

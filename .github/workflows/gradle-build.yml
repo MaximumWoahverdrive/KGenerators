@@ -118,14 +118,14 @@ jobs:
           body: |
             ## ${{ github.ref_name }}
 
-            KGenerators Regenerated: custom block generators for Spigot, Paper and Folia, continuing the archived KGenerators.
+            KGenerators Regenerated: custom block generators for Paper and Folia, continuing the archived KGenerators.
 
             **Download:** [${{ steps.jar_info.outputs.jar_name }}](${{ github.server_url }}/${{ github.repository }}/releases/download/${{ github.ref_name }}/${{ steps.jar_info.outputs.jar_name }})
             **File Size:** ${{ steps.jar_info.outputs.file_size }}
 
             ### Compatibility
             - Java ${{ needs.build.outputs.java_version }}+
-            - Minecraft ${{ needs.build.outputs.oldest_minecraft_version }} to ${{ needs.build.outputs.newest_minecraft_version }}: Spigot, Paper and their forks
+            - Minecraft ${{ needs.build.outputs.oldest_minecraft_version }} to ${{ needs.build.outputs.newest_minecraft_version }}: Paper and its forks (Purpur, ...); plain Spigot is not supported
             - Folia
 
             ---

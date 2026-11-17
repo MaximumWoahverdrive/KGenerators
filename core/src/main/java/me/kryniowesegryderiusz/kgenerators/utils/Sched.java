@@ -4,7 +4,7 @@ import org.bukkit.Location;
 import org.bukkit.entity.Entity;
 
 /**
- * Scheduling that works on every supported server, from 1.8 Spigot to Folia.
+ * Scheduling that works on every supported server, from Paper 1.8 to Folia.
  *
  * <p>On Folia, work runs on Paper's region/entity/global/async schedulers: world, block and hologram
  * work on the region owning the location, player and inventory work on the player's scheduler,
