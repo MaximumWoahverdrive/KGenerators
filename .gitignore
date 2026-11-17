@@ -22,3 +22,6 @@ dependency-reduced-pom.xml
 .gradle/
 build/
 runs/
+
+# Local development scratch (one-off test harnesses etc.)
+tmp/
