@@ -33,3 +33,7 @@ Generating Oraxen blocks requires to add another type of generated object, like 
       chance: 10.0
       material: oraxen:amethyst_ore
 ```
+
+### Compatibility
+
+Built against Oraxen 1.175.0, the newest version that runs on Java 17 (Oraxen 1.177 and later need Java 21).

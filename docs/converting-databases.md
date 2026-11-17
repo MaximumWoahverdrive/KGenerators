@@ -8,10 +8,10 @@ KGenerators allows you to store data in a various database types. In case you wa
 
 1. For safety reasons you should make backup of all your KGenerators data
 2. Stay on database you are currently using
-3. If you are converting to MySQL - configure it in config.yml
+3. If you are converting to MySQL - configure it in the `database` section of config.yml
 4. Open server console, as migrating data is only possible from there
 5. Choose your new database type (MYSQL/SQLITE)
 6. Type command `kgenerators convertdbto <database_type>`
 7. Wait a while, migration will take place, database type in config.yml should be updated automatically
 
-In case of any problem occurred try to restart server and repeat previous steps. If issue still persists create `/kgen debug` link and contact us.
+In case of any problem occurred try to restart server and repeat previous steps. If issue still persists create a `/kgen debug` link and [open an issue on GitHub](https://github.com/MaximumWoahverdrive/KGenerators/issues) with it.

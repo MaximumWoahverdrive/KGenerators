@@ -1,9 +1,12 @@
 # KGenerators Regenerated documentation
 
-These pages are mirrored from the original KGenerators documentation by Kryniowesegryderiusz
-(`kzone.gitbook.io/docs`, retrieved 2026-11-17), so that they stay available with the project.
-They describe the original plugin; KGenerators Regenerated keeps its commands, permissions and
-configuration files, so they apply unchanged unless a page says otherwise.
+These pages started as a mirror of the original KGenerators documentation by Kryniowesegryderiusz
+(`kzone.gitbook.io/docs`, retrieved 2026-11-17) and are updated for KGenerators Regenerated 8.0.0.
+KGenerators Regenerated keeps the original's commands, permissions and configuration files; what
+changed is listed in [Upgrading from 7.3.x to 8.0.0](migrating-to-8.0.md).
+
+KGenerators Regenerated 8.0.0 needs Paper 1.19.4 or newer (or a Paper fork such as Purpur or Folia)
+and Java 17 or newer.
 
 - [Upgrading from 7.3.x to 8.0.0](migrating-to-8.0.md)
 - [Commands & Permissions](commands-and-permissions.md)
@@ -17,7 +20,9 @@ configuration files, so they apply unchanged unless a page says otherwise.
 - [Addons](addons.md)
   - [SuperiorSkyblock2ForceHook](addons/superiorskyblock2forcehook.md)
 - [Supported plugins](supported-plugins.md)
-  - [Bentobox](supported-plugins/bentobox.md)
+  - [BentoBox](supported-plugins/bentobox.md)
+  - [CMI](supported-plugins/cmi.md)
+  - [DecentHolograms](supported-plugins/decentholograms.md)
   - [EcoItems](supported-plugins/ecoitems.md)
   - [FactionsUUID](supported-plugins/factionsuuid.md)
   - [FancyHolograms](supported-plugins/fancyholograms.md)
@@ -30,11 +35,13 @@ configuration files, so they apply unchanged unless a page says otherwise.
   - [MythicMobs](supported-plugins/mythicmobs.md)
   - [Nexo](supported-plugins/nexo.md)
   - [Oraxen](supported-plugins/oraxen.md)
-  - [PlotSquared](supported-plugins/plotsquared.md)
-  - [SlimeFun](supported-plugins/slimefun.md)
-  - [SuperiorSkyblock2](supported-plugins/superiorskyblock2.md)
   - [PlaceholderAPI](supported-plugins/placeholderapi.md)
   - [PlayerPoints](supported-plugins/playerpoints.md)
+  - [PlotSquared](supported-plugins/plotsquared.md)
+  - [Slimefun](supported-plugins/slimefun.md)
+  - [SuperiorSkyblock2](supported-plugins/superiorskyblock2.md)
+  - [Vault](supported-plugins/vault.md)
   - [WildStacker](supported-plugins/wildstacker.md)
+  - [WorldEdit](supported-plugins/worldedit.md)
   - [WorldGuard](supported-plugins/worldguard.md)
 - [Developers API](developers-api.md)

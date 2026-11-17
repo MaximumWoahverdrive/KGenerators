@@ -9,3 +9,7 @@
 >
 > * You cant have any generators matching barrel item in inventory, while using barrel inventory
 > * You cant place generator matching barrel item near barrel
+
+### Compatibility
+
+Built against WildStacker API 2026.3.

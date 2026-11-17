@@ -33,3 +33,7 @@ Generating IA blocks requires to add another type of generated object, like belo
       chance: 10.0
       material: ruby_ore
 ```
+
+### Compatibility
+
+Built against ItemsAdder API 3.6.1.

@@ -22,3 +22,7 @@ generates:
       chance: 10.0
       item: "mmoitems:MATERIAL#ENCHATED_IRON"
 ```
+
+### Compatibility
+
+Built against MMOItems 6.10.1 with MythicLib 1.7.1.

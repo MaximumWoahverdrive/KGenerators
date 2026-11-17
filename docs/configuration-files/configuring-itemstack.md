@@ -19,9 +19,10 @@ Using extended item configuration its possible to set:
 * Lore
 * [Item Flags](https://hub.spigotmc.org/javadocs/bukkit/org/bukkit/inventory/ItemFlag.html)
 * [Enchants](https://hub.spigotmc.org/javadocs/bukkit/org/bukkit/enchantments/Enchantment.html)
-* Custom NBT
+* Custom NBT (stored as persistent data, see the note below)
 * Custom head via `material: "customhead:<base64>"`
 * Custom Model Data
+* Items from [supported plugins](../supported-plugins.md) via `material: "<plugin>:<id>"`, for example `itemsadder:ruby`
 
 ### Simple vs extended configuration
 
@@ -60,7 +61,7 @@ Extended configuration on the other hand gives you the opportunity to freely cus
 > In KGenerators Regenerated, `custom-nbt` entries are stored as string values in the item's
 > persistent data container, not as raw NBT tags: `key:value` is stored as `kgenerators:key`,
 > and `namespace:key:value` as `namespace:key`. Keys may only use `a-z`, `0-9`, `.`, `_`, `-`
-> and `/`.
+> and `/`. See [Upgrading from 7.3.x to 8.0.0](../migrating-to-8.0.md#custom-nbt-in-item-configurations).
 
 
 #### Custom head
@@ -80,10 +81,10 @@ Or in extended item configuration
 ```yaml
 ...:
     item:
-    material: customhead:ewogICJ0aW1lc3RhbXAiIDogMTY1NDEzNTEyMjkwOSwKICAicHJvZmlsZUlkIiA6ICI5ZGY3MmQyMTIzZDc0MWRiOWZmNGFlYzljZWIxNTRlNiIsCiAgInByb2ZpbGVOYW1lIiA6ICJLcnluaW8iLAogICJzaWduYXR1cmVSZXF1aXJlZCIgOiB0cnVlLAogICJ0ZXh0dXJlcyIgOiB7CiAgICAiU0tJTiIgOiB7CiAgICAgICJ1cmwiIDogImh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvMjQxMGMwZjI4ZDBjOTFkMGZlODFjZmUzZjZlMjMwYmFhN2YxOTY5NTlhOGI4NDBkN2U2ZDdlMDNjNjYzNDBkNSIKICAgIH0KICB9Cn0=
-    name: "Head"
-    lore:
-     - "&cThats just player head"
+      material: customhead:ewogICJ0aW1lc3RhbXAiIDogMTY1NDEzNTEyMjkwOSwKICAicHJvZmlsZUlkIiA6ICI5ZGY3MmQyMTIzZDc0MWRiOWZmNGFlYzljZWIxNTRlNiIsCiAgInByb2ZpbGVOYW1lIiA6ICJLcnluaW8iLAogICJzaWduYXR1cmVSZXF1aXJlZCIgOiB0cnVlLAogICJ0ZXh0dXJlcyIgOiB7CiAgICAiU0tJTiIgOiB7CiAgICAgICJ1cmwiIDogImh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvMjQxMGMwZjI4ZDBjOTFkMGZlODFjZmUzZjZlMjMwYmFhN2YxOTY5NTlhOGI4NDBkN2U2ZDdlMDNjNjYzNDBkNSIKICAgIH0KICB9Cn0=
+      name: "Head"
+      lore:
+       - "&cThats just player head"
 ```
 
 

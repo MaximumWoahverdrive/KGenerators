@@ -87,4 +87,6 @@ differences:
   `MenusManager.isVieving`/`isSomeoneVieving`, `RecipesManager.isGeneratorRecipe` and the
   `ItemsAdderHook` block helpers. `MenusManager.getVieving` returns `Enum<?>`, and
   `MenuItemStorage.get` takes an `IMenuItemType`.
+- The API is published on JitPack: `com.github.MaximumWoahverdrive:KGenerators:<version>` (see
+  [Developers API](developers-api.md)).
 - `@Nullable` annotations come from `org.jetbrains.annotations` instead of `javax.annotation`.

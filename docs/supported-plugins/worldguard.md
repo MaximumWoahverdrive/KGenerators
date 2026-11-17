@@ -4,6 +4,8 @@
 
 * Flags that help managing KGenerators on regions
 
+Players with `kgenerators.bypass.worldguard` ignore these flags.
+
 ### Flags
 
 **Flag: kgenerators-pick-up**\
@@ -28,3 +30,7 @@ If you want to create public generators make sure, that you:
 * set *kgenerators-only-gen-break* to *allow*
 * set *kgenerators-interact* to *deny*
 * also remember to set *block-break* to *allow*
+
+### Compatibility
+
+Built against WorldGuard 7.0.8 (with WorldEdit 7.2.20). WorldGuard 7.0.9 and later dropped Minecraft 1.19.4.

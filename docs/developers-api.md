@@ -2,13 +2,48 @@
 
 ### Loading dependency
 
-> [!NOTE]
-> The artifacts below are upstream's, published on CodeMC up to version 7.3. KGenerators Regenerated
-> keeps the same API, so you can compile against them; it does not publish its own artifacts yet.
+KGenerators Regenerated is published through [JitPack](https://jitpack.io/#MaximumWoahverdrive/KGenerators),
+built from each release tag. Use it as a compile-only dependency; the server provides the plugin at
+runtime. Add `depend: [KGenerators]` or `softdepend: [KGenerators]` to your `plugin.yml`.
 
-You can add KGenerators as dependency directly via jar file or use Mave/Gradle
+#### Gradle
+
+```groovy
+repositories {
+    maven { url = 'https://jitpack.io' }
+}
+
+dependencies {
+    compileOnly 'com.github.MaximumWoahverdrive:KGenerators:VERSION'
+}
+```
 
 #### Maven
+
+```xml
+<repositories>
+  <repository>
+    <id>jitpack.io</id>
+    <url>https://jitpack.io</url>
+  </repository>
+</repositories>
+
+<dependencies>
+  <dependency>
+    <groupId>com.github.MaximumWoahverdrive</groupId>
+    <artifactId>KGenerators</artifactId>
+    <version>VERSION</version>
+    <scope>provided</scope>
+  </dependency>
+</dependencies>
+```
+
+> [!NOTE]
+> *VERSION* is a release tag, such as `8.0.0`. The API is the same as KGenerators 7.3, so addons built
+> against upstream's `me.kryniowesegryderiusz:kgenerators-core:7.3` from CodeMC keep working; see
+> the [migration notes](migrating-to-8.0.md#for-developers) for the few internal classes that changed.
+
+### Maven
 
 ```xml
 <repositories>
@@ -45,11 +80,11 @@ dependencies {
 
 ### Getting started with KGeneratorsAPI
 
-**All API methods are accessible from** [**`KGeneratorsAPI`**](../core/src/main/java/me/kryniowesegryderiusz/kgenerators/api/KGeneratorsAPI.java) **class**
+**All API methods are accessible from** [**`KGeneratorsAPI`**](../src/main/java/me/kryniowesegryderiusz/kgenerators/api/KGeneratorsAPI.java) **class**
 
-The most important Interface is [`IGeneratorLocation`](../core/src/main/java/me/kryniowesegryderiusz/kgenerators/api/interfaces/IGeneratorLocation.java), which manages Generator at specific location.
+The most important Interface is [`IGeneratorLocation`](../src/main/java/me/kryniowesegryderiusz/kgenerators/api/interfaces/IGeneratorLocation.java), which manages Generator at specific location.
 
-Related to that is method `KGeneratorsAPI#getGeneratorLocation(Location)`
+Related to that is method `KGeneratorsAPI#getLoadedGeneratorLocation(Location)`, which returns `null` if there is no loaded generator at that location
 
 #### A few examples below
 
@@ -58,7 +93,7 @@ Related to that is method `KGeneratorsAPI#getGeneratorLocation(Location)`
 <summary>Example of getting generator from location</summary>
 
 ```java
-IGeneratorLocation igl = KGeneratorsAPI.getGeneratorLocation(location);
+IGeneratorLocation igl = KGeneratorsAPI.getLoadedGeneratorLocation(location);
 ```
 
 </details>
@@ -70,7 +105,7 @@ IGeneratorLocation igl = KGeneratorsAPI.getGeneratorLocation(location);
 `location` - Bukkit Location variable
 
 ```java
-IGeneratorLocation igl = KGeneratorsAPI.getGeneratorLocation(location);
+IGeneratorLocation igl = KGeneratorsAPI.getLoadedGeneratorLocation(location);
     if (igl != null)
         igl.removeGenerator(true, null);
 ```
@@ -88,7 +123,7 @@ This can be related for example to CustomEnchants/Minions plugins
 `player` - Player related with this action
 
 ```java
-IGeneratorLocation igl = KGeneratorsAPI.getGeneratorLocation(location);
+IGeneratorLocation igl = KGeneratorsAPI.getLoadedGeneratorLocation(location);
     if (igl != null
         && igl.isPermittedToMine(player)
         && igl.isBlockPossibleToMine(location)) {
@@ -101,6 +136,14 @@ IGeneratorLocation igl = KGeneratorsAPI.getGeneratorLocation(location);
 
 ### Events
 
-* `PreBlockGenerationEvent` - cancellable event called when generator regenegenerating function is fired, returns [`IGeneratorLocation`](../core/src/main/java/me/kryniowesegryderiusz/kgenerators/api/interfaces/IGeneratorLocation.java)\`\`
-* `PostBlockGenerationEvent` - called after generator regeneration, for monitoring reasons, returns [`IGeneratorLocation`](../core/src/main/java/me/kryniowesegryderiusz/kgenerators/api/interfaces/IGeneratorLocation.java)\`\`
-* `ReloadEvent` - called, when KGenerators is being reloaded.
+All events are in the `me.kryniowesegryderiusz.kgenerators.api.events` package.
+
+* `PreGeneratorRegenerationEvent` - cancellable event called before a generator regenerates, returns [`IGeneratorLocation`](../src/main/java/me/kryniowesegryderiusz/kgenerators/api/interfaces/IGeneratorLocation.java)
+* `PostGeneratorRegenerationEvent` - called after generator regeneration, for monitoring reasons, returns [`IGeneratorLocation`](../src/main/java/me/kryniowesegryderiusz/kgenerators/api/interfaces/IGeneratorLocation.java)
+* `PostGeneratorPlaceEvent` - called after a generator is placed, returns the `IGeneratorLocation` and the `CommandSender` that placed it
+* `GeneratorRemoveEvent` - called when a generator is removed from the world, returns the `IGeneratorLocation`, the generator item, whether it is dropped, and the player (if any)
+* `PostGeneratorUpgradeGeneratorLocationEvent` - called after a placed generator is upgraded, returns the upgrade, the player and the `IGeneratorLocation`
+* `PostGeneratorUpgradeItemEvent` - called after generator items are upgraded, returns the upgrade, the player and the item
+* `GeneratorLoadEvent` / `GeneratorUnloadEvent` - called when a placed generator is loaded or unloaded with its chunk, returns the `IGeneratorLocation`
+* `PluginEnabledEvent` / `PluginDisabledEvent` - called after KGenerators has fully loaded, and when it is disabled
+* `PluginReloadEvent` - called, when KGenerators is being reloaded.

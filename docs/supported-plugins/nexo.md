@@ -33,3 +33,7 @@ Generating Nexo blocks requires to add another type of generated object, like be
       chance: 10.0
       material: ruby_ore
 ```
+
+### Compatibility
+
+Built against Nexo 1.10.0. Nexo itself supports Minecraft 1.20.4 and newer.

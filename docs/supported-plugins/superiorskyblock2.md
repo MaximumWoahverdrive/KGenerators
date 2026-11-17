@@ -9,6 +9,9 @@
 
 ### Permissions
 
+Players with `kgenerators.bypass.superiorskyblock2` ignore these permissions.
+
+
 **Permission: kgenerators\_use\_flag**\
 *Default: Member*\
 Determines if players could mine generators on this island.
@@ -142,3 +145,7 @@ It should look similar to that:
         volume: 0.2
         pitch: 0.2
 ```
+
+### Compatibility
+
+Built against SuperiorSkyblock2 API 2024.1. Newer API versions dropped Minecraft 1.20.1 - 1.20.3.

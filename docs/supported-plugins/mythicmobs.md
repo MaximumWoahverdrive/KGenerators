@@ -45,3 +45,7 @@ Example below:
       #How many living entities would stop regeneration
       max-entities: 1
 ```
+
+### Compatibility
+
+Built against MythicMobs 5.8.0. MythicMobs 5.9 and later dropped Minecraft 1.19.4.
