@@ -87,7 +87,7 @@ public class Main extends JavaPlugin {
     		Logger.warn("ItemsAdder is enabled, KGenerators loading postponed until IA is loaded");
     		this.getServer().getPluginManager().registerEvents(new ItemsAdderHook().new ItemsAdderListeners(), this);
     	} else {
-    		Logger.warn("KGenerators will be loaded in post init check, check for more informations further in this log");
+    		Logger.debugPluginLoad("KGenerators will finish loading once the server has started");
     		Sched.global(() -> {
     			Main.getInstance().enable();
     		});
@@ -160,7 +160,6 @@ public class Main extends JavaPlugin {
     	Logger.info("Reload: KGenerators reload started");
     	settings.reload();
     	generators.reload();
-    	//players.clear();
     	upgrades.reload();
     	limits = new LimitsManager();
     	Lang.loadFromFiles();

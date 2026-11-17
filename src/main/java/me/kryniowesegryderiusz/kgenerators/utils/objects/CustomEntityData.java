@@ -80,7 +80,6 @@ public class CustomEntityData {
 		
 		if (configMap.containsKey(keyName)) {
 			if (configMap.get(keyName) instanceof String) {
-				//return new CustomEntityData(EntityUtils.getEntityType((String) configMap.get(keyName), "CustomEntityData"));
 				return new CustomEntityData((String) configMap.get(keyName));
 			} else {
 				Map<?, ?> map;

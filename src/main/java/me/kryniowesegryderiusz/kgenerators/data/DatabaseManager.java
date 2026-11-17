@@ -55,9 +55,6 @@ public class DatabaseManager {
 			public void run() {
 				Logger.info("DatabasesHandler: Converting database from " + Main.getSettings().getDbType().name() + " to " + toDbType.name() + ". IT COULD TAKE A WHILE!");
 
-				//db.getDataSource().setConnectionTimeout(5*60*1000);
-				//db.getDataSource().setLeakDetectionThreshold(5*60*1000);
-				//db.getDataSource().setMaximumPoolSize(500);
 				
 				IDatabase newDb = getDatabase(toDbType);
 

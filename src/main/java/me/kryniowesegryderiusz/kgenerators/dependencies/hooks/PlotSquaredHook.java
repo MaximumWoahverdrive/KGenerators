@@ -36,8 +36,6 @@ public class PlotSquaredHook {
         
         Location p2loc = Location.at(l.getWorld().getName(), l.getBlockX(), l.getBlockY(), l.getBlockZ());
         
-        //if (!pl.isPlotArea())
-        //	return false;
         
         if (p2loc.isPlotRoad() || p2loc.isUnownedPlotArea())
         	return false;

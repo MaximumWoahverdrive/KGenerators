@@ -62,4 +62,5 @@ Colour codes work as before (`&` codes and `#RRGGBB` hex colours). Two differenc
   - WorldGuard flags are handled by `dependencies.hooks.WorldGuardHook`.
   - Colours and action bars: use Paper's Adventure API (`Player#sendActionBar`, components).
 - The `debug.multi-version` setting in `config.yml` no longer does anything and can be removed.
+- The unused `GeneratingType` and `UpgradeType` enums are removed.
 - `@Nullable` annotations come from `org.jetbrains.annotations` instead of `javax.annotation`.
