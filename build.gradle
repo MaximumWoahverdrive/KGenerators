@@ -1,0 +1,98 @@
+plugins {
+    id 'java'
+    id 'idea'
+    id 'xyz.jpenilla.run-paper' version '3.1.0'
+    id 'com.gradleup.shadow' version '9.6.1'
+    id 'com.palantir.git-version' version '5.2.0'
+}
+
+def baseVersion = '7.3'
+def runPaperVersion = '26.3'
+def targetJavaVersion = 21
+def gitDetails = versionDetails()
+def isClean = providers.exec { commandLine 'git', 'status', '--porcelain' }.standardOutput.asText.get().trim().isEmpty()
+// Format: 7.3-<hash>[+dirty]
+version = "${baseVersion}-${gitDetails.gitHash.take(7)}${isClean ? '' : '+dirty'}"
+
+idea {
+    module {
+        // Dev server data, not project sources.
+        excludeDirs += files('run')
+    }
+}
+
+allprojects {
+    apply plugin: 'java'
+    group = 'me.kryniowesegryderiusz'
+    version = rootProject.version
+
+    repositories {
+        mavenCentral()
+        maven { url = 'https://repo.papermc.io/repository/maven-public/' }
+        maven { url = 'https://hub.spigotmc.org/nexus/content/repositories/snapshots/' }
+        maven { url = 'https://maven.enginehub.org/repo/' }
+        // BentoBox's POMs declare themselves as -SNAPSHOT versions, which Gradle rejects; take the jar alone.
+        exclusiveContent {
+            forRepository {
+                maven {
+                    url = 'https://repo.codemc.io/repository/maven-public/'
+                    metadataSources { artifact() }
+                }
+            }
+            filter { includeGroup 'world.bentobox' }
+        }
+        maven { url = 'https://jitpack.io' }
+        maven { url = 'https://repo.codemc.io/repository/maven-public/' }
+        maven { url = 'https://repo.bg-software.com/repository/api/' }
+        maven { url = 'https://repo.extendedclip.com/content/repositories/placeholderapi/' }
+        maven { url = 'https://mvn.lumine.io/repository/maven-public/' }
+        maven { url = 'https://ci.ender.zone/plugin/repository/everything/' }
+        // 4.0.9.1 has been removed from Iridium's nexus; 4.1.5 is the only version still published.
+        maven { url = 'https://nexus.iridiumdevelopment.net/repository/maven-releases/' }
+        maven { url = 'https://repo.nexomc.com/releases' }
+        maven { url = 'https://repo.rosewooddev.io/repository/public/' }
+        // repo.fancyplugins.de no longer resolves; FancyHolograms moved to FancyInnovations.
+        maven { url = 'https://repo.fancyinnovations.com/releases' }
+        maven { url = 'https://nexus.phoenixdevt.fr/repository/maven-public/' }
+    }
+
+    java {
+        // Lombok and the shaded libraries are built for Java 21; foojay downloads it if missing.
+        toolchain.languageVersion = JavaLanguageVersion.of(targetJavaVersion)
+    }
+
+    tasks.withType(JavaCompile).configureEach {
+        options.encoding = 'UTF-8'
+        options.release.set(targetJavaVersion)
+    }
+}
+
+// The plugin jar: core and every version adapter, plus core's shaded libraries.
+dependencies {
+    implementation project(':core')
+    ['v1_8', 'v1_9', 'v1_12', 'v1_13', 'v1_16', 'v1_21'].each { implementation project(":$it") }
+}
+
+def shaded = 'me.kryniowesegryderiusz.kgenerators.dependencies.shaded'
+tasks.shadowJar {
+    archiveBaseName = 'KGenerators'
+    archiveClassifier = ''
+    relocate 'de.tr7zw.changeme.nbtapi', "${shaded}.nbtapi"
+    relocate 'com.cryptomorin.xseries', "${shaded}.xseries"
+    relocate 'com.zaxxer.hikari', "${shaded}.hikaricp"
+}
+tasks.jar { enabled = false }
+tasks.assemble { dependsOn tasks.shadowJar }
+
+tasks.runServer {
+    minecraftVersion(runPaperVersion)
+    // Minecraft 26 needs Java 25, newer than the Java 21 the plugin is built for.
+    javaLauncher = javaToolchains.launcherFor { languageVersion = JavaLanguageVersion.of(25) }
+}
+
+// Adds a runFolia task, for testing on Folia
+runPaper.folia.registerTask()
+tasks.named('runFolia') {
+    minecraftVersion(runPaperVersion)
+    javaLauncher = javaToolchains.launcherFor { languageVersion = JavaLanguageVersion.of(25) }
+}

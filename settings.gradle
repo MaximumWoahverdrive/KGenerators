@@ -1,0 +1,8 @@
+plugins {
+    // Allows Gradle to auto-download the JDKs declared by the java toolchains
+    id 'org.gradle.toolchains.foojay-resolver-convention' version '1.0.0'
+}
+
+rootProject.name = 'KGenerators'
+
+include 'core', 'v1_8', 'v1_9', 'v1_12', 'v1_13', 'v1_16', 'v1_21'

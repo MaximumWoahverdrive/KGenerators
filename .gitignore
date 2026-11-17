@@ -17,3 +17,8 @@ bin/
 *.tar.gz
 *.rar
 dependency-reduced-pom.xml
+
+# Gradle
+.gradle/
+build/
+run/
