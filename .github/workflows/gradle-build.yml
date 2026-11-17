@@ -1,0 +1,99 @@
+# Builds the plugin jar on every push; on a tag, also publishes it as a GitHub release.
+
+name: Gradle Package
+
+on:
+  push:
+  release:
+    types: [ created ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    outputs:
+      java_version: ${{ steps.compatibility.outputs.java_version }}
+      paper_version: ${{ steps.compatibility.outputs.paper_version }}
+
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          fetch-depth: 1
+
+      - name: Set up JDK 21
+        uses: actions/setup-java@v6
+        with:
+          java-version: '21'
+          distribution: 'temurin'
+
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@v6
+
+      - name: Build with Gradle
+        run: gradle shadowJar
+
+      - name: Get release compatibility
+        id: compatibility
+        if: github.ref_type == 'tag'
+        run: gradle -q printReleaseMetadata >> "$GITHUB_OUTPUT"
+
+      - name: Upload build artifacts
+        uses: actions/upload-artifact@v7
+        with:
+          name: plugin-jar
+          path: build/libs/*.jar
+          if-no-files-found: error
+          retention-days: 30
+
+  # Only for tags: publishes the jar the build job made
+  release:
+    needs: [ build ]
+    if: github.ref_type == 'tag'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - name: Download build artifacts
+        uses: actions/download-artifact@v8
+        with:
+          name: plugin-jar
+          path: dist
+
+      - name: Get JAR info for release
+        id: jar_info
+        run: |
+          JAR_FILE=$(find dist -name "*.jar" | head -1)
+          JAR_NAME=$(basename "$JAR_FILE")
+          FILE_SIZE=$(stat -c%s "$JAR_FILE" | numfmt --to=iec)
+          {
+            echo "jar_file=$JAR_FILE"
+            echo "jar_name=$JAR_NAME"
+            echo "file_size=$FILE_SIZE"
+          } >> "$GITHUB_OUTPUT"
+
+      - name: Create Release
+        uses: softprops/action-gh-release@v3
+        with:
+          name: "${{ github.ref_name }}"
+          body: |
+            ## ${{ github.ref_name }}
+
+            Custom block generators, with Folia support and Minecraft 26.x compatibility.
+
+            **Download:** [${{ steps.jar_info.outputs.jar_name }}](${{ github.server_url }}/${{ github.repository }}/releases/download/${{ github.ref_name }}/${{ steps.jar_info.outputs.jar_name }})
+            **File Size:** ${{ steps.jar_info.outputs.file_size }}
+
+            ### Compatibility
+            - Java ${{ needs.build.outputs.java_version }}+
+            - Paper ${{ needs.build.outputs.paper_version }}+, including Minecraft 26.x
+            - Folia for the same Minecraft versions
+
+            ---
+
+            Built automatically from commit ${{ github.sha }}
+          files: ${{ steps.jar_info.outputs.jar_file }}
+          draft: false
+          prerelease: false
+          generate_release_notes: true

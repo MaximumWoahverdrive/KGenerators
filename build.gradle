@@ -8,6 +8,8 @@ plugins {
 
 def baseVersion = '7.3'
 def runPaperVersion = '26.3'
+// The oldest server API the plugin is compiled against (see core/build.gradle)
+def apiVersion = '1.21.5'
 def targetJavaVersion = 21
 def gitDetails = versionDetails()
 def isClean = providers.exec { commandLine 'git', 'status', '--porcelain' }.standardOutput.asText.get().trim().isEmpty()
@@ -95,4 +97,11 @@ runPaper.folia.registerTask()
 tasks.named('runFolia') {
     minecraftVersion(runPaperVersion)
     javaLauncher = javaToolchains.launcherFor { languageVersion = JavaLanguageVersion.of(25) }
+}
+
+tasks.register('printReleaseMetadata') {
+    doLast {
+        println("java_version=${targetJavaVersion}")
+        println("paper_version=${apiVersion}")
+    }
 }
