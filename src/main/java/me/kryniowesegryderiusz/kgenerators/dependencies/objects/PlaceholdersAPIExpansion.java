@@ -97,8 +97,9 @@ public class PlaceholdersAPIExpansion extends PlaceholderExpansion {
                         return pl.getLimit(limit) + "";
                     }
                     case "left" -> {
-                        PlayerLimits pl = new PlayerLimits(p);
-                        return (pl.getLimit(limit) - limit.getPlacedGenerators(gp)) + "";
+                        int playerLimit = new PlayerLimits(p).getLimit(limit);
+                        if (playerLimit == -1) return "-1";
+                        return Math.max(0, playerLimit - limit.getPlacedGenerators(gp)) + "";
                     }
                     default -> {
                         return "Not valid KGen placeholder";

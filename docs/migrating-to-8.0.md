@@ -54,7 +54,18 @@ container can read them under the new keys.
 - **`/kgen menu <player> upgrade <generator>`** opens the upgrade menu; it always answered that the menu
   doesn't exist.
 - **`/kgen spawn`** without an owner, or for an offline owner, no longer fails with an error when
-  limits are enabled; such generators are not subject to place limits.
+  limits are enabled; such generators are not subject to place limits. Spawned generators now count
+  towards their owner's limits. Spawning at coordinates checks its arguments and the world, and works
+  from the console on Folia.
+- **Limits:**
+  - `kgenerators.placelimit.<limit_id>.<number>` permissions now work for limit ids with capital
+    letters, and only match their own limit: with limits `stone` and `stone_generators`,
+    `kgenerators.placelimit.stone_generators.40` no longer also raises `stone` to 40. Permissions set to `false` no longer count, and on a group without
+    `place-limit` such a permission no longer turns the player's unlimited group into a limited one.
+  - Upgrading a placed generator is refused if it would take the owner over a place limit.
+  - The "can't place more" message shows the player's own limit instead of the group's default.
+  - `%kgenerators_limits_left_<limit_id>%` is `-1` for unlimited groups and never negative.
+- **`/kgen timeleft`** names the right permission (`kgenerators.timeleft`) when it's missing.
 - **Commands that only players can use** now tell the console so (new message
   `commands.any.player-only`, added to existing language files automatically) instead of printing to
   the server log.

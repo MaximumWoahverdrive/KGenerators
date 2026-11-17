@@ -75,6 +75,8 @@ public class Upgrade {
             return;
         }
 
+        if (!gl.getOwner().canUpgrade(gl, getNextGenerator(), p)) return;
+
         if (this.upgrade(p, 1)) {
             gl.changeTo(getNextGenerator());
             Main.getInstance()

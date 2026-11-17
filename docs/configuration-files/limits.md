@@ -97,7 +97,7 @@ The default `limits.yml` ships with these groups. You can edit or remove them an
 
 ```yaml
 #This limits players to have max 50 generators at all
-#It affeccts all generators (because they are not listed)
+#It affects all generators (because they are not listed)
 global_limits:
   name: "Global limit"
   item: PLAYER_HEAD
@@ -124,10 +124,11 @@ stone_generator_level_1_limits:
 
 #This limits ores generators to be used only by owners
 ore_generators_owner_limits:
-  name: "Stone generator level 1 limit"
-  item: generator:stone_generator_level_1
+  name: "Ores generators owner limit"
+  item: generator:ores_generator
   generators:
-  - stone_generator_level_1
+  - ores_generator
+  - ores_from_stone_generator
   only-owner-pickup: true
   only-owner-use: true
 ```
@@ -148,9 +149,13 @@ ore_generators_owner_limits:
 * Several groups can contain the same generator; the generator can only be placed if every one of them
   allows it. In the preconfigured file, placing `stone_generator_level_1` is checked against
   `global_limits` (50), `stone_generators_limits` (20) and `stone_generator_level_1_limits` (10).
-* Place limits are only checked when a generator is placed. Upgrading a placed generator moves it from
-  the old generator's count to the new one's without checking the limit, and lowering a limit doesn't
-  remove generators that are already placed.
+* `/kgenerators spawn` checks the owner's limits only when the owner is online; generators spawned
+  without an owner or for an offline owner aren't limited, but still count for their owner.
+* Upgrading a placed generator moves it from the old generator's count to the new one's. The upgrade is
+  refused if that would take the owner over the limit of a group that contains the new generator but
+  not the old one. Upgrading generator items in the hand isn't limited; the limit applies when they are
+  placed.
+* Lowering a limit doesn't remove generators that are already placed.
 
 #### Only owner pick up and only owner use
 
@@ -182,9 +187,9 @@ Notes on the `placelimit` permissions:
 
 * They have to be given to the player (or their group) directly. Operator status and wildcard
   permissions such as `kgenerators.*` or `kgenerators.placelimit.*` don't grant them.
-* Since "no limit" is stored as `-1`, a `kgenerators.placelimit.<limit_id>.<number>` permission on a
-  group without `place-limit` gives that player a limit of `<number>`. Use `.bypass` to keep a player
-  unlimited.
+* A `kgenerators.placelimit.<limit_id>.<number>` permission can only raise a limit; on a group without
+  `place-limit` it has no effect. A permission set to `false` doesn't count.
+* The limit id in the permission is not case-sensitive.
 
 ### Limits menu
 
@@ -218,4 +223,4 @@ player's limits:
 
 * `%kgenerators_limits_limit_<limit_id>%` - the player's place limit (`-1` means no limit)
 * `%kgenerators_limits_placed_<limit_id>%` - generators of the group the player has placed
-* `%kgenerators_limits_left_<limit_id>%` - how many more the player can place
+* `%kgenerators_limits_left_<limit_id>%` - how many more the player can place (`-1` means no limit)

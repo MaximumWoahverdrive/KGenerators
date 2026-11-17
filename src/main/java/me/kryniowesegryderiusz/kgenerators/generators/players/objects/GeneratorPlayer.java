@@ -12,6 +12,7 @@ import me.kryniowesegryderiusz.kgenerators.lang.Lang;
 import me.kryniowesegryderiusz.kgenerators.lang.enums.Message;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
+import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 public class GeneratorPlayer {
@@ -126,6 +127,28 @@ public class GeneratorPlayer {
         PlayerLimits pl = new PlayerLimits(player);
         for (Limit limit : Main.getLimits().getValues()) {
             if (!limit.fulfillsPlaceLimit(this, gLoc, pl)) return false;
+        }
+        return true;
+    }
+
+    /**
+     * Whether upgrading a placed generator of this owner to {@code next} stays within the place limits.
+     * Like {@link #canPlace}, limits only apply to an online owner.
+     *
+     * @param gLoc generator location being upgraded
+     * @param next generator it is upgraded to
+     * @param notify who to tell if a limit is reached
+     * @return true if no configured limit prevents the upgrade
+     */
+    public boolean canUpgrade(GeneratorLocation gLoc, Generator next, CommandSender notify) {
+        if (!Main.getLimits().hasLimits() || isNone) return true;
+
+        Player player = this.getOnlinePlayer();
+        if (player == null) return true;
+
+        PlayerLimits pl = new PlayerLimits(player);
+        for (Limit limit : Main.getLimits().getValues()) {
+            if (!limit.fulfillsUpgradeLimit(this, gLoc.getGenerator(), next, pl, notify)) return false;
         }
         return true;
     }

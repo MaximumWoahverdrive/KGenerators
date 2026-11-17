@@ -2,6 +2,7 @@ package me.kryniowesegryderiusz.kgenerators.generators.players.limits.objects;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map.Entry;
 import me.kryniowesegryderiusz.kgenerators.Main;
 import org.bukkit.entity.Player;
@@ -25,28 +26,30 @@ public class PlayerLimits {
 
         ArrayList<Limit> bypassedLimits = new ArrayList<>();
 
-        /* Checking limits */
+        /* Checking limits: kgenerators.placelimit.<limit id>.<amount> or .bypass */
         player.recalculatePermissions();
 
         for (PermissionAttachmentInfo pai : player.getEffectivePermissions()) {
-            String perm = pai.getPermission();
+            if (!pai.getValue()) continue;
+            String perm = pai.getPermission().toLowerCase(Locale.ROOT);
 
             for (Limit limit : Main.getLimits().getValues()) {
-                if (perm.contains("kgenerators.placelimit." + limit.getId())) {
-                    String[] sPerm = perm.split("\\.");
-                    int amount;
-                    try {
-                        amount = Integer.parseInt(sPerm[3]);
-                        if (amount > this.adjustedPlaceLimits.get(limit)) {
-                            this.adjustedPlaceLimits.put(limit, amount);
-                        }
-                    } catch (NumberFormatException ignored) {
-                        // Ignore invalid permission format
-                    }
+                String prefix = "kgenerators.placelimit." + limit.getId().toLowerCase(Locale.ROOT) + ".";
+                if (!perm.startsWith(prefix)) continue;
+                String suffix = perm.substring(prefix.length());
+
+                if (suffix.equals("bypass")) {
+                    bypassedLimits.add(limit);
+                    continue;
                 }
 
-                if (perm.contains("kgenerators.placelimit." + limit.getId() + ".bypass")) {
-                    bypassedLimits.add(limit);
+                int current = this.adjustedPlaceLimits.get(limit);
+                if (current == -1) continue; // already unlimited
+                try {
+                    int amount = Integer.parseInt(suffix);
+                    if (amount > current) this.adjustedPlaceLimits.put(limit, amount);
+                } catch (NumberFormatException ignored) {
+                    // Not a limit permission, e.g. a longer limit id sharing this prefix
                 }
             }
         }

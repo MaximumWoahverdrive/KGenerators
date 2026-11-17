@@ -3,6 +3,7 @@ package me.kryniowesegryderiusz.kgenerators;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map.Entry;
+import java.util.concurrent.atomic.AtomicInteger;
 import me.kryniowesegryderiusz.kgenerators.addons.Addons;
 import me.kryniowesegryderiusz.kgenerators.addons.objects.Addon;
 import me.kryniowesegryderiusz.kgenerators.data.enums.DatabaseType;
@@ -15,6 +16,7 @@ import me.kryniowesegryderiusz.kgenerators.generators.locations.objects.Generato
 import me.kryniowesegryderiusz.kgenerators.lang.Lang;
 import me.kryniowesegryderiusz.kgenerators.lang.enums.Message;
 import me.kryniowesegryderiusz.kgenerators.logger.Logger;
+import me.kryniowesegryderiusz.kgenerators.utils.Sched;
 import me.kryniowesegryderiusz.kgenerators.utils.Text;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -281,7 +283,7 @@ public class Commands implements CommandExecutor {
                                             sender,
                                             Message.COMMANDS_TIME_LEFT_NO_PERMISSION,
                                             "<permission>",
-                                            "kgenerators.timeLeft");
+                                            "kgenerators.timeleft");
                         }
                     } else {
                         Lang.getMessageStorage().send(sender, Message.COMMANDS_ANY_ONLY_PLAYER);
@@ -389,35 +391,50 @@ public class Commands implements CommandExecutor {
 
                         ArrayList<Location> playerSelection = WorldEditHook.getPlayerSelection(selectingPlayer);
 
-                        int amount = 0;
-
-                        if (playerSelection != null) {
-                            String owner = null;
-                            if (args.length >= 4) {
-                                owner = args[3];
-                            }
-                            for (Location l : playerSelection) {
-                                GeneratorLocation gl = new GeneratorLocation(
-                                        -1,
-                                        Main.getGenerators().get(args[2]),
-                                        l,
-                                        Main.getPlacedGenerators().new ChunkInfo(l.getChunk()),
-                                        Main.getPlayers().getPlayer(owner),
-                                        null);
-                                if (gl.placeGenerator(sender, true)) amount++;
-                            }
+                        if (playerSelection == null || playerSelection.isEmpty()) {
+                            Lang.getMessageStorage()
+                                    .send(sender, Message.COMMANDS_SPAWN_DONE_WORLDEDIT, "<amount>", "0");
+                            return false;
                         }
 
-                        Lang.getMessageStorage()
-                                .send(sender, Message.COMMANDS_SPAWN_DONE_WORLDEDIT, "<amount>", amount + "");
+                        Generator weGenerator = Main.getGenerators().get(args[2]);
+                        String weOwner = args.length >= 4 ? args[3] : null;
+                        // Each block is placed on the thread owning its region (Folia); report once all are done
+                        AtomicInteger placed = new AtomicInteger();
+                        AtomicInteger remaining = new AtomicInteger(playerSelection.size());
+                        for (Location l : playerSelection) {
+                            Sched.atNow(l, () -> {
+                                GeneratorLocation gl = new GeneratorLocation(
+                                        -1,
+                                        weGenerator,
+                                        l,
+                                        Main.getPlacedGenerators().new ChunkInfo(l.getChunk()),
+                                        Main.getPlayers().getPlayer(weOwner),
+                                        null);
+                                if (gl.placeGenerator(sender, true)) placed.incrementAndGet();
+                                if (remaining.decrementAndGet() == 0)
+                                    Lang.getMessageStorage()
+                                            .send(
+                                                    sender,
+                                                    Message.COMMANDS_SPAWN_DONE_WORLDEDIT,
+                                                    "<amount>",
+                                                    placed.get() + "");
+                            });
+                        }
 
                         return false;
 
                     } else {
 
+                        if (args.length < 6) {
+                            Lang.getMessageStorage().send(sender, Message.COMMANDS_SPAWN_USAGE_COORDINATES);
+                            return false;
+                        }
+
                         if (Bukkit.getWorld(args[1]) == null) {
                             Lang.getMessageStorage()
                                     .send(sender, Message.COMMANDS_ANY_WORLD_DOESNT_EXIST, "<world>", args[1]);
+                            return false;
                         }
 
                         try {
@@ -433,22 +450,25 @@ public class Commands implements CommandExecutor {
 
                                 Location l = Main.getPlacedGenerators()
                                         .stringToLocation(args[1] + "," + args[2] + "," + args[3] + "," + args[4]);
+                                String coordOwner = owner;
 
-                                GeneratorLocation gl = new GeneratorLocation(
-                                        -1,
-                                        g,
-                                        l,
-                                        Main.getPlacedGenerators().new ChunkInfo(l.getChunk()),
-                                        Main.getPlayers().getPlayer(owner),
-                                        null);
-                                gl.placeGenerator(sender, true);
-
-                                Lang.getMessageStorage()
-                                        .send(
-                                                sender,
-                                                Message.COMMANDS_SPAWN_DONE_COORDINATES,
-                                                "<location_info>",
-                                                gl.toString());
+                                // Placed on the thread owning the location's region (Folia)
+                                Sched.atNow(l, () -> {
+                                    GeneratorLocation gl = new GeneratorLocation(
+                                            -1,
+                                            g,
+                                            l,
+                                            Main.getPlacedGenerators().new ChunkInfo(l.getChunk()),
+                                            Main.getPlayers().getPlayer(coordOwner),
+                                            null);
+                                    if (gl.placeGenerator(sender, true))
+                                        Lang.getMessageStorage()
+                                                .send(
+                                                        sender,
+                                                        Message.COMMANDS_SPAWN_DONE_COORDINATES,
+                                                        "<location_info>",
+                                                        gl.toString());
+                                });
 
                             } else Lang.getMessageStorage().send(sender, Message.COMMANDS_ANY_GENERATOR_DOESNT_EXIST);
 

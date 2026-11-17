@@ -14,6 +14,7 @@ import me.kryniowesegryderiusz.kgenerators.logger.Logger;
 import me.kryniowesegryderiusz.kgenerators.utils.ItemUtils;
 import me.kryniowesegryderiusz.kgenerators.utils.Text;
 import me.kryniowesegryderiusz.kgenerators.utils.immutable.Config;
+import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
@@ -102,21 +103,41 @@ public class Limit {
 
     public boolean fulfillsPlaceLimit(GeneratorPlayer gp, GeneratorLocation gloc, PlayerLimits pLimits) {
         if (!generators.contains(gloc.getGenerator())) return true;
+        return hasRoomFor(gp, gloc.getGenerator(), pLimits, gp.getOnlinePlayer());
+    }
 
-        if (pLimits.getLimit(this) == -1 || getPlacedGenerators(gp) < pLimits.getLimit(this)) return true;
-        else {
-            Lang.getMessageStorage()
-                    .send(
-                            gp.getOnlinePlayer(),
-                            Message.GENERATORS_LIMITS_CANT_MORE,
-                            "<number>",
-                            String.valueOf(this.placeLimit),
-                            "<generator>",
-                            Text.name(gloc.getGenerator().getGeneratorItem().getItemMeta()),
-                            "<limit>",
-                            this.name);
-            return false;
-        }
+    /**
+     * Checks whether changing a placed generator from {@code from} to {@code to} keeps the owner within
+     * this limit. Only limits that count {@code to} but not {@code from} can be exceeded by it.
+     *
+     * @param gp owner of the generator
+     * @param from generator before the upgrade
+     * @param to generator after the upgrade
+     * @param pLimits the owner's limits
+     * @param notify who to tell if the limit is reached
+     * @return true if this limit allows the change
+     */
+    public boolean fulfillsUpgradeLimit(
+            GeneratorPlayer gp, Generator from, Generator to, PlayerLimits pLimits, CommandSender notify) {
+        if (!generators.contains(to) || generators.contains(from)) return true;
+        return hasRoomFor(gp, to, pLimits, notify);
+    }
+
+    private boolean hasRoomFor(GeneratorPlayer gp, Generator generator, PlayerLimits pLimits, CommandSender notify) {
+        int playerLimit = pLimits.getLimit(this);
+        if (playerLimit == -1 || getPlacedGenerators(gp) < playerLimit) return true;
+
+        Lang.getMessageStorage()
+                .send(
+                        notify,
+                        Message.GENERATORS_LIMITS_CANT_MORE,
+                        "<number>",
+                        String.valueOf(playerLimit),
+                        "<generator>",
+                        Text.name(generator.getGeneratorItem().getItemMeta()),
+                        "<limit>",
+                        this.name);
+        return false;
     }
 
     public int getPlacedGenerators(GeneratorPlayer gp) {
