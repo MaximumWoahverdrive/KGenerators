@@ -6,6 +6,8 @@ import java.util.ArrayList;
 import me.kryniowesegryderiusz.kgenerators.generators.holograms.interfaces.IHologramProvider;
 import me.kryniowesegryderiusz.kgenerators.generators.locations.objects.GeneratorLocation;
 
+// CMI deprecated these for removal without a replacement in its public API
+@SuppressWarnings("removal")
 public class CMIHologramsProvider extends IHologramProvider {
 
     @Override

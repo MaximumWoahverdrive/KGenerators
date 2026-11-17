@@ -67,8 +67,10 @@ public class Recipe {
                     ItemStack item =
                             FilesUtils.loadItemStack(file, generatorID + ".ingredients", ingredientsString, false);
 
-                    // ExactChoice is deprecated on 26.x, but what replaces it does not exist on 1.19.4
-                    shapedRecipe.setIngredient(ingredientsChar, new RecipeChoice.ExactChoice(item));
+                    // Deprecated on 26.x, but RecipeChoice.exactChoice() that replaces it doesn't exist on 1.19.4
+                    @SuppressWarnings("removal")
+                    RecipeChoice choice = new RecipeChoice.ExactChoice(item);
+                    shapedRecipe.setIngredient(ingredientsChar, choice);
                     this.addIngredient(ingredientsChar, item);
                 }
 
