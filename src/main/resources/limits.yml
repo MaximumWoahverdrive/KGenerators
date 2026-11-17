@@ -6,7 +6,7 @@
 
 #=================================================
 #=====            Enable limits.             ===== 
-#===== Change this to true to enable recipes =====
+#===== Change this to true to enable limits  =====
 #=================================================
 
 enabled: false
@@ -44,7 +44,7 @@ example_limit_group:
 #===============================================================
 
 #This limits players to have max 50 generators at all
-#It affeccts all generators (because they are not listed)
+#It affects all generators (because they are not listed)
 global_limits:
   name: "Global limit"
   item: PLAYER_HEAD
@@ -71,9 +71,10 @@ stone_generator_level_1_limits:
 
 #This limits ores generators to be used only by owners
 ore_generators_owner_limits:
-  name: "Stone generator level 1 limit"
-  item: generator:stone_generator_level_1
+  name: "Ores generators owner limit"
+  item: generator:ores_generator
   generators:
-  - stone_generator_level_1
+  - ores_generator
+  - ores_from_stone_generator
   only-owner-pickup: true
   only-owner-use: true

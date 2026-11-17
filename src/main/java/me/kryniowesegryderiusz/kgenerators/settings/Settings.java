@@ -135,7 +135,7 @@ public class Settings {
             config.loadConfig();
         } catch (InvalidConfigurationException e) {
             Logger.error(
-                    "Generators file: You've missconfigured config.yml file. Check your spaces! More info below. Disabling plugin.");
+                    "Config file: You've misconfigured config.yml file. Check your spaces! More info below. Disabling plugin.");
             Logger.error(e);
             Main.getInstance().getServer().getPluginManager().disablePlugin(Main.getInstance());
             return;

@@ -47,12 +47,9 @@ public class DependenciesManager {
         if (VaultHook.setupEconomy()) {
             Logger.debugPluginLoad("Dependencies: Detected Vault economy. Hooked into it.");
             dependencies.add(Dependency.VAULT_ECONOMY);
-        } else Logger.warn("Dependencies: Vault economy was not found! Some features could not work!");
-
-        if (VaultHook.setupPermissions()) {
-            Logger.debugPluginLoad("Dependencies: Detected Vault permissions. Hooked into it.");
-            dependencies.add(Dependency.VAULT_PERMISSIONS);
-        } else Logger.warn("Dependencies: Vault permissions was not found! Some features could not work!");
+        } else
+            Logger.info(
+                    "Dependencies: No Vault economy found. Money upgrade costs and money drops need Vault and an economy plugin.");
 
         if (Bukkit.getPluginManager().isPluginEnabled("BentoBox")) {
             Logger.debugPluginLoad("Dependencies: Detected plugin BentoBox. Hooking into it.");

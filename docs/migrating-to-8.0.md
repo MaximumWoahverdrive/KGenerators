@@ -100,4 +100,6 @@ differences:
   `MenuItemStorage.get` takes an `IMenuItemType`.
 - The API is published on JitPack: `com.github.MaximumWoahverdrive:KGenerators:<version>` (see
   [Developers API](developers-api.md)).
+- `Dependency.VAULT_PERMISSIONS` and `VaultHook.setupPermissions`/`hasPermission` are removed; they
+  were never used.
 - `@Nullable` annotations come from `org.jetbrains.annotations` instead of `javax.annotation`.

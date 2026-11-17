@@ -92,7 +92,7 @@ public class UpgradesManager {
             config.loadConfig();
         } catch (InvalidConfigurationException e) {
             Logger.error(
-                    "Generators file: You've missconfigured upgrades.yml file. Check your spaces! More info below. Disabling plugin.");
+                    "Upgrades file: You've misconfigured upgrades.yml file. Check your spaces! More info below. Disabling plugin.");
             Logger.error(e);
             Main.getInstance().getServer().getPluginManager().disablePlugin(Main.getInstance());
             return;

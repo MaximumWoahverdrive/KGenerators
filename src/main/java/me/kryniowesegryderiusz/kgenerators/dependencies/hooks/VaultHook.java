@@ -3,17 +3,12 @@ package me.kryniowesegryderiusz.kgenerators.dependencies.hooks;
 import me.kryniowesegryderiusz.kgenerators.Main;
 import net.milkbowl.vault.economy.Economy;
 import net.milkbowl.vault.economy.EconomyResponse;
-import net.milkbowl.vault.permission.Permission;
-import org.bukkit.Bukkit;
-import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.RegisteredServiceProvider;
 
 public class VaultHook {
 
     private static Economy econ = null;
-
-    private static Permission perms = null;
 
     public static boolean setupEconomy() {
         if (Main.getInstance().getServer().getPluginManager().getPlugin("Vault") == null) {
@@ -36,21 +31,6 @@ public class VaultHook {
 
     public static void giveMoney(Player player, double amount) {
         econ.depositPlayer(player, amount);
-    }
-
-    public static boolean setupPermissions() {
-        if (Main.getInstance().getServer().getPluginManager().getPlugin("Vault") == null) {
-            return false;
-        }
-
-        RegisteredServiceProvider<Permission> rsp =
-                Main.getInstance().getServer().getServicesManager().getRegistration(Permission.class);
-        perms = rsp.getProvider();
-        return true;
-    }
-
-    public static boolean hasPermission(OfflinePlayer offPlayer, String perm) {
-        return perms.playerHas(Bukkit.getWorlds().get(0).getName(), offPlayer, perm);
     }
 
     public static String formatMoney(double money) {

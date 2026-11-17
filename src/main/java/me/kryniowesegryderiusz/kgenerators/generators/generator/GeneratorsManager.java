@@ -117,7 +117,7 @@ public class GeneratorsManager {
             config.loadConfig();
         } catch (InvalidConfigurationException e) {
             Logger.error(
-                    "Generators file: You've missconfigured generators.yml file. Check your spaces! More info below. Disabling plugin.");
+                    "Generators file: You've misconfigured generators.yml file. Check your spaces! More info below. Disabling plugin.");
             Logger.error(e);
             Main.getInstance().getServer().getPluginManager().disablePlugin(Main.getInstance());
             return;

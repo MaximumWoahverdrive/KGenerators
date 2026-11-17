@@ -2,11 +2,11 @@
 #https://github.com/MaximumWoahverdrive/KGenerators
 #Need help? Open an issue: https://github.com/MaximumWoahverdrive/KGenerators/issues
 
-#Using upgrades feature requires Vault and some economy system installed!
+#Upgrades paid with money need Vault and an economy plugin installed!
 
 #=================================================
 #=====           Enable upgrades.            ===== 
-#===== Change this to true to enable recipes =====
+#===== Change this to true to enable upgrades =====
 #=================================================
 
 enabled: false

@@ -32,7 +32,7 @@ public class RecipesManager {
             file.loadConfig();
         } catch (InvalidConfigurationException e) {
             Logger.error(
-                    "Generators file: You've missconfigured recipes.yml file. Check your spaces! More info below. Disabling plugin.");
+                    "Recipes file: You've misconfigured recipes.yml file. Check your spaces! More info below. Disabling plugin.");
             Logger.error(e);
             Main.getInstance().getServer().getPluginManager().disablePlugin(Main.getInstance());
             return;
