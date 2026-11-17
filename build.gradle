@@ -6,6 +6,7 @@ plugins {
     id 'xyz.jpenilla.run-paper' version '3.1.0'
     id 'com.gradleup.shadow' version '9.6.1'
     id 'com.palantir.git-version' version '5.2.0'
+    id 'com.diffplug.spotless' version '8.11.0'
 }
 
 def runPaperVersion = '26.3'
@@ -23,6 +24,21 @@ def lastTag = hasTag ? gitDetails.lastTag.replaceFirst('^v', '') : '0.0.0'
 def isClean = providers.exec { commandLine 'git', 'status', '--porcelain' }.standardOutput.asText.get().trim().isEmpty()
 def versionSuffix = !hasTag || gitDetails.commitDistance > 0 ? "-r${gitDetails.commitDistance}.${gitDetails.gitHash.take(7)}" : ''
 version = "${lastTag}${versionSuffix}${isClean ? '' : '+dirty'}"
+
+// Formatting: `gradle spotlessApply` formats, and `gradle build` fails on unformatted code.
+spotless {
+    java {
+        target 'src/**/*.java'
+        palantirJavaFormat()
+        removeUnusedImports()
+    }
+    groovyGradle {
+        target '*.gradle'
+        leadingTabsToSpaces(4)
+        trimTrailingWhitespace()
+        endWithNewline()
+    }
+}
 
 idea {
     module {

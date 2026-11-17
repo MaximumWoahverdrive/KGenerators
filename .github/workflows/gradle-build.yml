@@ -69,7 +69,8 @@ jobs:
         uses: gradle/actions/setup-gradle@v6
 
       - name: Build with Gradle
-        run: gradle shadowJar
+        # build: checks formatting (Spotless) and builds the plugin jar
+        run: gradle build
 
       - name: Get release compatibility
         id: compatibility
