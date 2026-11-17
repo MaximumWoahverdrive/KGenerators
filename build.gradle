@@ -3,6 +3,7 @@ import xyz.jpenilla.runpaper.task.RunServer
 plugins {
     id 'java'
     id 'idea'
+    id 'maven-publish'
     id 'xyz.jpenilla.run-paper' version '3.1.0'
     id 'com.gradleup.shadow' version '9.6.1'
     id 'com.palantir.git-version' version '5.2.0'
@@ -191,6 +192,23 @@ tasks.shadowJar {
     relocate 'org.bstats', "${shaded}.bstats"
 }
 tasks.jar { enabled = false }
+
+// The developer API: the plugin jar plus sources and Javadoc, for addons to compile against.
+// JitPack builds it from a tag (see jitpack.yml): com.github.MaximumWoahverdrive:KGenerators:<tag>
+java {
+    withSourcesJar()
+    withJavadocJar()
+}
+publishing {
+    publications {
+        shadow(MavenPublication) {
+            from components.shadow
+            artifactId = 'KGenerators'
+            artifact sourcesJar
+            artifact javadocJar
+        }
+    }
+}
 tasks.assemble { dependsOn tasks.shadowJar }
 
 // Every test server gets its own folder under runs/: runs/<version> for Paper, runs/folia-<version> for Folia

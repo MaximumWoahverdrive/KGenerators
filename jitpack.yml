@@ -1,0 +1,6 @@
+# Builds the developer API artifact for JitPack: com.github.MaximumWoahverdrive:KGenerators:<tag>
+# Gradle provisions the JDK the build compiles with (see build.gradle) through the foojay resolver.
+jdk:
+  - openjdk21
+install:
+  - ./gradlew publishToMavenLocal --no-daemon

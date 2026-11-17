@@ -61,12 +61,13 @@ Report bugs and ask questions in [GitHub issues](https://github.com/MaximumWoahv
 ## Building
 
 ```sh
-gradle build
+./gradlew build
 ```
 
 The plugin jar is written to `build/libs/`. Gradle downloads the JDKs it needs. Test servers for
-each supported version run with `gradle runPaper1_19_4`, ... `runPaper1_21_11`, `runServer`
-(Paper 26.3) and `runFolia`.
+each supported version run with `./gradlew runPaper1_19_4`, ... `runPaper1_21_11`, `runServer`
+(Paper 26.3) and `runFolia`. `./gradlew spotlessApply` formats the code; `build` fails on
+unformatted code.
 
 ## Credits and license
 

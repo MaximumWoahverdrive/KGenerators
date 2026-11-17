@@ -70,12 +70,12 @@ jobs:
 
       - name: Build with Gradle
         # build: checks formatting (Spotless) and builds the plugin jar
-        run: gradle build
+        run: ./gradlew build
 
       - name: Get release compatibility
         id: compatibility
         if: github.ref_type == 'tag'
-        run: gradle -q printReleaseMetadata >> "$GITHUB_OUTPUT"
+        run: ./gradlew -q printReleaseMetadata >> "$GITHUB_OUTPUT"
 
       - name: Upload build artifacts
         uses: actions/upload-artifact@v7
