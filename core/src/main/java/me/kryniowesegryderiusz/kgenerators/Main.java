@@ -191,7 +191,8 @@ public class Main extends JavaPlugin {
 			 * Metrix
 			 */
 			Logger.debugPluginLoad("MainManager: Loading Metrix");
-			int pluginId = 7871;
+			// bStats plugin ID of KGenerators Regenerated (upstream used 7871)
+			int pluginId = 35398;
 			metrics = new Metrics(this, pluginId);
 			metrics.addCustomChart(new SingleLineChart("configured_generators", () -> Main.getGenerators().getAmount()));
 			metrics.addCustomChart(new SingleLineChart("database_generators", () -> Main.getDatabases().getDb().getGeneratorsAmount()));
