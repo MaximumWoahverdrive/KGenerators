@@ -11,6 +11,7 @@ import java.io.InputStreamReader;
 import java.io.PrintStream;
 import java.io.PrintWriter;
 import java.net.URL;
+import java.net.URLEncoder;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
@@ -21,6 +22,8 @@ import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import javax.net.ssl.HttpsURLConnection;
 
@@ -222,7 +225,7 @@ public class Logger {
 						}
 					}
 
-					String url = postHaste(sender, fileString);
+					String url = postPaste(sender, fileString);
 					if (url != null) {
 						Lang.getMessageStorage().send(sender, Message.COMMANDS_DEBUG_DONE, "<url>", url);
 					}
@@ -248,45 +251,46 @@ public class Logger {
 
 	}
 
-	private static String postHaste(CommandSender sender, String text) {
-		
-		String response = null;
-		
+	/**
+	 * Uploads text to mclo.gs, a paste service for Minecraft server logs that needs no API key.
+	 * Pastes are kept for 90 days; at most 10 MiB and 25000 lines.
+	 *
+	 * @return the paste's URL, or null if the upload failed
+	 */
+	private static String postPaste(CommandSender sender, String text) {
 		try {
-			byte[] postData = text.getBytes(StandardCharsets.UTF_8);
-			int postDataLength = postData.length;
-	
-			String requestURL = "https://hastebin.com/documents";
-			URL url = new URL(requestURL);
-			HttpsURLConnection conn = (HttpsURLConnection) url.openConnection();
+			byte[] postData = ("content=" + URLEncoder.encode(text, "UTF-8")).getBytes(StandardCharsets.UTF_8);
+
+			HttpsURLConnection conn = (HttpsURLConnection) new URL("https://api.mclo.gs/1/log").openConnection();
 			conn.setDoOutput(true);
-			conn.setInstanceFollowRedirects(false);
 			conn.setRequestMethod("POST");
-			conn.setRequestProperty("User-Agent", "Hastebin Java Api");
-			conn.setRequestProperty("Content-Length", Integer.toString(postDataLength));
-			conn.setRequestProperty("content-type", "text/plain");
-			conn.setRequestProperty("Authorization", "Bearer b9669ab4ea83f533d3c1faa80586fec599ebe87d4be9473a2e63cd33693eb7c57fd29312f683d7e259649e89d42b6a1911bcea1437bbe4ace53ef8a159942711");
+			conn.setRequestProperty("User-Agent", "KGenerators Regenerated");
+			conn.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
+			conn.setRequestProperty("Content-Length", Integer.toString(postData.length));
 			conn.setUseCaches(false);
-			
-			DataOutputStream wr;
-			wr = new DataOutputStream(conn.getOutputStream());
-			wr.write(postData);
-			BufferedReader reader = new BufferedReader(new InputStreamReader(conn.getInputStream()));
-			response = reader.readLine();
-	
-			if (response != null && response.contains("\"key\"")) {
-				response = response.substring(response.indexOf(":") + 2, response.length() - 2);
-	
-				String postURL = "https://hastebin.com/share/";
-				response = postURL + response;
+			try (DataOutputStream wr = new DataOutputStream(conn.getOutputStream())) {
+				wr.write(postData);
 			}
-		
+
+			StringBuilder response = new StringBuilder();
+			try (BufferedReader reader = new BufferedReader(new InputStreamReader(
+					conn.getResponseCode() < 400 ? conn.getInputStream() : conn.getErrorStream(), StandardCharsets.UTF_8))) {
+				String line;
+				while ((line = reader.readLine()) != null)
+					response.append(line);
+			}
+
+			// {"success":true,"id":"...","url":"https:\/\/mclo.gs\/...",...}
+			Matcher url = Pattern.compile("\"url\"\\s*:\\s*\"([^\"]+)\"").matcher(response);
+			if (response.indexOf("\"success\":true") >= 0 && url.find())
+				return url.group(1).replace("\\/", "/");
+
+			Logger.error("Logger: Uploading debug to mclo.gs failed: " + response);
 		} catch (IOException e) {
-			Lang.getMessageStorage().send(sender, Message.COMMANDS_DEBUG_ERROR);
 			Logger.error(e);
 		}
-
-		return response;
+		Lang.getMessageStorage().send(sender, Message.COMMANDS_DEBUG_ERROR);
+		return null;
 	}
 
 }
