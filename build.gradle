@@ -12,8 +12,8 @@ def runPaperVersion = '26.3'
 // Oldest server the plugin supports, and the Java it runs on there (1.8.8 servers run Java 8)
 def oldestMinecraftVersion = '1.8.8'
 def targetJavaVersion = 8
-// JDK that compiles it: it must read the Paper API, whose class files are Java 21
-def compilerJavaVersion = 21
+// JDK that compiles it: it must read the Paper API, whose class files are Java 25
+def compilerJavaVersion = 25
 // Version from git, as in ClaimsAndThings: <last tag>[-r<commits since it>.<hash>][+dirty],
 // e.g. 7.3.0 on the tagged commit and 7.3.0-r24.a6b5d0c 24 commits after it.
 def gitDetails = versionDetails()
