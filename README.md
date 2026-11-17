@@ -43,6 +43,8 @@ and put it in your server's `plugins/` folder. It needs Paper 1.19.4 or newer, o
 [7.3.1](https://github.com/MaximumWoahverdrive/KGenerators/releases/tag/7.3.1), which runs on
 Spigot and Paper from 1.8.8.
 
+Upgrading from KGenerators 7.3.x? Read [the 8.0.0 migration notes](docs/migrating-to-8.0.md) first.
+
 ## Documentation
 
 See [docs/](docs/README.md): commands and permissions, configuration, limits, supported plugins

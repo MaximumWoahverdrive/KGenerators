@@ -5,6 +5,7 @@ These pages are mirrored from the original KGenerators documentation by Kryniowe
 They describe the original plugin; KGenerators Regenerated keeps its commands, permissions and
 configuration files, so they apply unchanged unless a page says otherwise.
 
+- [Upgrading from 7.3.x to 8.0.0](migrating-to-8.0.md)
 - [Commands & Permissions](commands-and-permissions.md)
 - [Configuration files](configuration-files.md)
   - [Configuring ItemStack](configuration-files/configuring-itemstack.md)
