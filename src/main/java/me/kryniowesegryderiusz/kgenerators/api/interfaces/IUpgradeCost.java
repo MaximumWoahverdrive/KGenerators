@@ -19,7 +19,7 @@ public interface IUpgradeCost {
 	/**
 	 * Checks if requirements are met
 	 * @param player
-	 * @param amount of generators beeing upgraded
+	 * @param amount of generators being upgraded
 	 * @return true if requirements are met
 	 */
 	public boolean checkRequirements(Player p, int amount);
@@ -27,7 +27,7 @@ public interface IUpgradeCost {
 	/**
 	 * Takes requirements
 	 * @param player
-	 * @param amount of generators beeing upgraded
+	 * @param amount of generators being upgraded
 	 */
 	public void takeRequirements(Player p, int amount);
 	

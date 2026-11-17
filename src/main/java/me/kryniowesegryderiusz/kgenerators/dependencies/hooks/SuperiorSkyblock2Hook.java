@@ -55,10 +55,10 @@ public class SuperiorSkyblock2Hook implements Listener {
 				&& IslandPrivilege.getByName("KGENERATORS_USE_FLAG") != null
 				&& IslandPrivilege.getByName("KGENERATORS_OPEN_MENU_FLAG") != null) {
 			initialised = true;
-			Logger.info("Dependencies: SuperiorSkyblock2: Other party plugin initialised additional privilages!");
+			Logger.info("Dependencies: SuperiorSkyblock2: Other party plugin initialised additional privileges!");
 		} else
 			Logger.error(
-					"Dependencies: SuperiorSkyblock2: Other party plugin tried to initialise additional privilages, but failed! IslandPrivileges are not added yet!");
+					"Dependencies: SuperiorSkyblock2: Other party plugin tried to initialise additional privileges, but failed! IslandPrivileges are not added yet!");
 	}
 
 	// Only remove the generators once the disband is final: after every other plugin had its say,
@@ -105,7 +105,7 @@ public class SuperiorSkyblock2Hook implements Listener {
 		IslandPrivilege.register("KGENERATORS_USE_FLAG");
 		IslandPrivilege.register("KGENERATORS_OPEN_MENU_FLAG");
 		initialised = true;
-		Logger.info("Dependencies: SuperiorSkyblock2 additional privilages set up");
+		Logger.info("Dependencies: SuperiorSkyblock2 additional privileges set up");
 
 	}
 

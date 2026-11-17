@@ -13,7 +13,7 @@
 | */kgenerators timeleft*                                                  | kgenerators.timeleft    | Check time remaining to regeneration                |
 | */kgenerators menu*                                                      | kgenerators.menu        | Open generators menu                                |
 | */kgenerators menu \<player>*                                            | kgenerators.menu.others | Open generators menu for player                     |
-| */kgenerators menu \<player> \<chances/recipe/upgrade> \<generator\_ID>* | kgenerators.menu.others | Open specyfic generators menu for player            |
+| */kgenerators menu \<player> \<chances/recipe/upgrade> \<generator\_ID>* | kgenerators.menu.others | Open specific generators menu for player            |
 | */kgenerators upgrade*                                                   | kgenerators.upgrade     | Upgrade generator                                   |
 | /kgenerators spawn \<world> \<x> \<y> \<z> \<generator\_ID> \[owner]     | kgenerators.spawn       | Spawn (appear) generator on specific coordinates    |
 | /kgenerators spawn worldedit \<generator\_ID> \[owner]                   | kgenerators.spawn       | Spawn (appear) generator inside WorldEdit selection |

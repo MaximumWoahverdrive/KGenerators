@@ -37,7 +37,7 @@ block-drop-to-eq: false
 #Should block-related exp drops be added directly to user?
 exp-drop-to-eq: false
 
-#Should "generators" lang section be sent by actionbar instad of chat?
+#Should "generators" lang section be sent by actionbar instead of chat?
 generators-actionbar-messages: true
 
 #How explosions should be handled, if there is generator inside explode area?
@@ -49,7 +49,7 @@ explosion-handler: 0
 #Should regeneration delay pass, even if chunk is unloaded?
 count-delay-on-unloaded-chunks: true
 
-#What should determine, wheather item in hand is a generator or not?
+#What should determine, whether item in hand is a generator or not?
 generator-item-matcher:
   #Generator id stored in the item's data (also recognises items from KGenerators 7.3.1 and older)
   #- the most reliable option to match generator

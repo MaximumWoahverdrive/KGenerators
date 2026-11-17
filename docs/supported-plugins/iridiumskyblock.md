@@ -2,4 +2,4 @@
 
 ### What is included in IridiumSkyblock support?
 
-* All generators are beeing removed on island deletion
+* All generators are being removed on island deletion

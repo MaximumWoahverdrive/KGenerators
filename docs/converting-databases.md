@@ -14,4 +14,4 @@ KGenerators allows you to store data in a various database types. In case you wa
 6. Type command `kgenerators convertdbto <database_type>`
 7. Wait a while, migration will take place, database type in config.yml should be updated automatically
 
-In case of any problem occured try to restart server and repeat previous steps. If issue still persists create `/kgen debug` link and contact us.
+In case of any problem occurred try to restart server and repeat previous steps. If issue still persists create `/kgen debug` link and contact us.

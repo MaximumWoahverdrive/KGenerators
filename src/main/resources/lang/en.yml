@@ -60,7 +60,7 @@ messages:
     explode-pickaxe:
       cannot-use-on-double: '&cYou cannot use explosion pickaxe on type double generator!'
   database:
-    error: '&cDatabase error occured, please contact with administration!'
+    error: '&cDatabase error occurred, please contact with administration!'
   commands:
     any:
       wrong: '&cWrong command! Type /kgenerators for help'
@@ -81,19 +81,19 @@ messages:
       help: List all generators
     menu:
       opened-others: '&aOpened &e<generator> <menu> menu &afor &e<player>'
-      error: '&cAn error occured, while using menus! Contact with administrator!'
+      error: '&cAn error occurred, while using menus! Contact with administrator!'
       no-permission: '&cYou dont have permission &8(&7<permission>&8)&c to open menu!'
       no-permission-others: '&cYou dont have permission &8(&7<permission>&8)&c to
         open menu for other players!'
       help: Opens menu
     give:
       generator-given: '&e<amount>x &a<generator> &awas given to &e<player>'
-      generator-recieved: '&aYou recieved &e<amount>x &a<generator>&a!'
+      generator-recieved: '&aYou received &e<amount>x &a<generator>&a!'
       usage: '&cUsage: &e/kgenerators give <player> <generator> [amount]'
       no-permission: '&cYou dont have permission &8(&7<permission>&8)&c to give generators'
       help: Give generator to player
     getall:
-      recieved: '&aGenerators recieved'
+      recieved: '&aGenerators received'
       no-permission: '&cYou dont have permission &8(&7<permission>&8)&c to get all
         generators'
       help: Get all generators
@@ -151,7 +151,7 @@ messages:
       help: Plugin configuration reload
     debug:
       done: '&aYour debug URL is: &e<url>'
-      error: '&cAn error occured, while making debug output!'
+      error: '&cAn error occurred, while making debug output!'
       no-permission: '&cYou dont have permission &8(&7<permission>&8)&c to paste debug'
     help:
       label: '&6&lKGenerators &aCommands help:'

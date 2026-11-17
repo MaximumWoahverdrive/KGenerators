@@ -53,7 +53,7 @@ public class SchedulesManager {
 						});
 					}
 		    	} catch (Exception e) {
-		    		Logger.error("SchedulesManager: An error occured at scheduler task");
+		    		Logger.error("SchedulesManager: An error occurred at scheduler task");
 		    		Logger.error(e);
 		    	}
 

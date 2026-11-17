@@ -85,7 +85,7 @@ public class GeneratorsLoader {
 				notLoaded++;
 			}
 		} catch (Exception e) {
-			Logger.error("An error occured, while loading " + generatorId + " | " + location + " | " + chunk + " | " + owner + " | " + lastGeneratedObjectId);
+			Logger.error("An error occurred, while loading " + generatorId + " | " + location + " | " + chunk + " | " + owner + " | " + lastGeneratedObjectId);
 			Logger.error(e);
 		}
 	}
@@ -93,7 +93,7 @@ public class GeneratorsLoader {
 	public ArrayList<GeneratorLocation> finish() {
 		if (notLoaded != 0) {
 			Logger.error(
-					"Database: An error occured, while loading " + String.valueOf(notLoaded) + " placed generators!");
+					"Database: An error occurred, while loading " + String.valueOf(notLoaded) + " placed generators!");
 			if (!errWorlds.isEmpty()) {
 				Logger.error("Database: Cant load worlds: " + errWorlds.toString());
 				String possible = "";

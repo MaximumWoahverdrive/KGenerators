@@ -3,7 +3,7 @@
 ### What is included in SuperiorSkyblock2 support?
 
 * KGenerators makes sure that island level is properly adjusted after block generation
-* All generators are beeing removed on island deletion
+* All generators are being removed on island deletion
 * KGenerators adds a few flags, which help players manage their island. You can translate them in your SuperiorSkyblock2 lang files.
 * SuperiorSkyblock2 block stacker cant stack generators
 

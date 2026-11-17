@@ -87,7 +87,7 @@ public class Main extends JavaPlugin {
     		Logger.warn("ItemsAdder is enabled, KGenerators loading postponed until IA is loaded");
     		this.getServer().getPluginManager().registerEvents(new ItemsAdderHook().new ItemsAdderListeners(), this);
     	} else {
-    		Logger.warn("KGenerators will be loaded in post init check, check for more informations futher in this log");
+    		Logger.warn("KGenerators will be loaded in post init check, check for more informations further in this log");
     		Sched.global(() -> {
     			Main.getInstance().enable();
     		});

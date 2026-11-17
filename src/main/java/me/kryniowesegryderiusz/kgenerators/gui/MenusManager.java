@@ -52,7 +52,7 @@ public class MenusManager implements Listener {
 							});
 						}
 			    	} catch (Exception e) {
-			    		Logger.error("MenusManager: An error occured at menus task");
+			    		Logger.error("MenusManager: An error occurred at menus task");
 			    		Logger.error(e);
 			    	}
 

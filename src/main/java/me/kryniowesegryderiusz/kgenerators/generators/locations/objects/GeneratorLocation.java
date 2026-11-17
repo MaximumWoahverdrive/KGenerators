@@ -117,7 +117,7 @@ public class GeneratorLocation implements IGeneratorLocation {
 	 * Checks if player is permitted to mine generated block. You probably wanna use
 	 * {@link #isBlockPossibleToMine(Location)} at first
 	 * 
-	 * @return wheather its possible to mine
+	 * @return whether its possible to mine
 	 */
 	public boolean isPermittedToMine(Player player) {
 		String permission = "kgenerators.mine." + this.getGenerator().getId();

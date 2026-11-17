@@ -58,7 +58,7 @@ public enum Message implements IMessage {
 	
 	HOOKS_EXPLODE_PICKAXE_CANNOT_USE_ON_DOUBLE("hooks.explode-pickaxe.cannot-use-on-double", "&cYou cannot use explosion pickaxe on type double generator!"),
 	
-	DATABASE_ERROR("database.error", "&cDatabase error occured, please contact with administration!"),
+	DATABASE_ERROR("database.error", "&cDatabase error occurred, please contact with administration!"),
 	
 	COMMANDS_ANY_WRONG("commands.any.wrong", "&cWrong command! Type /kgenerators for help"),
 	COMMANDS_ANY_NO_PERMISSION("commands.any.no-permission", "&cYou dont have permission &8(&7<permission>&8)&c to use KGenerators commands"),
@@ -77,18 +77,18 @@ public enum Message implements IMessage {
 	COMMANDS_LIST_HELP("commands.list.help", "List all generators"),
 	
 	COMMANDS_MENU_OPENED_OTHERS("commands.menu.opened-others", "&aOpened &e<generator> <menu> menu &afor &e<player>"),
-	COMMANDS_MENU_ERROR("commands.menu.error", "&cAn error occured, while using menus! Contact with administrator!"),
+	COMMANDS_MENU_ERROR("commands.menu.error", "&cAn error occurred, while using menus! Contact with administrator!"),
 	COMMANDS_MENU_NO_PERMISSION("commands.menu.no-permission", "&cYou dont have permission &8(&7<permission>&8)&c to open menu!"),
 	COMMANDS_MENU_NO_PERMISSION_OTHERS("commands.menu.no-permission-others", "&cYou dont have permission &8(&7<permission>&8)&c to open menu for other players!"),
 	COMMANDS_MENU_HELP("commands.menu.help", "Opens menu"),
 	
 	COMMANDS_GIVE_GENERATOR_GIVEN("commands.give.generator-given", "&e<amount>x &a<generator> &awas given to &e<player>"),
-	COMMANDS_GIVE_GENERATOR_RECIEVED("commands.give.generator-recieved", "&aYou recieved &e<amount>x &a<generator>&a!"),
+	COMMANDS_GIVE_GENERATOR_RECIEVED("commands.give.generator-recieved", "&aYou received &e<amount>x &a<generator>&a!"),
 	COMMANDS_GIVE_USAGE("commands.give.usage", "&cUsage: &e/kgenerators give <player> <generator> [amount]"),
 	COMMANDS_GIVE_NO_PERMISSION("commands.give.no-permission", "&cYou dont have permission &8(&7<permission>&8)&c to give generators"),
 	COMMANDS_GIVE_HELP("commands.give.help", "Give generator to player"),
 	
-	COMMANDS_GET_ALL_RECIEVED("commands.getall.recieved", "&aGenerators recieved"),
+	COMMANDS_GET_ALL_RECIEVED("commands.getall.recieved", "&aGenerators received"),
 	COMMANDS_GET_ALL_NO_PERMISSION("commands.getall.no-permission", "&cYou dont have permission &8(&7<permission>&8)&c to get all generators"),
 	COMMANDS_GET_ALL_HELP("commands.getall.help", "Get all generators"),
 	
@@ -140,7 +140,7 @@ public enum Message implements IMessage {
 	COMMANDS_RELOAD_HELP("commands.reload.help", "Plugin configuration reload"),
 	
 	COMMANDS_DEBUG_DONE("commands.debug.done", "&aYour debug URL is: &e<url>"),
-	COMMANDS_DEBUG_ERROR("commands.debug.error", "&cAn error occured, while making debug output!"),
+	COMMANDS_DEBUG_ERROR("commands.debug.error", "&cAn error occurred, while making debug output!"),
 	COMMANDS_DEBUG_NO_PERMISSION("commands.debug.no-permission", "&cYou dont have permission &8(&7<permission>&8)&c to paste debug"),
 	
 	COMMANDS_HELP_LABEL("commands.help.label", "&6&lKGenerators &aCommands help:"),

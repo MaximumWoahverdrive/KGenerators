@@ -77,10 +77,10 @@ class WorldGuardFlags {
 				}
 			}
 		} catch (IllegalStateException e) {
-			Logger.error("WorldGuard: An error occured, while adding WorldGuard flags!");
+			Logger.error("WorldGuard: An error occurred, while adding WorldGuard flags!");
 			Logger.error("WorldGuard: Are you using PlugMan? ;)");
 		} catch (NoClassDefFoundError e) {
-			Logger.error("WorldGuard: An error occured, while adding WorldGuard flags!");
+			Logger.error("WorldGuard: An error occurred, while adding WorldGuard flags!");
 			Logger.error("WorldGuard: WorldGuard is installed, but didnt load properly!");
 			Logger.error(e);
 		}

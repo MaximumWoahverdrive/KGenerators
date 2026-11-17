@@ -95,7 +95,7 @@ public class FilesConverter {
 
 		if (!config.contains("generators-actionbar-messages")) {
 			add(file, "");
-			add(file, "#Should \"generators\" lang section be sent by actionbar instad of chat?");
+			add(file, "#Should \"generators\" lang section be sent by actionbar instead of chat?");
 			add(file, "generators-actionbar-messages: true");
 			Logger.info("FilesConverter: Added generators-actionbar-messages settings to config file");
 		}
@@ -202,7 +202,7 @@ public class FilesConverter {
 		
 		if (!config.contains("generator-item-matcher")) {
 			add(file, "");
-			add(file, "#What should determine, wheather item in hand is a generator or not?");
+			add(file, "#What should determine, whether item in hand is a generator or not?");
 			add(file, "generator-item-matcher:");
 			add(file, "  #Custom NBT - the most reliable option to match generator");
 			add(file, "  check-by-nbt: true");

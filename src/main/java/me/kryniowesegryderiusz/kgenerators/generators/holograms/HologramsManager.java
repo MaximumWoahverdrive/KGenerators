@@ -82,7 +82,7 @@ public class HologramsManager {
 					}
 
 		    	} catch (Exception e) {
-		    		Logger.error("Holograms: An error occured at holograms task");
+		    		Logger.error("Holograms: An error occurred at holograms task");
 		    		Logger.error(e);
 		    	}
 

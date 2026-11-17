@@ -103,4 +103,4 @@ IGeneratorLocation igl = KGeneratorsAPI.getGeneratorLocation(location);
 
 * `PreBlockGenerationEvent` - cancellable event called when generator regenegenerating function is fired, returns [`IGeneratorLocation`](../core/src/main/java/me/kryniowesegryderiusz/kgenerators/api/interfaces/IGeneratorLocation.java)\`\`
 * `PostBlockGenerationEvent` - called after generator regeneration, for monitoring reasons, returns [`IGeneratorLocation`](../core/src/main/java/me/kryniowesegryderiusz/kgenerators/api/interfaces/IGeneratorLocation.java)\`\`
-* `ReloadEvent` - called, when KGenerators is beeing reloaded.
+* `ReloadEvent` - called, when KGenerators is being reloaded.

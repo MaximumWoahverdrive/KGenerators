@@ -15,7 +15,7 @@ enabled: false
 #=====              Below you can find EXAMPLE-upgrade.                ===== 
 #===== IT WONT BE LOADED! Here you can just find all options explained =====
 #===========================================================================
-#Generator id of generator beeing upgraded
+#Generator id of generator being upgraded
 example_generator_id_level_1:
   #Next level generator id:
   next-level: example_generator_id_level_2

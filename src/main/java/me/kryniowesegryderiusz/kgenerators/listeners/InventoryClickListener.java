@@ -76,7 +76,7 @@ public class InventoryClickListener implements Listener {
 
 				} catch (Exception ex) {
 					Lang.getMessageStorage().send(p, Message.COMMANDS_MENU_ERROR);
-					Logger.error("An error occured while using menus!");
+					Logger.error("An error occurred while using menus!");
 					Logger.error(ex);
 					Main.getMenus().closeInv(p);
 				}

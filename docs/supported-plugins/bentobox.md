@@ -3,7 +3,7 @@
 ### What is included in BentoBox support?
 
 * KGenerators adds a few flags, which help players manage their island. You can translate them in your BentoBox lang files.
-* All generators are beeing removed on island deletion
+* All generators are being removed on island deletion
 
 ### Added KGenerators flags
 
