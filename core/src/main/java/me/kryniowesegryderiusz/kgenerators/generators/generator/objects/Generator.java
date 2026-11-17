@@ -105,7 +105,7 @@ public class Generator {
 			Logger.error("Generator " + generatorID
 					+ " uses old generator item configuration that will be not supported in the future!");
 			Logger.error(
-					"Check https://github.com/MaximumWoahverdrive/KGenerators/blob/main/core/src/main/resources/generators.yml#L14 for new configuration options!");
+					"Check https://github.com/MaximumWoahverdrive/KGenerators/blob/master/core/src/main/resources/generators.yml#L14 for new configuration options!");
 
 			Boolean glow = true;
 			if (config.contains(generatorID + ".glow")) {
@@ -160,7 +160,7 @@ public class Generator {
 			Logger.error("Generator " + generatorID
 					+ " has OLD generates (chances) section set, which allow only block generation!");
 			Logger.error(
-					"Check https://github.com/MaximumWoahverdrive/KGenerators/blob/main/core/src/main/resources/generators.yml#L32 for new generators.yml look!");
+					"Check https://github.com/MaximumWoahverdrive/KGenerators/blob/master/core/src/main/resources/generators.yml#L32 for new generators.yml look!");
 		} else {
 			Logger.error("Generators file: " + generatorID + " doesnt have generating section!");
 			error = true;

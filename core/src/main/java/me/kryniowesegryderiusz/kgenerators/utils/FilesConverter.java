@@ -43,7 +43,7 @@ public class FilesConverter {
 			add(file, "database:");
 			add(file, "  #Possible options: SQLITE, MYSQL (not recommended for big servers)");
 			add(file,
-					"  #You can convert data from one database to another! More info here: https://github.com/MaximumWoahverdrive/KGenerators/blob/main/docs/converting-databases.md ");
+					"  #You can convert data from one database to another! More info here: https://github.com/MaximumWoahverdrive/KGenerators/blob/master/docs/converting-databases.md ");
 			add(file, "  dbtype: SQLITE");
 			add(file, "  #Settings for MYSQL");
 			add(file, "  host: hostname");
