@@ -8,17 +8,21 @@ plugins {
     id 'com.palantir.git-version' version '5.2.0'
 }
 
-def baseVersion = '7.3'
 def runPaperVersion = '26.3'
 // Oldest server the plugin supports, and the Java it runs on there (1.8.8 servers run Java 8)
 def oldestMinecraftVersion = '1.8.8'
 def targetJavaVersion = 8
 // JDK that compiles it: it must read the Paper API, whose class files are Java 21
 def compilerJavaVersion = 21
+// Version from git, as in ClaimsAndThings: <last tag>[-r<commits since it>.<hash>][+dirty],
+// e.g. 7.3.0 on the tagged commit and 7.3.0-r24.a6b5d0c 24 commits after it.
 def gitDetails = versionDetails()
+// Without a reachable tag (e.g. a shallow clone) git-version reports the commit hash as the tag.
+def hasTag = gitDetails.lastTag && !gitDetails.gitHash.startsWith(gitDetails.lastTag)
+def lastTag = hasTag ? gitDetails.lastTag.replaceFirst('^v', '') : '0.0.0'
 def isClean = providers.exec { commandLine 'git', 'status', '--porcelain' }.standardOutput.asText.get().trim().isEmpty()
-// Format: 7.3-<hash>[+dirty]
-version = "${baseVersion}-${gitDetails.gitHash.take(7)}${isClean ? '' : '+dirty'}"
+def versionSuffix = !hasTag || gitDetails.commitDistance > 0 ? "-r${gitDetails.commitDistance}.${gitDetails.gitHash.take(7)}" : ''
+version = "${lastTag}${versionSuffix}${isClean ? '' : '+dirty'}"
 
 idea {
     module {
