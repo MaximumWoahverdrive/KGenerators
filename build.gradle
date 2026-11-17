@@ -87,7 +87,8 @@ dependencies {
 
 def shaded = 'me.kryniowesegryderiusz.kgenerators.dependencies.shaded'
 tasks.shadowJar {
-    archiveBaseName = 'KGenerators'
+    archiveBaseName = 'KGenerators-Regenerated'
+    from(rootProject.file('LICENSE.md'))
     archiveClassifier = ''
     relocate 'de.tr7zw.changeme.nbtapi', "${shaded}.nbtapi"
     relocate 'com.cryptomorin.xseries', "${shaded}.xseries"

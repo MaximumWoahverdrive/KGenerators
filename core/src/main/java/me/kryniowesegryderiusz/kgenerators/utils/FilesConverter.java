@@ -29,9 +29,9 @@ public class FilesConverter {
 		}
 
 		if (!config.contains("lang")) {
-			add(file, "#KGenerators made by Kryniowesegryderiusz (Krynio_ on spigot)");
-			add(file, "#https://www.spigotmc.org/resources/79246/");
-			add(file, "#Need help? Join KGenerators discord: https://discord.gg/BZRjhpP4Ab");
+			add(file, "#KGenerators Regenerated, based on KGenerators by Kryniowesegryderiusz");
+			add(file, "#https://github.com/MaximumWoahverdrive/KGenerators");
+			add(file, "#Need help? Open an issue: https://github.com/MaximumWoahverdrive/KGenerators/issues");
 			add(file, "");
 			add(file, "#Choose lang file. Default possibilities are en, pl, ro, vi");
 			add(file, "lang: " + settings.getLang());
@@ -43,7 +43,7 @@ public class FilesConverter {
 			add(file, "database:");
 			add(file, "  #Possible options: SQLITE, MYSQL (not recommended for big servers)");
 			add(file,
-					"  #You can convert data from one database to another! More info here: https://github.com/Kryniowesegryderiusz/KGenerators/wiki/Converting-databases ");
+					"  #You can convert data from one database to another! More info here: https://github.com/MaximumWoahverdrive/KGenerators/blob/main/docs/converting-databases.md ");
 			add(file, "  dbtype: SQLITE");
 			add(file, "  #Settings for MYSQL");
 			add(file, "  host: hostname");

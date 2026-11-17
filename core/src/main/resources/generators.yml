@@ -1,6 +1,6 @@
-#KGenerators made by Kryniowesegryderiusz (Krynio_ on spigot)
-#https://www.spigotmc.org/resources/79246/
-#Need help? Join KGenerators discord: https://discord.gg/BZRjhpP4Ab
+#KGenerators Regenerated, based on KGenerators by Kryniowesegryderiusz
+#https://github.com/MaximumWoahverdrive/KGenerators
+#Need help? Open an issue: https://github.com/MaximumWoahverdrive/KGenerators/issues
 
 #===========================================================================
 #=====              Below you can find EXAMPLE-generator.              ===== 
@@ -13,7 +13,7 @@ example_generator:
   # ***       You HAVE TO set them!        ***
   #
   #Generator item
-  #More options for item settings can be found here https://kzone.gitbook.io/docs/kgenerators/configuration-files/configuring-itemstack
+  #More options for item settings can be found here https://github.com/MaximumWoahverdrive/KGenerators/blob/main/docs/configuration-files/configuring-itemstack.md
   generator-item:
     material: GRASS
     name: '&aExample #4fff47generator' #Hex colors are available only for 1.16+
@@ -36,7 +36,7 @@ example_generator:
     #type: block - generator will spawn simple block
     - type: block
       chance: 10.0
-      #More options for block settings can be found here https://kzone.gitbook.io/docs/kgenerators/configuration-files/configuring-block
+      #More options for block settings can be found here https://github.com/MaximumWoahverdrive/KGenerators/blob/main/docs/configuration-files/configuring-block.md
       material: DIRT
     #type: block - generator will spawn block with custom drops
     - type: block
@@ -46,7 +46,7 @@ example_generator:
       custom-drops:
         #Should default drops from this block be removed?
         remove-defaults: true
-        #More options for item settings can be found here https://kzone.gitbook.io/docs/kgenerators/configuration-files/configuring-itemstack
+        #More options for item settings can be found here https://github.com/MaximumWoahverdrive/KGenerators/blob/main/docs/configuration-files/configuring-itemstack.md
         item: DIAMOND
         exp: 100
         money: 50.0
@@ -70,7 +70,7 @@ example_generator:
     #type: item - generator will spawn more complicated item. 
     - type: item
       chance: 10.0
-      #More options for item settings can be found here https://kzone.gitbook.io/docs/kgenerators/configuration-files/configuring-itemstack
+      #More options for item settings can be found here https://github.com/MaximumWoahverdrive/KGenerators/blob/main/docs/configuration-files/configuring-itemstack.md
       item:
         material: STONE #only this is required
         amount: 5
@@ -352,4 +352,4 @@ ores_generator:
 #Have you added new generator? Do /kgenerators reload and check if it exist in /kgenerators list
 #If it doesnt - check the console or /plugins/KGenerators/log.txt for errors!
 
-#Need other help? Join KGenerators discord: https://discord.gg/BZRjhpP4Ab
+#Need other help? Open an issue: https://github.com/MaximumWoahverdrive/KGenerators/issues

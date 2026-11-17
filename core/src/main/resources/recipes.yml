@@ -1,6 +1,6 @@
-#KGenerators made by Kryniowesegryderiusz (Krynio_ on spigot)
-#https://www.spigotmc.org/resources/79246/
-#Need help? Join KGenerators discord: https://discord.gg/BZRjhpP4Ab
+#KGenerators Regenerated, based on KGenerators by Kryniowesegryderiusz
+#https://github.com/MaximumWoahverdrive/KGenerators
+#Need help? Open an issue: https://github.com/MaximumWoahverdrive/KGenerators/issues
 
 # WARNING! To add/update/remove recipe you HAVE TO RESTART SERVER!
 
@@ -30,7 +30,7 @@ example_generator:
     #"B" is item of ores_generator
     B: generator:ores_generator
     #"C" is other custom configured item
-    #More options for item settings can be found here https://kzone.gitbook.io/docs/kgenerators/configuration-files/configuring-itemstack
+    #More options for item settings can be found here https://github.com/MaximumWoahverdrive/KGenerators/blob/main/docs/configuration-files/configuring-itemstack.md
     C:
       material: STONE
       name: "Magic stone"

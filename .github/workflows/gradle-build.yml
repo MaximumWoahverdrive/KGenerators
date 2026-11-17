@@ -81,7 +81,7 @@ jobs:
           body: |
             ## ${{ github.ref_name }}
 
-            Custom block generators for Spigot, Paper and Folia.
+            KGenerators Regenerated: custom block generators for Spigot, Paper and Folia, continuing the archived KGenerators.
 
             **Download:** [${{ steps.jar_info.outputs.jar_name }}](${{ github.server_url }}/${{ github.repository }}/releases/download/${{ github.ref_name }}/${{ steps.jar_info.outputs.jar_name }})
             **File Size:** ${{ steps.jar_info.outputs.file_size }}

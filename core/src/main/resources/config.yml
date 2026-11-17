@@ -1,9 +1,9 @@
-#KGenerators made by Kryniowesegryderiusz (Krynio_ on spigot)
-#https://www.spigotmc.org/resources/79246/
-#Need help? Join KGenerators discord: https://discord.gg/BZRjhpP4Ab
+#KGenerators Regenerated, based on KGenerators by Kryniowesegryderiusz
+#https://github.com/MaximumWoahverdrive/KGenerators
+#Need help? Open an issue: https://github.com/MaximumWoahverdrive/KGenerators/issues
 
 #Choose lang file. Built in possibilities are en, fr, pl, ro, se, vi, zhcn
-#If you want to add your own language contact us on Discord
+#If you want to add your own language open an issue on GitHub
 lang: en
 
 #Database settings

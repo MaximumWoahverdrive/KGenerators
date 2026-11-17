@@ -1,6 +1,6 @@
-#KGenerators made by Kryniowesegryderiusz (Krynio_ on spigot)
-#https://www.spigotmc.org/resources/79246/
-#Need help? Join KGenerators discord: https://discord.gg/BZRjhpP4Ab
+#KGenerators Regenerated, based on KGenerators by Kryniowesegryderiusz
+#https://github.com/MaximumWoahverdrive/KGenerators
+#Need help? Open an issue: https://github.com/MaximumWoahverdrive/KGenerators/issues
 
 #Using upgrades feature requires Vault and some economy system installed!
 
@@ -26,7 +26,7 @@ example_generator_id_level_1:
   #Upgrade cost in exp levels
   exp-levels: 5
   #Upgrade cost in items
-  #More options for item settings can be found here https://kzone.gitbook.io/docs/kgenerators/configuration-files/configuring-itemstack
+  #More options for item settings can be found here https://github.com/MaximumWoahverdrive/KGenerators/blob/main/docs/configuration-files/configuring-itemstack.md
   items:
     '1':
       material: stone

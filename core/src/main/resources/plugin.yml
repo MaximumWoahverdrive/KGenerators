@@ -1,9 +1,9 @@
 main: me.kryniowesegryderiusz.kgenerators.Main
 name: KGenerators
 version: "${version}"
-author: Kryniowesegryderiusz (Krynio_ on spigot)
-website: https://www.spigotmc.org/resources/79246/
-description: Create your custom generators
+authors: [Kryniowesegryderiusz, MaximumWoahverdrive]
+website: https://github.com/MaximumWoahverdrive/KGenerators
+description: KGenerators Regenerated - create your custom generators
 loadbefore: [SuperiorSkyblock2]
 softdepend: [ItemsAdder, PlaceholderAPI]
 api-version: 1.13
