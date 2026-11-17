@@ -134,3 +134,10 @@ testServers.each { mc, jdk ->
         javaLauncher = javaToolchains.launcherFor { languageVersion = JavaLanguageVersion.of(jdk) }
     }
 }
+
+// Run test servers headless, as production servers are. Otherwise java.awt.Color (which BungeeCord's
+// ChatColor uses for hex colours on 1.16+) tries to load the desktop graphics library, which fails
+// without X11 libraries installed.
+tasks.withType(RunServer).configureEach {
+    jvmArgs('-Djava.awt.headless=true')
+}
