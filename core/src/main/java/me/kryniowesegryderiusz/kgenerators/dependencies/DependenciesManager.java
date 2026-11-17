@@ -171,9 +171,6 @@ public class DependenciesManager {
 		} else if (Bukkit.getPluginManager().isPluginEnabled("DecentHolograms")) {
 			Logger.debugPluginLoad("Dependencies: Detected plugin DecentHolograms. Hooked holograms into it.");
 			dependencies.add(Dependency.DECENT_HOLOGRAMS);
-		} else if (Bukkit.getPluginManager().isPluginEnabled("HolographicDisplays")) {
-			Logger.debugPluginLoad("Dependencies: Detected plugin HolographicDisplays. Hooked holograms into it.");
-			dependencies.add(Dependency.HOLOGRAPHIC_DISPLAYS);
 		} else if (Bukkit.getPluginManager().isPluginEnabled("CMI")) {
 			Logger.debugPluginLoad("Dependencies: Detected plugin CMI. Hooked holograms into it.");
 			dependencies.add(Dependency.CMI_HOLOGRAMS);

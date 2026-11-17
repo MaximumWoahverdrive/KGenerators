@@ -18,7 +18,6 @@ import me.kryniowesegryderiusz.kgenerators.dependencies.enums.Dependency;
 import me.kryniowesegryderiusz.kgenerators.dependencies.objects.CMIHologramsProvider;
 import me.kryniowesegryderiusz.kgenerators.dependencies.objects.DecentHologramsProvider;
 import me.kryniowesegryderiusz.kgenerators.dependencies.objects.FancyHologramsProvider;
-import me.kryniowesegryderiusz.kgenerators.dependencies.objects.HolographicDisplaysProvider;
 import me.kryniowesegryderiusz.kgenerators.generators.generator.objects.Generator;
 import me.kryniowesegryderiusz.kgenerators.generators.holograms.interfaces.IHologramProvider;
 import me.kryniowesegryderiusz.kgenerators.generators.locations.objects.GeneratorLocation;
@@ -43,9 +42,6 @@ public class HologramsManager {
 		} else if (Main.getDependencies().isEnabled(Dependency.DECENT_HOLOGRAMS)) {
 			hologramProvider = new DecentHologramsProvider();
 			Logger.debugPluginLoad("Holograms: Enabling DecentHologramsProvider");
-		} else if (Main.getDependencies().isEnabled(Dependency.HOLOGRAPHIC_DISPLAYS)) {
-			hologramProvider = new HolographicDisplaysProvider();
-			Logger.debugPluginLoad("Holograms: Enabling HolographicDisplaysProvider");
 		} else if (Main.getDependencies().isEnabled(Dependency.CMI_HOLOGRAMS)) {
 			hologramProvider = new CMIHologramsProvider();
 			Logger.debugPluginLoad("Holograms: Enabling CMIHologramsProvider");
