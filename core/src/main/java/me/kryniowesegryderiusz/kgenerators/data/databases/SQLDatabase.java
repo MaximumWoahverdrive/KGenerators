@@ -61,6 +61,9 @@ public class SQLDatabase implements IDatabase {
 				config.setJdbcUrl("jdbc:sqlite:" + Main.getInstance().getDataFolder().getPath() + "/data/database.db");
 				config.setConnectionTestQuery("SELECT 1");
 				config.setMaxLifetime(60000); // 60 Sec
+				// Connections are replaced every 60s anyway, so keepalive pings add nothing; HikariCP's
+				// default (2 min) is longer than the lifetime and would only log a warning.
+				config.setKeepaliveTime(0);
 				config.setMaximumPoolSize(sqlconfig.getPoolSize());
 				if (sqlconfig.getPoolSize() > 1) {
 					Logger.warn("Database " + dbType.name() + ": SQL: The pool size is higher than one! If you dont know what you're doing change database.pool-size in config.yml to one!");
@@ -102,6 +105,9 @@ public class SQLDatabase implements IDatabase {
 				config.setPassword(sqlconfig.getDbPass());
 				config.setConnectionTestQuery("SELECT 1");
 				config.setMaxLifetime(60000); // 60 Sec
+				// Connections are replaced every 60s anyway, so keepalive pings add nothing; HikariCP's
+				// default (2 min) is longer than the lifetime and would only log a warning.
+				config.setKeepaliveTime(0);
 				config.setMaximumPoolSize(sqlconfig.getPoolSize());
 				if (sqlconfig.getPoolSize() <= 1)
 					Logger.warn("Database " + dbType.name() + ": SQL: The pool size is set to one! You probably want to change database.pool-size in config.yml to 3 or higher!");

@@ -8,8 +8,7 @@ dependencies {
     // 13.3.1 could not parse Minecraft 26's version scheme; 13.7.1 and later can.
     // api: core's public methods take and return XMaterial, which the version adapters compile against.
     api 'com.github.cryptomorin:XSeries:14.0.0'
-    // 4.0.3 is HikariCP's last Java 8 release; 5.x and later need Java 11.
-    implementation 'com.zaxxer:HikariCP:4.0.3'
+    implementation 'com.zaxxer:HikariCP:7.1.0'
     implementation 'org.slf4j:slf4j-api:2.0.20'
     // Usage statistics; Folia-aware since 3.1
     implementation 'org.bstats:bstats-bukkit:3.2.1'
