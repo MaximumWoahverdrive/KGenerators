@@ -18,7 +18,7 @@ import lombok.Getter;
 import lombok.Setter;
 import me.kryniowesegryderiusz.kgenerators.Main;
 import me.kryniowesegryderiusz.kgenerators.api.objects.AbstractGeneratedObject;
-import me.kryniowesegryderiusz.kgenerators.dependencies.hooks.NBTAPIHook;
+import me.kryniowesegryderiusz.kgenerators.utils.ItemData;
 import me.kryniowesegryderiusz.kgenerators.generators.generator.GeneratorsManager;
 import me.kryniowesegryderiusz.kgenerators.generators.generator.enums.GeneratorType;
 import me.kryniowesegryderiusz.kgenerators.generators.upgrades.objects.Upgrade;
@@ -135,7 +135,7 @@ public class Generator {
 		}
 
 		if (this.generatorItem != null)
-			NBTAPIHook.addNBT(generatorItem, generatorID, GeneratorItemMatcher.GENERATOR_ID_NBT, generatorID);
+			ItemData.setString(generatorItem, ItemData.GENERATOR_ID, generatorID);
 
 		/*
 		 * Generates section

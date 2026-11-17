@@ -18,7 +18,6 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
 import me.kryniowesegryderiusz.kgenerators.Main;
-import me.kryniowesegryderiusz.kgenerators.dependencies.hooks.NBTAPIHook;
 import me.kryniowesegryderiusz.kgenerators.logger.Logger;
 import me.kryniowesegryderiusz.kgenerators.utils.immutable.Config;
 import com.cryptomorin.xseries.XEnchantment;
@@ -196,8 +195,7 @@ public class FilesUtils {
 			if (map.containsKey("custom-nbt")) {
 				for (String s : (ArrayList<String>) map.get("custom-nbt")) {
 					if (s != null) {
-						String[] splitted = s.split(":");
-						NBTAPIHook.addNBT(item, place, splitted[0], splitted[1]);
+						ItemData.applyConfigEntry(item, place, s);
 					}
 				}
 			}

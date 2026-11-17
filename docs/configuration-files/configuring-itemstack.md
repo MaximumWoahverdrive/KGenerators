@@ -56,6 +56,12 @@ Extended configuration on the other hand gives you the opportunity to freely cus
    custom-model-data: 155
 ```
 
+> [!NOTE]
+> In KGenerators Regenerated, `custom-nbt` entries are stored as string values in the item's
+> persistent data container, not as raw NBT tags: `key:value` is stored as `kgenerators:key`,
+> and `namespace:key:value` as `namespace:key`. Keys may only use `a-z`, `0-9`, `.`, `_`, `-`
+> and `/`.
+
 
 #### Custom head
 This is custom head item.

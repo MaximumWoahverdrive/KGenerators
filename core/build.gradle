@@ -2,9 +2,6 @@ apply plugin: 'java-library'
 
 dependencies {
     // Shaded into the plugin jar (relocated in the root build.gradle).
-    // NBT-API: KGenerators is the only plugin here that needs it, so it is bundled rather than a separate plugin.
-    // 2.16.1 is the version verified to load NMS support 'MC26_2'.
-    implementation 'de.tr7zw:item-nbt-api:2.16.1'
     // 13.3.1 could not parse Minecraft 26's version scheme; 13.7.1 and later can.
     // api: core's public methods take and return XMaterial, which the version adapters compile against.
     api 'com.github.cryptomorin:XSeries:14.0.0'

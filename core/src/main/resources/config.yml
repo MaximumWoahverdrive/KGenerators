@@ -51,7 +51,8 @@ count-delay-on-unloaded-chunks: true
 
 #What should determine, wheather item in hand is a generator or not?
 generator-item-matcher:
-  #Custom NBT - the most reliable option to match generator 
+  #Generator id stored in the item's data (also recognises items from KGenerators 7.3.1 and older)
+  #- the most reliable option to match generator
   check-by-nbt: true
   #Check by item meta - could break on generator item changes
   check-by-item-meta: false
