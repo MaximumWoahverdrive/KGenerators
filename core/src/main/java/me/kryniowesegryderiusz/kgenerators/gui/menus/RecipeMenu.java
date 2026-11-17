@@ -1,5 +1,6 @@
 package me.kryniowesegryderiusz.kgenerators.gui.menus;
 
+import me.kryniowesegryderiusz.kgenerators.utils.Text;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -74,7 +75,7 @@ public class RecipeMenu {
 		
 		if (resultItem.getItemType().contains("<generator>"))
 			resultItem.setItemStack(generator.getGeneratorItem());
-		resultItem.replace("<generator_name>", generator.getGeneratorItem().getItemMeta().getDisplayName());
+		resultItem.replace("<generator_name>", Text.name(generator.getGeneratorItem().getItemMeta()));
 		
 		ItemStack readyItem = resultItem.build(player);
 

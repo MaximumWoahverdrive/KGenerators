@@ -1,5 +1,6 @@
 package me.kryniowesegryderiusz.kgenerators.utils;
 
+import me.kryniowesegryderiusz.kgenerators.utils.Text;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.EnumMap;
@@ -124,7 +125,7 @@ public abstract class ItemUtils {
 		ArrayList<String> reps = new ArrayList<>(Arrays.asList(replacables));
 		ArrayList<String> newLore = new ArrayList<String>();
 		
-		for (String s : item.getItemMeta().getLore()) {
+		for (String s : Text.lore(item.getItemMeta())) {
 			String message = s;
 			for (int i = 0; i < reps.size(); i = i + 2) {
 				message = message.replace(reps.get(i), reps.get(i + 1));
@@ -133,7 +134,7 @@ public abstract class ItemUtils {
 		}
 		
 		ItemMeta meta = item.getItemMeta();
-		meta.setLore(newLore);
+		Text.setLore(meta, newLore);
 		item.setItemMeta(meta);
 		
 		return item;

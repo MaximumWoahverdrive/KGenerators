@@ -1,7 +1,9 @@
 package me.kryniowesegryderiusz.kgenerators.dependencies.hooks;
 
+import me.kryniowesegryderiusz.kgenerators.utils.Text;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 
 import me.clip.placeholderapi.PlaceholderAPI;
 import me.kryniowesegryderiusz.kgenerators.Main;
@@ -20,11 +22,13 @@ public class PlaceholderAPIHook {
 	public static ItemStack translatePlaceholders(OfflinePlayer op, ItemStack item) {
 		
 		if (op != null && Main.getDependencies().isEnabled(Dependency.PLACEHOLDERAPI) && item.hasItemMeta()) {
-			if (item.getItemMeta().hasDisplayName())
-				item.getItemMeta()
-						.setDisplayName(PlaceholderAPI.setPlaceholders(op, item.getItemMeta().getDisplayName()));
-			if (item.getItemMeta().hasLore())
-				item.getItemMeta().setLore(PlaceholderAPI.setPlaceholders(op, item.getItemMeta().getLore()));
+			// getItemMeta() returns a copy, so the changes only stick once it is set back
+			ItemMeta meta = item.getItemMeta();
+			if (meta.hasDisplayName())
+				Text.setName(meta, PlaceholderAPI.setPlaceholders(op, Text.name(meta)));
+			if (meta.hasLore())
+				Text.setLore(meta, PlaceholderAPI.setPlaceholders(op, Text.lore(meta)));
+			item.setItemMeta(meta);
 		}
 		return item;
 	}

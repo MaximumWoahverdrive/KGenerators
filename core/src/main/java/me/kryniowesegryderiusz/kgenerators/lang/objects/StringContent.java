@@ -1,5 +1,6 @@
 package me.kryniowesegryderiusz.kgenerators.lang.objects;
 
+import me.kryniowesegryderiusz.kgenerators.utils.Text;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -50,7 +51,7 @@ public class StringContent implements Cloneable {
 				{
 					for (String as : stringContent.getLines())
 					{
-						newDesc.add(Main.getMultiVersion().getChatUtils().colorize(as));
+						newDesc.add(Text.colorize(as));
 					}
 				}
 			}
@@ -93,7 +94,7 @@ public class StringContent implements Cloneable {
 		{
 			for (String s : (ArrayList<String>) config.getStringList(path))
 			{
-				lines.add(Main.getMultiVersion().getChatUtils().colorize(s));
+				lines.add(Text.colorize(s));
 			}
 		}
 		else if (defaultContent != null)

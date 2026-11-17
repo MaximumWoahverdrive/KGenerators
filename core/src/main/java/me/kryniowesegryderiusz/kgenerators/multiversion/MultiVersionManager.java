@@ -3,9 +3,7 @@ package me.kryniowesegryderiusz.kgenerators.multiversion;
 import lombok.Getter;
 import me.kryniowesegryderiusz.kgenerators.Main;
 import me.kryniowesegryderiusz.kgenerators.logger.Logger;
-import me.kryniowesegryderiusz.kgenerators.multiversion.interfaces.ActionBar;
 import me.kryniowesegryderiusz.kgenerators.multiversion.interfaces.BlocksUtils;
-import me.kryniowesegryderiusz.kgenerators.multiversion.interfaces.ChatUtils;
 import me.kryniowesegryderiusz.kgenerators.multiversion.interfaces.RecipesLoader;
 import me.kryniowesegryderiusz.kgenerators.multiversion.interfaces.SkullUtils;
 import me.kryniowesegryderiusz.kgenerators.multiversion.interfaces.WorldGuardUtils;
@@ -22,10 +20,6 @@ public class MultiVersionManager {
 	private BlocksUtils blocksUtils = new BlocksUtils_1_13();
 	@Getter
 	private WorldGuardUtils worldGuardUtils;
-	@Getter
-	private ActionBar actionBar = new ActionBar_1_9();
-	@Getter
-	private ChatUtils chatUtils = new ChatUtils_1_16();
 	@Getter
 	private SkullUtils skullUtils = new SkullUtils_1_21();
 

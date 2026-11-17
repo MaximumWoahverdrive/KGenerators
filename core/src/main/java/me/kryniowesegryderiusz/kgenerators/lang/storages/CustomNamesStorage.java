@@ -1,5 +1,6 @@
 package me.kryniowesegryderiusz.kgenerators.lang.storages;
 
+import me.kryniowesegryderiusz.kgenerators.utils.Text;
 import java.util.HashMap;
 
 import org.bukkit.enchantments.Enchantment;
@@ -29,7 +30,7 @@ public class CustomNamesStorage {
 		String name = "";
 
 		if (item.hasItemMeta() && item.getItemMeta().hasDisplayName())
-			name = item.getItemMeta().getDisplayName();
+			name = Text.name(item.getItemMeta());
 		else if (customNames.get(XMaterial.matchXMaterial(item).name()) != null)
 			name = customNames.get(XMaterial.matchXMaterial(item).name());
 		else {

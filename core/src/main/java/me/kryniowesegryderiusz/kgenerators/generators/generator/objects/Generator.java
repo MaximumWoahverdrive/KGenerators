@@ -1,5 +1,6 @@
 package me.kryniowesegryderiusz.kgenerators.generators.generator.objects;
 
+import me.kryniowesegryderiusz.kgenerators.utils.Text;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -115,14 +116,14 @@ public class Generator {
 			ArrayList<String> loreGot = new ArrayList<String>();
 			ArrayList<String> lore = new ArrayList<String>();
 			ItemMeta meta = (ItemMeta) this.generatorItem.getItemMeta();
-			meta.setDisplayName(
-					Main.getMultiVersion().getChatUtils().colorize(config.getString(generatorID + ".name")));
+			Text.setName(meta, 
+					Text.colorize(config.getString(generatorID + ".name")));
 			loreGot = (ArrayList<String>) config.getList(generatorID + ".lore");
 			for (String l : loreGot) {
-				l = Main.getMultiVersion().getChatUtils().colorize(l);
+				l = Text.colorize(l);
 				lore.add(l);
 			}
-			meta.setLore(lore);
+			Text.setLore(meta, lore);
 			lore.clear();
 			if (glow)
 				meta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
@@ -262,7 +263,7 @@ public class Generator {
 	}
 
 	public String getGeneratorItemName() {
-		return this.generatorItem.getItemMeta().getDisplayName();
+		return Text.name(this.generatorItem.getItemMeta());
 	}
 
 	public Upgrade getUpgrade() {

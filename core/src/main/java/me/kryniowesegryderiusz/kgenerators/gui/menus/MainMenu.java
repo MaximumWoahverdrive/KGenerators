@@ -1,5 +1,6 @@
 package me.kryniowesegryderiusz.kgenerators.gui.menus;
 
+import me.kryniowesegryderiusz.kgenerators.utils.Text;
 import java.util.ArrayList;
 import java.util.Map.Entry;
 
@@ -60,7 +61,7 @@ public class MainMenu {
 			if (generatorMenuItem.getItemType().contains("<generator>"))
 				generatorMenuItem.setItemStack(generator.getGeneratorItem());
 
-			generatorMenuItem.replace("<generator_name>", generator.getGeneratorItem().getItemMeta().getDisplayName());
+			generatorMenuItem.replace("<generator_name>", Text.name(generator.getGeneratorItem().getItemMeta()));
 
 			if (Main.getRecipes().get(generator) != null) {
 				generatorMenuItem.addLore(Lang.getMenuItemAdditionalLinesStorage().get(MenuItemAdditionalLines.RECIPE));

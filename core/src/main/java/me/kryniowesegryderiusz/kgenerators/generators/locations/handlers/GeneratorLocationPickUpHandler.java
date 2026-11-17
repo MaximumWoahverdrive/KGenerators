@@ -1,5 +1,6 @@
 package me.kryniowesegryderiusz.kgenerators.generators.locations.handlers;
 
+import me.kryniowesegryderiusz.kgenerators.utils.Text;
 import org.bukkit.entity.Player;
 
 import me.kryniowesegryderiusz.kgenerators.Main;
@@ -55,7 +56,7 @@ public class GeneratorLocationPickUpHandler {
 		gLocation.removeGenerator(true, p);
 		Logger.debugPlayer(p.getName() + " picked up " + gLocation.toString());
 		Lang.getMessageStorage().send(p, Message.GENERATORS_PICK_UP_SUCCESFULL,
-				"<generator>", generator.getGeneratorItem().getItemMeta().getDisplayName());
+				"<generator>", Text.name(generator.getGeneratorItem().getItemMeta()));
 		
 		Main.getSettings().getPickupSound().play(p);
 		return;

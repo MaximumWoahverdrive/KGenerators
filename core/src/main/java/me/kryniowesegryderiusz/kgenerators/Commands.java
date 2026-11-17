@@ -1,5 +1,6 @@
 package me.kryniowesegryderiusz.kgenerators;
 
+import me.kryniowesegryderiusz.kgenerators.utils.Text;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -73,7 +74,7 @@ public class Commands implements CommandExecutor {
 					Lang.getMessageStorage().send(sender, Message.COMMANDS_LIST_HEADER);
 					for (Entry<String, Generator> e : Main.getGenerators().getEntrySet()) {
 						Lang.getMessageStorage().send(sender, Message.COMMANDS_LIST_LIST, false, false, "<generator>",
-								e.getValue().getGeneratorItem().getItemMeta().getDisplayName(), "<generatorID>",
+								Text.name(e.getValue().getGeneratorItem().getItemMeta()), "<generatorID>",
 								e.getKey());
 					}
 				} else {
@@ -168,11 +169,11 @@ public class Commands implements CommandExecutor {
 							player.getInventory().addItem(item);
 
 							Lang.getMessageStorage().send(sender, Message.COMMANDS_GIVE_GENERATOR_GIVEN, "<generator>",
-									item.getItemMeta().getDisplayName(), "<player>", player.getDisplayName(),
+									Text.name(item.getItemMeta()), "<player>", Text.legacy(player.displayName()),
 									"<amount>", String.valueOf(amount), label, generatorID);
 
 							Lang.getMessageStorage().send(player, Message.COMMANDS_GIVE_GENERATOR_RECIEVED,
-									"<generator>", item.getItemMeta().getDisplayName(), "<amount>",
+									"<generator>", Text.name(item.getItemMeta()), "<amount>",
 									String.valueOf(amount));
 						}
 					} else {

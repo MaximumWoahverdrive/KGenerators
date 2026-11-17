@@ -1,5 +1,6 @@
 package me.kryniowesegryderiusz.kgenerators.generators.players.limits.objects;
 
+import me.kryniowesegryderiusz.kgenerators.utils.Text;
 import java.util.ArrayList;
 
 import org.bukkit.entity.Player;
@@ -100,7 +101,7 @@ public class Limit {
 		else {
 			Lang.getMessageStorage().send(gp.getOnlinePlayer(), Message.GENERATORS_LIMITS_CANT_MORE, "<number>",
 					String.valueOf(this.placeLimit), "<generator>",
-					gloc.getGenerator().getGeneratorItem().getItemMeta().getDisplayName(), "<limit>", this.name);
+					Text.name(gloc.getGenerator().getGeneratorItem().getItemMeta()), "<limit>", this.name);
 			return false;
 		}
 	}

@@ -1,5 +1,6 @@
 package me.kryniowesegryderiusz.kgenerators.generators.locations.objects;
 
+import me.kryniowesegryderiusz.kgenerators.utils.Text;
 import java.util.UUID;
 
 import org.jetbrains.annotations.Nullable;
@@ -121,7 +122,7 @@ public class GeneratorLocation implements IGeneratorLocation {
 		String permission = "kgenerators.mine." + this.getGenerator().getId();
 		if (!player.hasPermission(permission)) {
 			Lang.getMessageStorage().send(player, Message.GENERATORS_DIGGING_NO_PERMISSION, "<permission>", permission,
-					"<generator>", this.getGenerator().getGeneratorItem().getItemMeta().getDisplayName());
+					"<generator>", Text.name(this.getGenerator().getGeneratorItem().getItemMeta()));
 			return false;
 		}
 

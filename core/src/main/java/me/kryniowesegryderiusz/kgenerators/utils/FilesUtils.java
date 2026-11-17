@@ -1,5 +1,6 @@
 package me.kryniowesegryderiusz.kgenerators.utils;
 
+import me.kryniowesegryderiusz.kgenerators.utils.Text;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.IOException;
@@ -164,15 +165,15 @@ public class FilesUtils {
 			}
 
 			if (map.containsKey("name"))
-				meta.setDisplayName(Main.getMultiVersion().getChatUtils().colorize((String) map.get("name")));
+				Text.setName(meta, Text.colorize((String) map.get("name")));
 
 			if (map.containsKey("lore")) {
 				ArrayList<String> lore = new ArrayList<>();
 				for (String s : (ArrayList<String>) map.get("lore")) {
 					if (s != null)
-						lore.add(Main.getMultiVersion().getChatUtils().colorize(s));
+						lore.add(Text.colorize(s));
 				}
-				meta.setLore(lore);
+				Text.setLore(meta, lore);
 			}
 
 			if (map.containsKey("item-flags")) {
