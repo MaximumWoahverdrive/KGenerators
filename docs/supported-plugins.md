@@ -9,7 +9,6 @@
 - [JetsMinions](supported-plugins/jetsminions.md)
 - [Lands](supported-plugins/lands.md)
 - [LitMinions](supported-plugins/litminions.md)
-- [Minions-Revamped](supported-plugins/minions-revamped.md)
 - [MMOItems](supported-plugins/mmoitems.md)
 - [MythicMobs](supported-plugins/mythicmobs.md)
 - [Nexo](supported-plugins/nexo.md)

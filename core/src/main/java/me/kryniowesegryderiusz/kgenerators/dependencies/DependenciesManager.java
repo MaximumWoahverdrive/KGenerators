@@ -12,7 +12,6 @@ import me.kryniowesegryderiusz.kgenerators.dependencies.hooks.FancyHologramsHook
 import me.kryniowesegryderiusz.kgenerators.dependencies.hooks.IridiumSkyblockHook;
 import me.kryniowesegryderiusz.kgenerators.dependencies.hooks.JetsMinionsHook;
 import me.kryniowesegryderiusz.kgenerators.dependencies.hooks.LitMinionsHook;
-import me.kryniowesegryderiusz.kgenerators.dependencies.hooks.MinionsHook;
 import me.kryniowesegryderiusz.kgenerators.dependencies.hooks.PlayerPointsHook;
 import me.kryniowesegryderiusz.kgenerators.dependencies.hooks.SlimefunHook;
 import me.kryniowesegryderiusz.kgenerators.dependencies.hooks.SuperiorSkyblock2Hook;
@@ -80,12 +79,6 @@ public class DependenciesManager {
 			Logger.debugPluginLoad("Dependencies: Detected plugin LitMinions. Hooking into it.");
 			Main.getInstance().getServer().getPluginManager().registerEvents(new LitMinionsHook(), Main.getInstance());
 			dependencies.add(Dependency.LIT_MINIONS);
-		}
-
-		if (Bukkit.getPluginManager().isPluginEnabled("Minions-Revamped")) {
-			Logger.debugPluginLoad("Dependencies: Detected plugin Minions-Revamped. Hooking into it.");
-			Main.getInstance().getServer().getPluginManager().registerEvents(new MinionsHook(), Main.getInstance());
-			dependencies.add(Dependency.MINIONS);
 		}
 
 		if (Bukkit.getPluginManager().isPluginEnabled("Slimefun")) {

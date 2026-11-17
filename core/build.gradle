@@ -71,7 +71,7 @@ dependencies {
     compileOnly 'com.github.Zrips:CMI-API:9.8.6.4'
     compileOnly 'com.github.Zrips:CMILib:1.6.0.4'  // CMI's API classes reference CMILib types
 
-    // JetsMinions, Minions-Miner: not published anywhere
+    // JetsMinions: not published anywhere
     compileOnly fileTree(dir: 'libs', include: '*.jar')
 }
 
