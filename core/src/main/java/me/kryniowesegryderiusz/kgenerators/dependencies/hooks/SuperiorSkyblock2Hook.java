@@ -61,7 +61,9 @@ public class SuperiorSkyblock2Hook implements Listener {
 					"Dependencies: SuperiorSkyblock2: Other party plugin tried to initialise additional privilages, but failed! IslandPrivileges are not added yet!");
 	}
 
-	@EventHandler
+	// Only remove the generators once the disband is final: after every other plugin had its say,
+	// and not at all if one of them cancelled it.
+	@EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
 	public void onDeleteEvent(IslandDisbandEvent e) {
 
 		Location min = e.getIsland().getMinimum();
