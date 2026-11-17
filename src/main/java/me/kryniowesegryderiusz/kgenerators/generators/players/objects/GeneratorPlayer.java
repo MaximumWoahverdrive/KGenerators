@@ -111,15 +111,19 @@ public class GeneratorPlayer {
     }
 
     /**
-     * Online player only
+     * Place limits only apply to an online owner; generators without an owner or spawned for an
+     * offline one are not limited.
      *
      * @param gLoc generator location the player wants to place
      * @return true if no configured limit prevents placing it
      */
     public Boolean canPlace(GeneratorLocation gLoc) {
-        if (!Main.getLimits().hasLimits()) return true;
+        if (!Main.getLimits().hasLimits() || isNone) return true;
 
-        PlayerLimits pl = new PlayerLimits(this.getOnlinePlayer());
+        Player player = this.getOnlinePlayer();
+        if (player == null) return true;
+
+        PlayerLimits pl = new PlayerLimits(player);
         for (Limit limit : Main.getLimits().getValues()) {
             if (!limit.fulfillsPlaceLimit(this, gLoc, pl)) return false;
         }

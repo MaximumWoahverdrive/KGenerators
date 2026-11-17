@@ -51,6 +51,10 @@ container can read them under the new keys.
 - **Upgrades paid with Vault money or PlayerPoints** no longer go through when the economy plugin
   refuses the payment; anything already taken is refunded.
 - **`/kgen list`** no longer puts the message prefix on every line.
+- **`/kgen menu <player> upgrade <generator>`** opens the upgrade menu; it always answered that the menu
+  doesn't exist.
+- **`/kgen spawn`** without an owner, or for an offline owner, no longer fails with an error when
+  limits are enabled; such generators are not subject to place limits.
 - **Commands that only players can use** now tell the console so (new message
   `commands.any.player-only`, added to existing language files automatically) instead of printing to
   the server log.

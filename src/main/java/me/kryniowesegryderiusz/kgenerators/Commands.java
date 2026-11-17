@@ -332,7 +332,7 @@ public class Commands implements CommandExecutor {
                                             Lang.getMessageStorage()
                                                     .send(sender, Message.COMMANDS_ANY_MENU_DOESNT_EXIST);
                                     } else if (args[2].toLowerCase().contains("upgrade")) {
-                                        if (Main.getUpgrades().couldBeObtained(args[2]))
+                                        if (Main.getUpgrades().couldBeObtained(generator.getId()))
                                             Main.getMenus().openUpgradeMenu(player, generator);
                                         else
                                             Lang.getMessageStorage()
