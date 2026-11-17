@@ -63,7 +63,9 @@ container can read them under the new keys.
 
 ## Text
 
-Colour codes work as before (`&` codes and `#RRGGBB` hex colours). Two differences:
+Colour codes work as before (`&` codes and `#RRGGBB` hex colours), and texts can now also use
+[MiniMessage](configuration-files/text-formatting.md) tags such as `<gradient>`. Two other
+differences:
 
 - PlaceholderAPI placeholders in generator item names and lore are now actually applied. In 7.3.1
   they were silently left as they were.

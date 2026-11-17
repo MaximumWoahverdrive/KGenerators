@@ -10,6 +10,7 @@ configuration files, so they apply unchanged unless a page says otherwise.
 - [Configuration files](configuration-files.md)
   - [Configuring ItemStack](configuration-files/configuring-itemstack.md)
   - [Configuring Block](configuration-files/configuring-block.md)
+  - [Text formatting](configuration-files/text-formatting.md)
   - [Limits](configuration-files/limits.md)
   - [Optional settings](configuration-files/optional-settings.md)
 - [Converting databases](converting-databases.md)
