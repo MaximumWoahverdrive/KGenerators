@@ -1,5 +1,6 @@
 package me.kryniowesegryderiusz.kgenerators.gui.menus;
 
+import me.kryniowesegryderiusz.kgenerators.utils.SkullUtils;
 import java.util.ArrayList;
 
 import org.bukkit.Material;
@@ -46,7 +47,7 @@ public class LimitsMenu {
 			ItemStack item = limit.getItem().clone();
 			
 			if (item.getType() == Material.PLAYER_HEAD)
-				item = Main.getMultiVersion().getSkullUtils().itemFromName(player.getName());
+				item = SkullUtils.itemFromName(player.getName());
 			
 			MenuItem chanceMenuItem = Lang.getMenuItemStorage().get(MenuItemType.LIMITS_MENU_LIMIT);
 			if (chanceMenuItem.getItemType().contains("<limit_display_item>"))

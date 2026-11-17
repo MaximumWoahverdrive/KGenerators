@@ -1,5 +1,6 @@
 package me.kryniowesegryderiusz.kgenerators.generators.locations.objects;
 
+import me.kryniowesegryderiusz.kgenerators.utils.BlockUtils;
 import me.kryniowesegryderiusz.kgenerators.utils.Text;
 import java.util.UUID;
 
@@ -108,7 +109,7 @@ public class GeneratorLocation implements IGeneratorLocation {
 	// api
 	public boolean isBlockPossibleToMine(Location location) {
 		return this.getGeneratedBlockLocation().equals(location) && 
-				(this.getGenerator().getPlaceholder() == null || !this.getGenerator().getPlaceholder().getItem().equals(Main.getMultiVersion().getBlocksUtils().getItemStackByBlock(location.getBlock())));
+				(this.getGenerator().getPlaceholder() == null || !this.getGenerator().getPlaceholder().getItem().equals(BlockUtils.getItemStackByBlock(location.getBlock())));
 	}
 
 	// api
@@ -151,11 +152,11 @@ public class GeneratorLocation implements IGeneratorLocation {
 			return false;
 
 		if (!Main.getSchedules().isScheduled(this)) {
-			if (Main.getMultiVersion().getBlocksUtils().isAir(this.getGeneratedBlockLocation().getBlock())) {
+			if (BlockUtils.isAir(this.getGeneratedBlockLocation().getBlock())) {
 				return true;
 			} else {
 				if (this.getGenerator().getPlaceholder() != null) {
-					ItemStack itemBlock = Main.getMultiVersion().getBlocksUtils().getItemStackByBlock(this.getGeneratedBlockLocation().getBlock());
+					ItemStack itemBlock = BlockUtils.getItemStackByBlock(this.getGeneratedBlockLocation().getBlock());
 					if (itemBlock.isSimilar(this.getGenerator().getPlaceholder().getItem())) {
 						for (AbstractGeneratedObject ago : this.getGenerator().getGeneratedObjects()) {
 							if (ago.isBlockSimilar(itemBlock))
@@ -239,10 +240,10 @@ public class GeneratorLocation implements IGeneratorLocation {
 
 		this.generator = generator;
 		if (this.getGenerator().getType() == GeneratorType.SINGLE) {
-			Main.getMultiVersion().getBlocksUtils().setBlock(this.location, Material.AIR);
+			BlockUtils.setBlock(this.location, Material.AIR);
 		} else {
-			Main.getMultiVersion().getBlocksUtils().setBlock(this.location, this.getGenerator().getGeneratorItem());
-			Main.getMultiVersion().getBlocksUtils().setBlock(this.location.clone().add(0, 1, 0), Material.AIR);
+			BlockUtils.setBlock(this.location, this.getGenerator().getGeneratorItem());
+			BlockUtils.setBlock(this.location.clone().add(0, 1, 0), Material.AIR);
 		}
 
 		Main.getDatabases().getDb().saveGenerator(this);

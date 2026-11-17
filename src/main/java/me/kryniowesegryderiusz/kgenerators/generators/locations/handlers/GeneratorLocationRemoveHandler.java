@@ -1,5 +1,6 @@
 package me.kryniowesegryderiusz.kgenerators.generators.locations.handlers;
 
+import me.kryniowesegryderiusz.kgenerators.utils.BlockUtils;
 import org.jetbrains.annotations.Nullable;
 
 import org.bukkit.Location;
@@ -47,8 +48,8 @@ public class GeneratorLocationRemoveHandler {
 		
 		SuperiorSkyblock2Hook.handleGeneratorLocationRemove(gLocation);
 		
-		Main.getMultiVersion().getBlocksUtils().setBlock(location, Material.AIR);
-		Main.getMultiVersion().getBlocksUtils().setBlock(gLocation.getGeneratedBlockLocation(), Material.AIR);
+		BlockUtils.setBlock(location, Material.AIR);
+		BlockUtils.setBlock(gLocation.getGeneratedBlockLocation(), Material.AIR);
 		
 		ItemsAdderHook.handleGeneratorLocationRemove(gLocation);
 		

@@ -1,5 +1,6 @@
 package me.kryniowesegryderiusz.kgenerators.generators.generator.objects;
 
+import me.kryniowesegryderiusz.kgenerators.utils.BlockUtils;
 import java.util.ArrayList;
 import java.util.ListIterator;
 import java.util.Map;
@@ -29,7 +30,7 @@ public class GeneratedEntity extends AbstractGeneratedObject {
 	@Override
 	public void regenerate(IGeneratorLocation generatorLocation) {
 		Location generateLocation = generatorLocation.getGeneratedBlockLocation().clone().add(0.5, 0, 0.5);
-		if (!Main.getMultiVersion().getBlocksUtils().isAir(generatorLocation.getGeneratedBlockLocation().getBlock()))
+		if (!BlockUtils.isAir(generatorLocation.getGeneratedBlockLocation().getBlock()))
 			generateLocation.add(0,1,0);
 		generateLocation.setPitch(-90);
 		entities.addAll(customEntityData.spawnEntities(generateLocation));

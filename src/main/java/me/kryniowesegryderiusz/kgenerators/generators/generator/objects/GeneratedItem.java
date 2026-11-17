@@ -1,5 +1,6 @@
 package me.kryniowesegryderiusz.kgenerators.generators.generator.objects;
 
+import me.kryniowesegryderiusz.kgenerators.utils.BlockUtils;
 import java.util.Map;
 
 import org.bukkit.Location;
@@ -71,8 +72,8 @@ public class GeneratedItem extends AbstractGeneratedObject implements Listener {
 	@Override
 	public void regenerate(IGeneratorLocation generatorLocation) {
 		Location generateLocation = generatorLocation.getGeneratedBlockLocation().clone().add(0.5, 0.5, 0.5);
-		if (!Main.getMultiVersion().getBlocksUtils().isAir(generatorLocation.getGeneratedBlockLocation().getBlock()) 
-				&& !Main.getMultiVersion().getBlocksUtils().isWater(generatorLocation.getGeneratedBlockLocation().getBlock()))
+		if (!BlockUtils.isAir(generatorLocation.getGeneratedBlockLocation().getBlock()) 
+				&& !BlockUtils.isWater(generatorLocation.getGeneratedBlockLocation().getBlock()))
 			generateLocation.add(0, 1, 0);
 		generateLocation.setPitch(-90);
 		this.entity = generatorLocation.getGeneratedBlockLocation().getWorld().dropItem(generateLocation, item);

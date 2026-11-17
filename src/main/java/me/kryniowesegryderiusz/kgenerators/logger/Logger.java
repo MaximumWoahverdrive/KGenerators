@@ -103,11 +103,6 @@ public class Logger {
 			log(object, LogType.DEBUG);
 	}
 	
-	public static void debugMultiVersionManager(Object object) {
-		if (Main.getSettings().isMultiVersionManagerDebug())
-			log(object, LogType.DEBUG);
-	}
-
 	public static void debug(Object object) {
 		log(object, LogType.DEBUG);
 	}

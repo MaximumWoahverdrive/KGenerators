@@ -1,5 +1,6 @@
 package me.kryniowesegryderiusz.kgenerators.generators.locations.handlers;
 
+import me.kryniowesegryderiusz.kgenerators.utils.BlockUtils;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -35,9 +36,9 @@ public class GeneratorLocationRegenerateHandler {
 			return;
 		}
 		
-		boolean isAir = Main.getMultiVersion().getBlocksUtils().isAir(generatingLocationBlock);
-		boolean isOnWhitelist = Main.getMultiVersion().getBlocksUtils().isOnWhitelist(generatingLocationBlock);
-		boolean isPlaceholder = gLocation.getGenerator().getPlaceholder() == null ? isAir : gLocation.getGenerator().getPlaceholder().getItem().equals(Main.getMultiVersion().getBlocksUtils().getItemStackByBlock(generatingLocationBlock));
+		boolean isAir = BlockUtils.isAir(generatingLocationBlock);
+		boolean isOnWhitelist = BlockUtils.isOnWhitelist(generatingLocationBlock);
+		boolean isPlaceholder = gLocation.getGenerator().getPlaceholder() == null ? isAir : gLocation.getGenerator().getPlaceholder().getItem().equals(BlockUtils.getItemStackByBlock(generatingLocationBlock));
 		
 		if (!isAir && !isOnWhitelist && !isPlaceholder) {
 			Logger.debug("GeneratorLocationRegenerateHandler: Dropping generator " + gLocation.toString() + " | isAir: " + isAir + " | isOnWhitelist: " + isOnWhitelist + " | isPlaceholder: " + isPlaceholder + " | block: " + generatingLocationBlock.getType().toString());

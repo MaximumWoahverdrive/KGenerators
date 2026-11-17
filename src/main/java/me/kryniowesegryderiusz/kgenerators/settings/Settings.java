@@ -107,8 +107,6 @@ public class Settings {
 	private boolean placedGeneratorsManagerDebug = false;
 	@Getter
 	private boolean schedulesManagerDebug = false;
-	@Getter
-	private boolean multiVersionManagerDebug = false;
 	
 	@Getter
 	private boolean warnings = true;
@@ -146,8 +144,6 @@ public class Settings {
 			this.placedGeneratorsManagerDebug = config.getBoolean("debug.placed-generators-manager");
 		if (config.contains("debug.schedules"))
 			this.schedulesManagerDebug = config.getBoolean("debug.schedules");
-		if (config.contains("debug.multi-version"))
-			this.multiVersionManagerDebug = config.getBoolean("debug.multi-version");
 		if (config.contains("debug.warnings"))
 			this.warnings = config.getBoolean("debug.warnings");
 

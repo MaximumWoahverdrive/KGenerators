@@ -1,5 +1,6 @@
 package me.kryniowesegryderiusz.kgenerators.gui.menus;
 
+import me.kryniowesegryderiusz.kgenerators.utils.BlockUtils;
 import java.util.ArrayList;
 
 import org.bukkit.entity.Player;
@@ -94,7 +95,7 @@ public class GeneratorMenu {
 			if (gl.isBroken())
 			{
 				if (gl.getGenerator().getType() == GeneratorType.DOUBLE)
-					Main.getMultiVersion().getBlocksUtils().setBlock(gl.getLocation(), gl.getGenerator().getGeneratorItem());
+					BlockUtils.setBlock(gl.getLocation(), gl.getGenerator().getGeneratorItem());
 				gl.scheduleGeneratorRegeneration();
 				Lang.getMessageStorage().send(p, Message.GENERATORS_ANY_REPAIRED);
 				Main.getMenus().closeInv(p);

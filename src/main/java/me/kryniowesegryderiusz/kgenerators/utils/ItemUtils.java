@@ -33,8 +33,8 @@ public abstract class ItemUtils {
         			&& Main.getGenerators().exists(splitted[1]))
         		return Main.getGenerators().get(splitted[1]).getGeneratorItem().clone();
         	else if (splitted[0].equals("customhead")
-        			&& Main.getMultiVersion().getSkullUtils().itemFromBase64(splitted[1]) != null)
-        		return Main.getMultiVersion().getSkullUtils().itemFromBase64(splitted[1]);
+        			&& SkullUtils.itemFromBase64(splitted[1]) != null)
+        		return SkullUtils.itemFromBase64(splitted[1]);
         	else if (splitted[0].equals("itemsadder")
         			&& ItemsAdderHook.getItemStack(splitted[1]) != null)
         		return ItemsAdderHook.getItemStack(splitted[1]);

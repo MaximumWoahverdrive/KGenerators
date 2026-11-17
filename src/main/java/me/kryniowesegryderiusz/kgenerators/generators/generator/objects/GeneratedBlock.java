@@ -1,5 +1,6 @@
 package me.kryniowesegryderiusz.kgenerators.generators.generator.objects;
 
+import me.kryniowesegryderiusz.kgenerators.utils.BlockUtils;
 import java.util.Map;
 
 import org.bukkit.inventory.ItemStack;
@@ -47,13 +48,13 @@ public class GeneratedBlock extends AbstractGeneratedObject {
 		
 		this.customBlockData.setBlock(generatorLocation.getGeneratedBlockLocation(), physics);
 		
-		if (Main.getMultiVersion().getBlocksUtils().isAgeable(generatorLocation.getGeneratedBlockLocation().getBlock())) {
-			int maxAge = Main.getMultiVersion().getBlocksUtils().getMaximumAge(generatorLocation.getGeneratedBlockLocation().getBlock());
+		if (BlockUtils.isAgeable(generatorLocation.getGeneratedBlockLocation().getBlock())) {
+			int maxAge = BlockUtils.getMaximumAge(generatorLocation.getGeneratedBlockLocation().getBlock());
 			if (age > maxAge)
 				age = maxAge;
 			else if (age < 0)
                 age = 0;
-			Main.getMultiVersion().getBlocksUtils().setAge(generatorLocation.getGeneratedBlockLocation().getBlock(), age);
+			BlockUtils.setAge(generatorLocation.getGeneratedBlockLocation().getBlock(), age);
 		}
 
 		if (Main.getDependencies().isEnabled(Dependency.SUPERIOR_SKYBLOCK_2))

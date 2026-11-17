@@ -1,5 +1,6 @@
 package me.kryniowesegryderiusz.kgenerators.utils.objects;
 
+import me.kryniowesegryderiusz.kgenerators.utils.SkullUtils;
 import org.bukkit.Location;
 import org.bukkit.inventory.ItemStack;
 
@@ -17,7 +18,7 @@ public class HeadCustomBlockData extends CustomBlockData  {
 	
 	@Override
 	public void setBlock(Location location) {
-		Main.getMultiVersion().getSkullUtils().blockWithBase64(location.getBlock(), skullBase64);
+		SkullUtils.blockWithBase64(location.getBlock(), skullBase64);
 	}
 	
 	@Override
@@ -27,7 +28,7 @@ public class HeadCustomBlockData extends CustomBlockData  {
 	
 	@Override
 	public ItemStack getItem() {
-		return Main.getMultiVersion().getSkullUtils().itemFromBase64(skullBase64);
+		return SkullUtils.itemFromBase64(skullBase64);
 	}
 	
 	@Override

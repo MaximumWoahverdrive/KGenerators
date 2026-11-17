@@ -1,4 +1,4 @@
-package me.kryniowesegryderiusz.kgenerators.multiversion;
+package me.kryniowesegryderiusz.kgenerators.utils;
 
 import java.nio.charset.StandardCharsets;
 import java.util.UUID;
@@ -13,12 +13,12 @@ import com.destroystokyo.paper.profile.PlayerProfile;
 import com.destroystokyo.paper.profile.ProfileProperty;
 
 import me.kryniowesegryderiusz.kgenerators.Main;
-import me.kryniowesegryderiusz.kgenerators.multiversion.interfaces.SkullUtils;
 
-public class SkullUtils_1_21 implements SkullUtils {
+public final class SkullUtils {
+
+	private SkullUtils() {}
 	
-	@Override
-	public ItemStack itemFromName(String name) {
+	public static ItemStack itemFromName(String name) {
 		ItemStack is = new ItemStack(org.bukkit.Material.PLAYER_HEAD);
 		SkullMeta meta = (SkullMeta) is.getItemMeta();
 		meta.setOwner(name);
@@ -26,8 +26,7 @@ public class SkullUtils_1_21 implements SkullUtils {
 		return is;
 	}
 
-	@Override
-	public ItemStack itemFromBase64(String base64) {
+	public static ItemStack itemFromBase64(String base64) {
 
 		ItemStack is = new ItemStack(org.bukkit.Material.PLAYER_HEAD);
 		SkullMeta meta = (SkullMeta) is.getItemMeta();
@@ -39,8 +38,7 @@ public class SkullUtils_1_21 implements SkullUtils {
 		return is;
 	}
 
-	@Override
-	public void blockWithBase64(Block block, String skullBase64) {
+	public static void blockWithBase64(Block block, String skullBase64) {
 
 		if (block.getType() != Material.PLAYER_HEAD) {
 			block.setType(Material.PLAYER_HEAD);
@@ -52,7 +50,7 @@ public class SkullUtils_1_21 implements SkullUtils {
 		
 	}
 	
-	private PlayerProfile getProfile(String base64) {
+	private static PlayerProfile getProfile(String base64) {
 		PlayerProfile profile = Main.getInstance().getServer().createProfile(
 				UUID.nameUUIDFromBytes("custom-textures".getBytes(StandardCharsets.UTF_8)), "custom-textures");
 		profile.getProperties().add(new ProfileProperty("textures", base64));

@@ -1,5 +1,6 @@
 package me.kryniowesegryderiusz.kgenerators.dependencies.hooks;
 
+import me.kryniowesegryderiusz.kgenerators.utils.BlockUtils;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.event.EventHandler;
@@ -29,7 +30,7 @@ public class JetsMinionsHook implements Listener {
 					
 					if (gLocation.getLastGeneratedObject().getCustomDrops().isRemoveDefaults()) {
 						e.setCancelled(true);
-						Main.getMultiVersion().getBlocksUtils().setBlock(location, Material.AIR);
+						BlockUtils.setBlock(location, Material.AIR);
 						e.getMinion().setTotalActionsProcessed(e.getMinion().getTotalActionsProcessed()+1);
 						e.getMinion().setActionsProcessedSinceHealthDrop(e.getMinion().getActionsProcessedSinceHealthDrop()+1);
 					}

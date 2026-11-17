@@ -1,5 +1,6 @@
 package me.kryniowesegryderiusz.kgenerators.utils.objects;
 
+import me.kryniowesegryderiusz.kgenerators.utils.BlockUtils;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
@@ -22,11 +23,11 @@ public class CustomBlockData {
 	}
 	
 	public void setBlock(Location location) {
-		Main.getMultiVersion().getBlocksUtils().setBlock(location, blockMaterial);
+		BlockUtils.setBlock(location, blockMaterial);
 	}
 	
 	public void setBlock(Location location, boolean physics) {
-		Main.getMultiVersion().getBlocksUtils().setBlock(location, blockMaterial, physics);
+		BlockUtils.setBlock(location, blockMaterial, physics);
 	}
 	
 	public ItemStack getItem() {

@@ -1,4 +1,5 @@
 package me.kryniowesegryderiusz.kgenerators;
+import me.kryniowesegryderiusz.kgenerators.dependencies.hooks.WorldGuardHook;
 import me.kryniowesegryderiusz.kgenerators.utils.Sched;
 
 
@@ -48,7 +49,6 @@ import me.kryniowesegryderiusz.kgenerators.listeners.InventoryClickListener;
 import me.kryniowesegryderiusz.kgenerators.listeners.GeneratorProtectionListeners;
 import me.kryniowesegryderiusz.kgenerators.listeners.PlayerInteractListener;
 import me.kryniowesegryderiusz.kgenerators.logger.Logger;
-import me.kryniowesegryderiusz.kgenerators.multiversion.MultiVersionManager;
 import me.kryniowesegryderiusz.kgenerators.settings.Settings;
 import me.kryniowesegryderiusz.kgenerators.utils.FilesConverter;
 
@@ -72,7 +72,6 @@ public class Main extends JavaPlugin {
 	
 	@Getter private static DatabaseManager databases;
 	@Getter private static DependenciesManager dependencies = new DependenciesManager();
-	@Getter private static MultiVersionManager multiVersion;
 	@Getter private static MenusManager menus;
 	
     @Override
@@ -121,7 +120,9 @@ public class Main extends JavaPlugin {
 		settings.reload();
 		FilesConverter.updateConfig(settings);
     	
-    	multiVersion = new MultiVersionManager();
+    	// WorldGuard only accepts new flags while plugins load
+    	if (getServer().getPluginManager().getPlugin("WorldGuard") != null)
+    		WorldGuardHook.registerFlags();
     }
     
     @Override

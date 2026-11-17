@@ -127,5 +127,3 @@ debug:
   placed-generators-manager: false
   #Debug related to schedules
   schedules: false
-  #Debug related to multi-version
-  multi-version: false

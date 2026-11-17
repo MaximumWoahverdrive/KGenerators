@@ -1,4 +1,5 @@
 package me.kryniowesegryderiusz.kgenerators.generators.schedules;
+import me.kryniowesegryderiusz.kgenerators.utils.BlockUtils;
 import me.kryniowesegryderiusz.kgenerators.utils.Sched;
 
 import java.util.ArrayList;
@@ -142,7 +143,7 @@ public class SchedulesManager {
 			else
 				agLocation = Main.getPlacedGenerators().getLoaded(aLocation);
 			
-			if (agLocation != null && schedules.containsKey(agLocation) && Main.getMultiVersion().getBlocksUtils().isAir(aLocation.getBlock()))
+			if (agLocation != null && schedules.containsKey(agLocation) && BlockUtils.isAir(aLocation.getBlock()))
 				return schedules.get(agLocation).getTimeLeft();
 			else
 				return -1;

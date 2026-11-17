@@ -1,5 +1,6 @@
 package me.kryniowesegryderiusz.kgenerators.generators.locations.handlers;
 
+import me.kryniowesegryderiusz.kgenerators.utils.BlockUtils;
 import org.bukkit.Material;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -48,8 +49,8 @@ public class GeneratorLocationPlaceHandler {
 	    }
     	
     	if (generator.getType() == GeneratorType.DOUBLE 
-    			&& !Main.getMultiVersion().getBlocksUtils().isAir(gLocation.getGeneratedBlockLocation().getBlock())
-    			&& !Main.getMultiVersion().getBlocksUtils().isOnWhitelist(gLocation.getGeneratedBlockLocation().getBlock())) {
+    			&& !BlockUtils.isAir(gLocation.getGeneratedBlockLocation().getBlock())
+    			&& !BlockUtils.isOnWhitelist(gLocation.getGeneratedBlockLocation().getBlock())) {
     		Lang.getMessageStorage().send(sender, Message.GENERATORS_PLACE_CANT_PLACE_DOUBLE_BELOW_BLOCK);
     		return false;
     	}
@@ -84,9 +85,9 @@ public class GeneratorLocationPlaceHandler {
     		Logger.debugPlayer("Something placed " + generator.getId() + " in " + gLocation.toStringLocation());
     	
     	if (generateGeneratorBlock && gLocation.getGenerator().getType() == GeneratorType.DOUBLE)
-    		Main.getMultiVersion().getBlocksUtils().setBlock(gLocation.getLocation(), gLocation.getGenerator().getGeneratorItem());
+    		BlockUtils.setBlock(gLocation.getLocation(), gLocation.getGenerator().getGeneratorItem());
     	
-    	Main.getMultiVersion().getBlocksUtils().setBlock(gLocation.getGeneratedBlockLocation(), Material.AIR);
+    	BlockUtils.setBlock(gLocation.getGeneratedBlockLocation(), Material.AIR);
     	
     	/*
     	if (gLocation.getGenerator().isGenerateImmediatelyAfterPlace())

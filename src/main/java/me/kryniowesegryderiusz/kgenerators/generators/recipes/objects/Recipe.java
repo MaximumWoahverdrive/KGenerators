@@ -6,8 +6,10 @@ import java.util.HashMap;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
+import org.bukkit.NamespacedKey;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.RecipeChoice;
 import org.bukkit.inventory.ShapedRecipe;
 import org.bukkit.inventory.ShapelessRecipe;
 
@@ -48,7 +50,8 @@ public class Recipe {
 				this.generator = generator;
 				ingredients.put(' ', new ItemStack(Material.AIR));
 
-				ShapedRecipe shapedRecipe = Main.getMultiVersion().getRecipesLoader().getShapedRecipe(generator);
+				ShapedRecipe shapedRecipe = new ShapedRecipe(new NamespacedKey(Main.getInstance(), "KGenerators_" + generator.getId()),
+						generator.getGeneratorItem());
 
 				ArrayList<String> shape = new ArrayList<String>();
 				shape = (ArrayList<String>) file.getList(generatorID + ".shape");
@@ -62,8 +65,7 @@ public class Recipe {
 					ItemStack item = FilesUtils.loadItemStack(file, generatorID + ".ingredients", ingredientsString,
 							false);
 
-					shapedRecipe = Main.getMultiVersion().getRecipesLoader().setIngredient(shapedRecipe,
-							ingredientsChar, item);
+					shapedRecipe.setIngredient(ingredientsChar, new RecipeChoice.ExactChoice(item));
 					this.addIngredient(ingredientsChar, item);
 				}
 

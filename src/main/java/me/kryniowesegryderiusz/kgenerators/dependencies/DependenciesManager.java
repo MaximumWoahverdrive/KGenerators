@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import org.bukkit.Bukkit;
 
 import lombok.Getter;
+import me.kryniowesegryderiusz.kgenerators.dependencies.hooks.WorldGuardHook;
 import me.kryniowesegryderiusz.kgenerators.Main;
 import me.kryniowesegryderiusz.kgenerators.dependencies.enums.Dependency;
 import me.kryniowesegryderiusz.kgenerators.dependencies.hooks.BentoBoxHook;
@@ -146,15 +147,12 @@ public class DependenciesManager {
 			PlayerPointsHook.setupPlayerPoints();
 		}
 
-		if (Main.getMultiVersion().getWorldGuardUtils() != null
-				&& Main.getMultiVersion().getWorldGuardUtils().isWorldGuardHooked()) {
+		if (WorldGuardHook.isHooked()) {
 			Logger.debugPluginLoad("Dependencies: Detected plugin WorldGuard. Hooked into it.");
 			dependencies.add(Dependency.WORLD_GUARD);
-		} else if (Main.getMultiVersion().getWorldGuardUtils() != null) {
-			if (Bukkit.getPluginManager().isPluginEnabled("WorldGuard")) {
-				Logger.error(
-						"Dependencies: Detected plugin WorldGuard, but couldnt hook into it! Search console log above for errors!");
-			}
+		} else if (Bukkit.getPluginManager().isPluginEnabled("WorldGuard")) {
+			Logger.error(
+					"Dependencies: Detected plugin WorldGuard, but couldnt hook into it! Search console log above for errors!");
 		}
 
 		if (Bukkit.getPluginManager().isPluginEnabled("FancyHolograms")) {

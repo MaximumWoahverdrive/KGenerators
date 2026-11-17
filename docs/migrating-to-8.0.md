@@ -56,6 +56,10 @@ Colour codes work as before (`&` codes and `#RRGGBB` hex colours). Two differenc
 - The developer API (`KGeneratorsAPI`, events, interfaces) is unchanged.
 - `GeneratorItemMatcher.GENERATOR_ID_NBT` is deprecated; generator items carry
   `ItemData.GENERATOR_ID` (`kgenerators:generator-id`) in their persistent data container.
-- `MultiVersionManager` no longer has `getActionBar()`, `getChatUtils()` or `isHigher(int)`; use
-  Paper's Adventure API (`Player#sendActionBar`, components) instead.
+- `MultiVersionManager` and `Main.getMultiVersion()` are gone, along with the `multiversion`
+  package: every supported server uses the same code now.
+  - Block helpers are static methods on `utils.BlockUtils`, skull helpers on `utils.SkullUtils`.
+  - WorldGuard flags are handled by `dependencies.hooks.WorldGuardHook`.
+  - Colours and action bars: use Paper's Adventure API (`Player#sendActionBar`, components).
+- The `debug.multi-version` setting in `config.yml` no longer does anything and can be removed.
 - `@Nullable` annotations come from `org.jetbrains.annotations` instead of `javax.annotation`.

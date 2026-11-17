@@ -1,5 +1,6 @@
 package me.kryniowesegryderiusz.kgenerators.listeners;
 
+import me.kryniowesegryderiusz.kgenerators.utils.BlockUtils;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -39,7 +40,7 @@ public class BlockBreakListener implements Listener {
 				}
 				
 				if (gLoc.getGeneratedBlockLocation().equals(e.getBlock().getLocation())
-						&& !gLoc.getGenerator().isPlaceholder(Main.getMultiVersion().getBlocksUtils().getItemStackByBlock(e.getBlock())) //Cant use !isScheduled, because ItemsAdder fires BlockBreakEvent twice
+						&& !gLoc.getGenerator().isPlaceholder(BlockUtils.getItemStackByBlock(e.getBlock())) //Cant use !isScheduled, because ItemsAdder fires BlockBreakEvent twice
 						&& gLoc.isPermittedToMine(p)
 						&& Main.getPlayers().getPlayer(p).canUse(gLoc)) {
 					

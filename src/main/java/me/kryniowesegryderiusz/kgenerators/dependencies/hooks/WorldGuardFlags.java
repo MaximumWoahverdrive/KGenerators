@@ -1,4 +1,4 @@
-package me.kryniowesegryderiusz.kgenerators.multiversion;
+package me.kryniowesegryderiusz.kgenerators.dependencies.hooks;
 
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
@@ -18,15 +18,17 @@ import com.sk89q.worldguard.protection.regions.RegionContainer;
 import me.kryniowesegryderiusz.kgenerators.dependencies.enums.WGFlag;
 import me.kryniowesegryderiusz.kgenerators.generators.locations.objects.GeneratorLocation;
 import me.kryniowesegryderiusz.kgenerators.logger.Logger;
-import me.kryniowesegryderiusz.kgenerators.multiversion.interfaces.WorldGuardUtils;
 
-public class WorldGuardUtils_1_13 implements WorldGuardUtils {
+/**
+ * KGenerators' WorldGuard flags. Uses WorldGuard's classes, so it is only loaded when WorldGuard
+ * is installed; everything else goes through {@link WorldGuardHook}.
+ */
+class WorldGuardFlags {
 
 	public static StateFlag PICK_UP_FLAG;
 	public static StateFlag ONLY_GEN_BREAK_FLAG;
 	public static StateFlag INTERACT_FLAG;
 
-	@Override
 	public boolean isWorldGuardHooked() {
 		if (PICK_UP_FLAG == null || ONLY_GEN_BREAK_FLAG == null || INTERACT_FLAG == null) {
 			return false;
@@ -35,7 +37,6 @@ public class WorldGuardUtils_1_13 implements WorldGuardUtils {
 		}
 	}
 
-	@Override
 	public void worldGuardFlagsAdd() {
 
 		try {
@@ -86,7 +87,6 @@ public class WorldGuardUtils_1_13 implements WorldGuardUtils {
 	}
 
 	/* Returns if pick up is allow/deny */
-	@Override
 	public boolean isWorldGuardFlagAllow(Location location, Player player, WGFlag flag) {
 
 		RegionContainer container = WorldGuard.getInstance().getPlatform().getRegionContainer();
