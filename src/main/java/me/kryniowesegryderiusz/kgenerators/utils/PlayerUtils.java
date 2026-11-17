@@ -46,9 +46,9 @@ public class PlayerUtils {
 	
 	/**
 	 * Performs block drop to eq and permission checks for drop
-	 * @param player
-	 * @param location
-	 * @param items
+	 * @param p player to give the items to, nullable
+	 * @param location location to drop the items at if they are not given to the player
+	 * @param items items to drop
 	 */
 	public static void dropBlockToInventory(Player p, Location location, ItemStack... items) {
 		if (p != null && Main.getSettings().isBlockDropToEq() && p.hasPermission("kgenerators.droptoinventory"))

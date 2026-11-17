@@ -33,11 +33,13 @@ public class MenuInventory {
 	
 	/**
 	 * Builds inventory and fills it with items
-	 * @param menuInventory
-	 * @param player
-	 * @param exludedEnumMenuItem
+	 * @param <T> menu inventory type enum
+	 * @param <T2> menu item type enum
+	 * @param menuInventory menu whose items are placed in the inventory
+	 * @param player player the inventory and items are built for
+	 * @param exludedEnumMenuItems menu items to leave out
 	 * @param replecables String, by String "key", "value"
-	 * @return
+	 * @return the built inventory
 	 */
 	public <T extends Enum<T> & IMenuInventoryType, T2 extends Enum<T2> & IMenuItemType> Inventory getInv(T menuInventory, Player player, ArrayList<T2> exludedEnumMenuItems, String... replecables)
 	{

@@ -69,11 +69,11 @@ public class GeneratorLocation implements IGeneratorLocation {
 	 * GeneratorLocation#save() method**
 	 * 
 	 * @param id - generatorLocation database id (-1 if not yet in database)
-	 * @param Generator       generator
-	 * @param Location        location
-	 * @param Chunk - chunk, where location
-	 * @param GeneratorPlayer owner - nullable
-	 * @param ago AbstractGeneratedObject - nullable
+	 * @param generator - generator placed at this location
+	 * @param location - location of the generator
+	 * @param chunkInfo - chunk containing the location
+	 * @param owner - owner of the generator, nullable
+	 * @param ago - last generated object, nullable
 	 */
 	public GeneratorLocation(int id, Generator generator, Location location, ChunkInfo chunkInfo, @Nullable GeneratorPlayer owner, @Nullable AbstractGeneratedObject ago) {
 		this.id = id;
@@ -117,6 +117,7 @@ public class GeneratorLocation implements IGeneratorLocation {
 	 * Checks if player is permitted to mine generated block. You probably wanna use
 	 * {@link #isBlockPossibleToMine(Location)} at first
 	 * 
+	 * @param player player trying to mine; is sent a message if not permitted
 	 * @return whether its possible to mine
 	 */
 	public boolean isPermittedToMine(Player player) {
@@ -144,7 +145,8 @@ public class GeneratorLocation implements IGeneratorLocation {
 	 * isnt any scheduled regeneration referred to it and there is nothing in place
 	 * of that generator.
 	 * 
-	 * @return
+	 * @return true if the generator is loaded, not scheduled and its generated
+	 *         block is missing or only the placeholder
 	 */
 	// api
 	public boolean isBroken() {
@@ -196,6 +198,7 @@ public class GeneratorLocation implements IGeneratorLocation {
 	/**
 	 * Places generator and saves it
 	 * 
+	 * @param player player placing the generator
 	 * @return whether placing was successful
 	 */
 	public boolean placeGenerator(Player player) {
@@ -205,6 +208,8 @@ public class GeneratorLocation implements IGeneratorLocation {
 	/**
 	 * Places generator and saves it For commands/api usage
 	 * 
+	 * @param sender sender placing the generator, used for permission checks and messages
+	 * @param generateGeneratorBlock whether to also set the generator block itself (only for double generators)
 	 * @return whether placing was successful
 	 */
 	public boolean placeGenerator(CommandSender sender, boolean generateGeneratorBlock) {
@@ -216,6 +221,10 @@ public class GeneratorLocation implements IGeneratorLocation {
 	}
 
 	/**
+	 * Runs the configured generator action matching the used interaction.
+	 * 
+	 * @param usedActionType interaction the player performed
+	 * @param player player interacting with the generator
 	 * @return true if event should be cancelled
 	 */
 	public boolean handleAction(InteractionType usedActionType, Player player) {
@@ -225,7 +234,7 @@ public class GeneratorLocation implements IGeneratorLocation {
 	/**
 	 * Changes this generatorLocation to another generator
 	 * 
-	 * @param Generator generator
+	 * @param generator generator to change to
 	 */
 	// api
 	public void changeTo(Generator generator) {

@@ -37,18 +37,31 @@ public final class Text {
 	/**
 	 * Config text ({@code &} codes, hex colours) as a section-sign string. Text that already has
 	 * section-sign codes, such as a name that was coloured before, is read the same way.
+	 *
+	 * @param configText text from the config, with {@code &} or section-sign codes
+	 * @return the text with all colour codes as section-sign codes
 	 */
 	public static String colorize(String configText) {
 		String text = configText.replace(LegacyComponentSerializer.SECTION_CHAR, '&');
 		return SECTION.serialize(AMPERSAND.deserialize(BARE_HEX.matcher(text).replaceAll("&#$1")));
 	}
 
-	/** A section-sign string as a component. */
+	/**
+	 * A section-sign string as a component.
+	 *
+	 * @param text a string with section-sign codes
+	 * @return the deserialized component
+	 */
 	public static Component component(String text) {
 		return SECTION.deserialize(text);
 	}
 
-	/** A component as a section-sign string. */
+	/**
+	 * A component as a section-sign string.
+	 *
+	 * @param component the component to serialize
+	 * @return the component as a string with section-sign codes
+	 */
 	public static String legacy(Component component) {
 		return SECTION.serialize(component);
 	}
@@ -56,12 +69,20 @@ public final class Text {
 	/**
 	 * A section-sign string as a component for an item name or lore line. Minecraft shows those in
 	 * italics unless told otherwise, which legacy Bukkit names never were.
+	 *
+	 * @param text a string with section-sign codes
+	 * @return the component, not italic unless the text sets italics itself
 	 */
 	public static Component itemText(String text) {
 		return component(text).decorationIfAbsent(TextDecoration.ITALIC, TextDecoration.State.FALSE);
 	}
 
-	/** The item's custom name as a section-sign string, or an empty string if it has none. */
+	/**
+	 * The item's custom name as a section-sign string, or an empty string if it has none.
+	 *
+	 * @param meta the item meta, may be null
+	 * @return the name, or an empty string if the meta is null or has no custom name
+	 */
 	public static String name(@Nullable ItemMeta meta) {
 		Component name = meta == null ? null : meta.displayName();
 		return name == null ? "" : legacy(name);
@@ -71,7 +92,12 @@ public final class Text {
 		meta.displayName(name == null ? null : itemText(name));
 	}
 
-	/** The item's lore as section-sign strings; empty if it has none. */
+	/**
+	 * The item's lore as section-sign strings; empty if it has none.
+	 *
+	 * @param meta the item meta, may be null
+	 * @return a new list of lore lines, empty if the meta is null or has no lore
+	 */
 	public static List<String> lore(@Nullable ItemMeta meta) {
 		List<String> lines = new ArrayList<>();
 		List<Component> lore = meta == null ? null : meta.lore();

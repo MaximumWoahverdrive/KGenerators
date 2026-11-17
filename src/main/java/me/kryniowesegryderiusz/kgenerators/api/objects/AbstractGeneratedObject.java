@@ -24,6 +24,7 @@ public abstract class AbstractGeneratedObject {
 	
 	/**
 	 * Compares two generated objects if they are equal.
+	 * @param generatedObject the generated object to compare with
 	 * @return true if its same object in different instances
 	 */
 	public boolean equals(AbstractGeneratedObject generatedObject) {
@@ -34,7 +35,7 @@ public abstract class AbstractGeneratedObject {
 	
 	/**
 	 * Loads GeneratorObject from config
-	 * @param generatedObjectConfig
+	 * @param generatedObjectConfig config map of this generated object, with its chance and type-specific values
 	 * @return true if loading was successful
 	 */
 	public boolean load(Map<?, ?> generatedObjectConfig) {
@@ -97,19 +98,20 @@ public abstract class AbstractGeneratedObject {
 	
 	/**
 	 * Gets GeneratedObjects specific info for logging purposes
-	 * @return
+	 * @return type-specific description of this object
 	 */
 	protected abstract String toStringSpecific();
 	
 	/**
 	 * Compares GeneratedObjects that have same type;
+	 * @param generatedObject the generated object of the same type to compare with
 	 * @return true if its same object in different instances
 	 */
 	protected abstract boolean compareSameType(AbstractGeneratedObject generatedObject);
 	
 	/**
 	 * Loads values specific for GeneratorObject
-	 * @param generatedObjectConfig
+	 * @param generatedObjectConfig config map of this generated object
 	 * @return true if loading was successful
 	 */
 	protected abstract boolean loadTypeSpecific(Map<?, ?> generatedObjectConfig);
@@ -125,8 +127,8 @@ public abstract class AbstractGeneratedObject {
 	
 	/**
 	 * Determines, whether some block is similar to this generated object
-	 * @param itemStack
-	 * @return
+	 * @param itemStackBlock item stack of the block to compare
+	 * @return true if the block matches this generated object; always false by default
 	 */
 	public boolean isBlockSimilar(ItemStack itemStackBlock) {
 		return false;

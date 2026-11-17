@@ -31,9 +31,10 @@ public class MenuPlayer {
 	
 	/**
 	 * Standard menu, without any additional info
-	 * @param player
-	 * @param menuInventory
-	 * @param inventory
+	 * @param <T> menu inventory type enum
+	 * @param player player viewing the menu
+	 * @param menuInventory type of the opened menu
+	 * @param inventory inventory shown to the player
 	 */
 	public <T extends Enum<T> & IMenuInventoryType> MenuPlayer(Player player, T menuInventory, Inventory inventory)
 	{
@@ -44,9 +45,11 @@ public class MenuPlayer {
 	
 	/**
 	 * Used for specified menus, like Chances, Recipe, Upgrade
-	 * @param player
-	 * @param menuInventory
-	 * @param generator
+	 * @param <T> menu inventory type enum
+	 * @param player player viewing the menu
+	 * @param menuInventory type of the opened menu
+	 * @param inventory inventory shown to the player
+	 * @param generator generator the menu is about
 	 */
 	public <T extends Enum<T> & IMenuInventoryType> MenuPlayer(Player player, T menuInventory, Inventory inventory, Generator generator)
 	{
@@ -58,10 +61,11 @@ public class MenuPlayer {
 	
 	/**
 	 * Used for paginated menus like Main
-	 * @param player
-	 * @param menuInventory
-	 * @param inventory
-	 * @param page
+	 * @param <T> menu inventory type enum
+	 * @param player player viewing the menu
+	 * @param menuInventory type of the opened menu
+	 * @param inventory inventory shown to the player
+	 * @param page currently shown page
 	 */
 	public <T extends Enum<T> & IMenuInventoryType> MenuPlayer(Player player, T menuInventory, Inventory inventory, int page)
 	{
@@ -73,10 +77,11 @@ public class MenuPlayer {
 	
 	/**
 	 * Used for menus linked to specific location
-	 * @param player
-	 * @param menuInventory
-	 * @param inventory
-	 * @param gLocation
+	 * @param <T> menu inventory type enum
+	 * @param player player viewing the menu
+	 * @param menuInventory type of the opened menu
+	 * @param inventory inventory shown to the player
+	 * @param gLocation generator location the menu is linked to
 	 */
 	public <T extends Enum<T> & IMenuInventoryType> MenuPlayer(Player player, T menuInventory, Inventory inventory, GeneratorLocation gLocation)
 	{

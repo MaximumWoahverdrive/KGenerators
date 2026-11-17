@@ -112,6 +112,7 @@ public class PlacedGeneratorsManager {
 	 * Unloads every generator in {@code world}. A world can be unloaded without its chunks
 	 * getting their own unload events, which would leave its generators loaded (and their
 	 * regenerations scheduled) against a world that is gone.
+	 * @param world world whose generators should be unloaded
 	 */
 	public void unloadWorld(World world) {
 		for (ChunkInfo ci : loadedGenerators.keySet()) {
@@ -262,8 +263,8 @@ public class PlacedGeneratorsManager {
 	
 	/**
 	 * This will load chunk
-	 * @param loc
-	 * @return
+	 * @param loc location inside the chunk to check
+	 * @return true if the chunk's generators are in the manager and fully loaded
 	 */
 	public boolean isChunkFullyLoaded(Location loc) {
 		boolean result = loadedGenerators.get(getChunkInfo(loc.getChunk())) != null && loadedGenerators.get(getChunkInfo(loc.getChunk())).isFullyLoaded();
@@ -294,6 +295,7 @@ public class PlacedGeneratorsManager {
 	
 	/**
 	 * This will load chunk if its not loaded
+	 * @param location block location of the generator
 	 * @return loaded GeneratorLocation related to location or null if none
 	 */
 	@Nullable public GeneratorLocation getLoaded(Location location) {
@@ -304,7 +306,9 @@ public class PlacedGeneratorsManager {
 	}
 	
 	/**
-	 * @return loaded GeneratorLocation list related to location or null if none
+	 * Gets the loaded generators in a chunk.
+	 * @param ci chunk to look up
+	 * @return loaded GeneratorLocation list of that chunk, or an empty list if none
 	 */
 	public ArrayList<GeneratorLocation> getLoaded(ChunkInfo ci) {
 		ChunkGeneratorLocations cgl = this.loadedGenerators.get(ci);
@@ -315,6 +319,8 @@ public class PlacedGeneratorsManager {
 	}
 	
 	/**
+	 * Checks whether a generator at the given location is loaded.
+	 * @param loc block location to check
 	 * @return whether GeneratorLocation related to location is loaded
 	 */
 	public boolean isLoaded(Location loc) {
@@ -322,6 +328,8 @@ public class PlacedGeneratorsManager {
 	}
 	
 	/**
+	 * Checks whether the given generator is loaded.
+	 * @param gLoc generator location to check
 	 * @return whether GeneratorLocation is loaded
 	 */
 	public boolean isLoaded(GeneratorLocation gLoc) {

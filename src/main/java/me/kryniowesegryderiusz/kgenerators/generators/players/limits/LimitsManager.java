@@ -74,8 +74,8 @@ public class LimitsManager {
 	/**
 	 * Checks if any limit has only owner use in context of generator
 	 * 
-	 * @param generator
-	 * @return
+	 * @param g generator to check
+	 * @return true if any limit containing this generator is only owner use
 	 */
 	public boolean isOnlyOwnerUse(Generator g) {
 		for (Limit l : limits.values()) {

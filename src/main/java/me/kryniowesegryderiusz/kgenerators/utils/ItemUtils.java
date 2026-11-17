@@ -69,7 +69,11 @@ public abstract class ItemUtils {
 		CROP_BLOCKS.put(XMaterial.BEETROOT, XMaterial.BEETROOTS);
 	}
 
-	/** The block this material places on this server, or null if it is not placeable. */
+	/**
+	 * The block this material places on this server, or null if it is not placeable.
+	 * @param xm material to look up
+	 * @return the block material, or null if it is not placeable
+	 */
 	public static Material getBlockMaterial(XMaterial xm) {
 		Material m = CROP_BLOCKS.getOrDefault(xm, xm).get();
 		return m != null && m.isBlock() ? m : null;
@@ -92,9 +96,9 @@ public abstract class ItemUtils {
 	
 	/**
 	 * Compares ItemStacks ignoring "internal" NBT and itemstack amount
-	 * @param i1
-	 * @param i2
-	 * @return
+	 * @param is1 first item
+	 * @param is2 second item
+	 * @return whether both items are equal after ignoring internal NBT and amount
 	 */
 	public static boolean compareSafe(ItemStack is1, ItemStack is2) {
 		

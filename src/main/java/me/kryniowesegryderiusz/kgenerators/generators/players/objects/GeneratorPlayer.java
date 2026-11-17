@@ -129,9 +129,8 @@ public class GeneratorPlayer {
 	/**
 	 * Online player only
 	 * 
-	 * @param player
-	 * @param generatorId
-	 * @return
+	 * @param gLoc generator location the player wants to place
+	 * @return true if no configured limit prevents placing it
 	 */
 	public Boolean canPlace(GeneratorLocation gLoc) {
 		if (!Main.getLimits().hasLimits())
@@ -148,9 +147,8 @@ public class GeneratorPlayer {
 	/**
 	 * Online player only
 	 * 
-	 * @param player
-	 * @param gLocation
-	 * @return
+	 * @param gLoc generator location the player wants to pick up
+	 * @return true if no configured limit prevents picking it up
 	 */
 	public Boolean canPickUp(GeneratorLocation gLoc) {
 		if (!Main.getLimits().hasLimits())

@@ -32,8 +32,9 @@ public class CustomDrops {
 	@Getter private ArrayList<String> commands = new ArrayList<String>();
 
 	/**
-	 * @param generatedObjectConfig
-	 * @return null if object doesn't have custom drops configured
+	 * Loads custom drops from the generated object's config section.
+	 * @param generatedObjectConfig config of the generated object
+	 * @return false if object doesn't have custom drops configured
 	 */
 
 	public boolean loadCustomDrops(Map<?, ?> generatedObjectConfig) {

@@ -16,7 +16,7 @@ public class PlayerLimits {
 	/**
 	 * Creates limit map with limits adjusted by permissions
 	 * 
-	 * @param player
+	 * @param player the player whose permissions adjust the limits
 	 */
 	public PlayerLimits(Player player) {
 

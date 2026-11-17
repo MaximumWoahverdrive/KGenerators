@@ -128,7 +128,8 @@ public class SchedulesManager {
 	 */
 	
 	/**
-	 * @param location Generator location
+	 * Gets the ticks left until the generator's scheduled regeneration.
+	 * @param gLocation Generator location
 	 * @return left ticks or -1 if not exist
 	 */
 	public int timeLeft(GeneratorLocation gLocation) {

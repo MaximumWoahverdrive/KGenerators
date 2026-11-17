@@ -41,7 +41,8 @@ public class KGeneratorsAPI {
 	 * interface Ex.
 	 * {@link me.kryniowesegryderiusz.kgenerators.generators.upgrades.objects.UpgradeCostMoney}
 	 * 
-	 * @param class being registered
+	 * @param <T> upgrade cost type
+	 * @param c class being registered
 	 * @since 6.0.0
 	 */
 	public static <T extends IUpgradeCost> void registerUpgradeCost(Class<T> c) {
@@ -54,7 +55,8 @@ public class KGeneratorsAPI {
 	 * AbstractGeneratedObject class Ex.
 	 * {@link me.kryniowesegryderiusz.kgenerators.generators.generator.objects.GeneratedBlock}
 	 * 
-	 * @param class being registered
+	 * @param <T> generated object type
+	 * @param c class being registered
 	 * @since 6.0.0
 	 */
 	public static <T extends AbstractGeneratedObject> void registerGeneratedObjec(Class<T> c) {

@@ -125,8 +125,8 @@ public class MessageStorage {
 	/**
 	 * Gets command list
 	 * 
-	 * @param list for subcommands of commands or null if just regular commands
-	 * @return
+	 * @param sender sender whose permissions filter the list
+	 * @return names of commands that have help text and the sender has permission for
 	 */
 	public ArrayList<String> getCommands(CommandSender sender) {
 

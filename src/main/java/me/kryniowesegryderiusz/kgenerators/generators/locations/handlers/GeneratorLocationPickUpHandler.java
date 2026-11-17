@@ -20,8 +20,8 @@ public class GeneratorLocationPickUpHandler {
 	
 	/**
 	 * Remember that this should always cancel event!
-	 * @param player
-	 * @param GeneratorLocation
+	 * @param gLocation the generator location being picked up
+	 * @param p the player picking up the generator
 	 */
 	public void handle(GeneratorLocation gLocation, Player p) {
 		

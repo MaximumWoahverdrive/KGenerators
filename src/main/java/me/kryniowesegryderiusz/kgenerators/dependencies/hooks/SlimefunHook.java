@@ -54,8 +54,9 @@ public class SlimefunHook implements Listener {
 	}
 	
 	/**
-	 * Should event be cancelled?
-	 * @param Location mined
+	 * Should event be cancelled? Schedules regeneration if the generated block was mined.
+	 * @param l location mined
+	 * @return true if the location is a generator block other than its generated block
 	 */
 	public static boolean handler(Location l)
 	{

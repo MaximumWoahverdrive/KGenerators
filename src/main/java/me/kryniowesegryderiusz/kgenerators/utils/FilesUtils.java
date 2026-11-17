@@ -82,7 +82,7 @@ public class FilesUtils {
 	/**
 	 * Loads ItemStack from config
 	 * 
-	 * @param config
+	 * @param config       - config to read from
 	 * @param path         - path of object with item key
 	 * @param key          - config key of item configuration
 	 * @param isBlockCheck - should this item be a block

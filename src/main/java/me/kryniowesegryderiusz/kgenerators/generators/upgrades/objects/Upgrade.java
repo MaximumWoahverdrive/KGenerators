@@ -30,10 +30,10 @@ public class Upgrade {
 	
 	/**
 	 * Loads upgrade from file and adds to UpgradeManager
-	 * @param upgradesManager 
-	 * @param config
+	 * @param upgradesManager the manager providing the upgrade cost types
+	 * @param config the upgrades config
 	 * @param generatorId aka path
-	 * @throws CannnotLoadUpgradeException
+	 * @throws CannnotLoadUpgradeException if the next-level generator is not set or a cost cannot be loaded
 	 */
 	public Upgrade(UpgradesManager upgradesManager, Config config, String generatorId) throws CannnotLoadUpgradeException {
 		if (!generatorId.equals("example_generator_id_level_1") && !generatorId.equals("enabled")) {

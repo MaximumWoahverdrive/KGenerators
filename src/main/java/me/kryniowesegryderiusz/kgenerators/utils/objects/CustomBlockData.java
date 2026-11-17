@@ -40,7 +40,7 @@ public class CustomBlockData {
 	
 	/**
 	 * Checks xMaterial
-	 * @param item
+	 * @param is the item stack to compare
 	 * @return true if xMaterials are same
 	 */
 	public boolean isSimilar(ItemStack is) {

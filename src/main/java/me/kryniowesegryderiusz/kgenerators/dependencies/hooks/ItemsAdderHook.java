@@ -34,6 +34,9 @@ public class ItemsAdderHook {
 	}
 	
 	/**
+	 * Gets the drops of the ItemsAdder custom block at a location.
+	 * @param location location of the block
+	 * @param tool tool used to break the block
 	 * @return ArrayList of CustomBlock drops if ItemsAdder is enabled and its CustomBlock
 	 */
 	public static ArrayList<ItemStack> getCustomBlockDrops(Location location, ItemStack tool) {

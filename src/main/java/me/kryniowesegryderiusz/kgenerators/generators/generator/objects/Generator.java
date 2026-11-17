@@ -73,9 +73,10 @@ public class Generator {
 	}
 
 	/**
-	 * 
-	 * @param config
-	 * @param generatorID
+	 * Loads this generator's settings from the generators config.
+	 * @param generatorsManager the manager used to look up generated objects and duplicate generator items
+	 * @param config the generators config
+	 * @param generatorID the generator's id, which is also its config path
 	 * @return true if generator loaded properly
 	 */
 	@SuppressWarnings("unchecked")

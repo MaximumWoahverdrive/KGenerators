@@ -69,7 +69,7 @@ public class CustomEntityData {
 	
 	/**
 	 * Checks entityType
-	 * @param item
+	 * @param customEntityData entity data to compare with
 	 * @return true if xMaterials are same
 	 */
 	public boolean isSimilar(CustomEntityData customEntityData) {

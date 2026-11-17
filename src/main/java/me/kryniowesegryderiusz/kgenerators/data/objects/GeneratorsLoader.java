@@ -30,12 +30,10 @@ public class GeneratorsLoader {
 	private ArrayList<GeneratorLocation> loadedGenerators = new ArrayList<GeneratorLocation>();
 
 	/**
-	 * 
-	 * @param generatorId
-	 * @param location    ("world,x,y,z")
-	 * @Param chunk ("world,x,z")
-	 * @param owner of owner or null
-	 * @throws SQLException
+	 * Loads the generator stored in the current row of a placed generators result set.
+	 * The location is read as "world,x,y,z" and the chunk as "world,x,z".
+	 * @param res result set positioned on the row to load
+	 * @throws SQLException if a column cannot be read from the result set
 	 */
 	public void loadNext(ResultSet res) throws SQLException {
 		this.loadNext(res.getInt("id"), res.getString("generator_id"),

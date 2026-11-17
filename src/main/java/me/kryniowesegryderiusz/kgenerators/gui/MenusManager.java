@@ -88,7 +88,7 @@ public class MenusManager implements Listener {
 	
 	/**
 	 * Opens main menu on first page
-	 * @param player
+	 * @param p player to open the menu for
 	 */
 	public void openMainMenu(Player p) {
 		openMainMenu(p, 0);
@@ -96,7 +96,8 @@ public class MenusManager implements Listener {
 	
 	/**
 	 * Opens main menu page containing that generator
-	 * @param player
+	 * @param p player to open the menu for
+	 * @param g generator whose page should be opened
 	 */
 	public void openMainMenu(Player p, Generator g) {
 		int nr = 0;
@@ -112,7 +113,7 @@ public class MenusManager implements Listener {
 	
 	/**
 	 * Opens main menu on specified page
-	 * @param player
+	 * @param p player to open the menu for
 	 * @param page (starts from 0)
 	 */
 	public void openMainMenu(Player p, int page) {

@@ -21,9 +21,9 @@ public class GeneratorLocationPlaceHandler {
 	
 	/**
 	 * Handle place of generator and saves it if successful
-	 * @param GeneratorLocation not being in Manager nor Database yet
+	 * @param gLocation - generator location not being in Manager nor Database yet
 	 * @param sender - player (CommandSender) placing generator
-	 * @param generateGeneratorBlock - 
+	 * @param generateGeneratorBlock - whether to also set the generator block itself (only for double generators)
 	 * @return whether placing was successful
 	 */
 	public boolean handle(GeneratorLocation gLocation, CommandSender sender, boolean generateGeneratorBlock) {    	

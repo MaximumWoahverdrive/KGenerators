@@ -37,8 +37,8 @@ public class Recipe {
 	/**
 	 * Loads recipe from file and adds it to RecipesManager
 	 * 
-	 * @param recipesManager
-	 * @param file
+	 * @param recipesManager the manager the loaded recipe is added to
+	 * @param file the recipes config
 	 * @param generatorID    aka path
 	 */
 	@SuppressWarnings("unchecked")
@@ -127,7 +127,7 @@ public class Recipe {
 	/**
 	 * Get 9 full items from recipe
 	 * 
-	 * @return
+	 * @return the ingredients of the 3x3 grid, row by row
 	 */
 	public ArrayList<ItemStack> getRecipe() {
 		ArrayList<ItemStack> recipe = new ArrayList<ItemStack>();

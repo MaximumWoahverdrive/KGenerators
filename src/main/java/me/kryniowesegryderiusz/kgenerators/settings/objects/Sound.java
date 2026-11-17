@@ -17,7 +17,7 @@ public class Sound {
 	/**
 	 * Constructor loading sound from config
 	 * 
-	 * @param cfg
+	 * @param cfg config to read from
 	 * @param path to sound
 	 */
 	public Sound(Config cfg, String path) {

@@ -117,9 +117,9 @@ public class Limit {
 	/**
 	 * Online player only
 	 * 
-	 * @param player
-	 * @param gLocation
-	 * @return
+	 * @param gp player trying to pick up the generator
+	 * @param gLocation generator location being picked up
+	 * @return true if this limit allows the pick up; false (after messaging the player) otherwise
 	 */
 	public Boolean fulfillsOnlyOwnerPickUp(GeneratorPlayer gp, GeneratorLocation gLocation) {
 		if (this.onlyOwnerPickUp)

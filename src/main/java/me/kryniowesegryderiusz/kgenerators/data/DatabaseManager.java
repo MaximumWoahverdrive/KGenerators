@@ -30,8 +30,8 @@ public class DatabaseManager {
 	/**
 	 * Gets proper database or null if OTHER
 	 * 
-	 * @param dbType
-	 * @return
+	 * @param dbType type of database to create
+	 * @return new SQL database for MYSQL or SQLITE, or null for any other type
 	 */
 	@Nullable
 	public IDatabase getDatabase(DatabaseType dbType) {

@@ -46,7 +46,12 @@ public final class ItemData {
 		return item.getItemMeta().getPersistentDataContainer().get(key, PersistentDataType.STRING);
 	}
 
-	/** The generator id written by KGenerators 7.3.1 or older, if the item has one. */
+	/**
+	 * The generator id written by KGenerators 7.3.1 or older, if the item has one.
+	 *
+	 * @param item the item to read
+	 * @return the legacy generator id, or null if the item has none
+	 */
 	@Nullable
 	public static String getLegacyGeneratorId(ItemStack item) {
 		if (!item.hasItemMeta())
@@ -58,6 +63,10 @@ public final class ItemData {
 	/**
 	 * Applies a "custom-nbt" entry from an item configuration as a persistent data string:
 	 * {@code key:value} under the kgenerators namespace, or {@code namespace:key:value}.
+	 *
+	 * @param item the item to write the data to
+	 * @param place where the entry comes from, used in the error message
+	 * @param entry the "custom-nbt" entry; an invalid one is logged as an error and skipped
 	 */
 	public static void applyConfigEntry(ItemStack item, String place, String entry) {
 		String[] parts = entry.split(":", 3);

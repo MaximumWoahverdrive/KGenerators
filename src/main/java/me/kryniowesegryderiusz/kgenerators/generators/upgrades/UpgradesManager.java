@@ -63,8 +63,8 @@ public class UpgradesManager {
 	/**
 	 * Checks if generator could be obtained by upgrade
 	 * 
-	 * @param generatorId
-	 * @return
+	 * @param generatorId id of the generator to check
+	 * @return true if any upgrade leads to this generator
 	 */
 	public boolean couldBeObtained(String generatorId) {
 		for (Entry<String, Upgrade> e : upgrades.entrySet()) {

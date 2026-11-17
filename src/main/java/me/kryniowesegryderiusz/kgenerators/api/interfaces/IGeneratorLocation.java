@@ -8,6 +8,7 @@ import org.bukkit.entity.Player;
 public interface IGeneratorLocation {
 	
 	/**
+	 * Gets the location of the generated block.
 	 * @return location, where generated object would appear
 	 */
 	public Location getGeneratedBlockLocation();
@@ -16,6 +17,7 @@ public interface IGeneratorLocation {
 	 * Checks if block at location is physically possible to mine.
 	 * Should be checked with every mining action
 	 * @param location - Crucial for double generators. 
+	 * @return true if the location is the generated block's location and the block there is not the placeholder
 	 */
 	public boolean isBlockPossibleToMine(Location location);
 	
@@ -23,7 +25,7 @@ public interface IGeneratorLocation {
 	 * Checks if player is permitted to mine generated block
 	 * Should be checked with every player-related mining action
 	 * You probably wanna use {@link #isBlockPossibleToMine(Location)} at first
-	 * @param player
+	 * @param player the player trying to mine
 	 * @return true if player is permitted
 	 */
 	public boolean isPermittedToMine(Player player);

@@ -20,6 +20,10 @@ import me.kryniowesegryderiusz.kgenerators.lang.enums.Message;
 public class GeneratorLocationActionHandler {
 
 	/**
+	 * Runs the first configured generator action whose requirements match the interaction.
+	 * @param gLocation generator location that was interacted with
+	 * @param usedActionType type of interaction the player performed
+	 * @param player player who interacted
 	 * @return true if event should be cancelled
 	 */
 	public boolean handle(GeneratorLocation gLocation, InteractionType usedActionType, Player player) {

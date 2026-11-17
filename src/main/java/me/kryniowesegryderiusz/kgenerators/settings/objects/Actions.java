@@ -24,9 +24,9 @@ public class Actions {
 	}
 
 	/**
-	 * 
-	 * @param config
-	 * @param path,  .actions would be included
+	 * Loads the pick-up, open-gui, time-left-check and upgrade actions from config.
+	 * @param config config to read from
+	 * @param path path,  .actions would be included
 	 */
 	public void load(Config config, String path) {
 		if (path.isEmpty())

@@ -47,7 +47,10 @@ public final class Sched {
 		}
 	}
 
-	/** Next tick, on the global region (replaces runTask without a location). */
+	/**
+	 * Next tick, on the global region (replaces runTask without a location).
+	 * @param task task to run
+	 */
 	public static void global(Runnable task) {
 		BACKEND.global(task);
 	}
@@ -69,7 +72,11 @@ public final class Sched {
 		return BACKEND.asyncLater(task, delayTicks);
 	}
 
-	/** Next tick, on the region owning {@code location} (replaces runTask for world work - keeps the one-tick deferral). */
+	/**
+	 * Next tick, on the region owning {@code location} (replaces runTask for world work - keeps the one-tick deferral).
+	 * @param location location whose region runs the task
+	 * @param task task to run
+	 */
 	public static void at(Location location, Runnable task) {
 		BACKEND.at(location, task);
 	}
@@ -78,13 +85,21 @@ public final class Sched {
 		return BACKEND.atLater(location, task, Math.max(1L, delayTicks));
 	}
 
-	/** Run now if this thread owns the location's region, else hand it to that region (replaces isPrimaryThread checks). */
+	/**
+	 * Run now if this thread owns the location's region, else hand it to that region (replaces isPrimaryThread checks).
+	 * @param location location whose region must run the task
+	 * @param task task to run
+	 */
 	public static void atNow(Location location, Runnable task) {
 		if (BACKEND.ownsRegion(location)) task.run();
 		else at(location, task);
 	}
 
-	/** Next tick, on the entity's scheduler (player inventories, GUIs). On Folia, dropped if the entity is gone. */
+	/**
+	 * Next tick, on the entity's scheduler (player inventories, GUIs). On Folia, dropped if the entity is gone.
+	 * @param entity entity whose scheduler runs the task
+	 * @param task task to run
+	 */
 	public static void entity(Entity entity, Runnable task) {
 		BACKEND.entity(entity, task);
 	}

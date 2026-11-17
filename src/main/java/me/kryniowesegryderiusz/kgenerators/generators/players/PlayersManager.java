@@ -34,8 +34,8 @@ public class PlayersManager {
 	 * need that (getPlayer()); This method should be used specifically in loading
 	 * generators from database
 	 * 
-	 * @param not loaded player if he is not loaded yet, loaded player otherwise
-	 * @return GeneratorPlayer
+	 * @param nick player name, or null for the shared "no player" instance
+	 * @return GeneratorPlayer: not loaded player if he is not loaded yet, loaded player otherwise
 	 */
 	public GeneratorPlayer createPlayer(String nick) {
 		if (nick == null)

@@ -21,7 +21,7 @@ import java.util.stream.StreamSupport;
  * <p>
  * Example usages:
  *
- * <pre><code>
+ * <pre>{@code
  * Random random = ...
  * Map<String, Double> stringWeights = new Hash<>();
  * stringWeights.put("a", 4d);
@@ -34,13 +34,13 @@ import java.util.stream.StreamSupport;
  * for (int i = 0; i < 10; i++) {
  *   selection.add(selector.next(random));
  * }
- * </code></pre>
+ * }</pre>
  *
  *
  * @author Olivier Grégoire
  * <p>Thread-safe.
  *
- * @param <T>
+ * @param <T> the type of the elements to select from
  */
 public final class RandomSelector<T> {
 
@@ -48,13 +48,13 @@ public final class RandomSelector<T> {
    * Creates a new random selector based on a uniform distribution.
    *
    * <p>
-   * A copy of <tt>elements</tt> is kept, so any modification to <tt>elements</tt> will not be
+   * A copy of {@code elements} is kept, so any modification to {@code elements} will not be
    * reflected in returned values.
    *
-   * @param <T>
-   * @param elements
-   * @return
-   * @throws IllegalArgumentException if <tt>elements</tt> is empty.
+   * @param <T> the type of the elements
+   * @param elements the elements to select from; must not be null or empty
+   * @return a selector that picks each element with equal probability
+   * @throws IllegalArgumentException if {@code elements} is empty.
    */
   @SuppressWarnings("unchecked")
 public static <T> RandomSelector<T> uniform(final Collection<T> elements)
@@ -69,19 +69,19 @@ public static <T> RandomSelector<T> uniform(final Collection<T> elements)
   }
 
   /**
-   * Creates a random selector among <tt>elements</tt> where the elements have a weight defined by
-   * <tt>weighter</tt>.
+   * Creates a random selector among {@code elements} where the elements have a weight defined by
+   * {@code weighter}.
    *
    * <p>
-   * A copy of <tt>elements</tt> is kept, so any modification to <tt>elements</tt> will not be
+   * A copy of {@code elements} is kept, so any modification to {@code elements} will not be
    * reflected in returned values.
    *
-   * @param <T>
-   * @param elements
-   * @param weighter
-   * @return
-   * @throws IllegalArgumentException if <tt>elements</tt> is empty or if <tt>weighter</tt> returns
-   * a negative value or <tt>0</tt>.
+   * @param <T> the type of the elements
+   * @param elements the elements to select from; must not be null or empty
+   * @param weighter the function giving each element's weight; must not be null
+   * @return a selector that picks elements with probability proportional to their weight
+   * @throws IllegalArgumentException if {@code elements} is empty or if {@code weighter} returns
+   * a negative value or {@code 0}.
    */
   @SuppressWarnings("unchecked")
 public static <T> RandomSelector<T> weighted(
@@ -118,17 +118,17 @@ public static <T> RandomSelector<T> weighted(
   }
 
   /**
-   * Returns the next element using <tt>random</tt>.
+   * Returns the next element using {@code random}.
    *
-   * @param random
-   * @return
+   * @param random the random number generator to use
+   * @return the selected element
    */
   public T next(final Random random) {
     return elements[selection.applyAsInt(random)];
   }
 
   /**
-   * Returns a stream of elements using <tt>random</tt>. The stream must use a terminal operation to
+   * Returns a stream of elements using {@code random}. The stream must use a terminal operation to
    * become closed and free the resources it's been using.
    *
    * <p>
@@ -136,8 +136,8 @@ public static <T> RandomSelector<T> weighted(
    * a different stream per thread given that Random has performance drawbacks in multi-threaded
    * environments.
    *
-   * @param random
-   * @return
+   * @param random the random number generator to use; must not be null
+   * @return an infinite stream of selected elements
    */
   public Stream<T> stream(final Random random) {
     requireNonNull(random, "random must not be null");

@@ -96,8 +96,8 @@ public class GeneratorsManager {
 	/**
 	 * Checks if generator item exists in other generator
 	 * 
-	 * @param generatorId
-	 * @param item
+	 * @param generatorId the generator to skip when comparing
+	 * @param item the generator item to look for
 	 * @return generatorId of doubled recipe, otherwise null
 	 */
 	public String exactGeneratorItemExists(String generatorId, ItemStack item) {
