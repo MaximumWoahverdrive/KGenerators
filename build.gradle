@@ -34,10 +34,8 @@ idea {
 group = 'me.kryniowesegryderiusz'
 
 repositories {
-    // XSeries, HikariCP, slf4j, bStats, Lombok, JetBrains annotations, PlotSquared
     mavenCentral()
     maven { url = 'https://repo.papermc.io/repository/maven-public/' }
-    // WorldEdit, WorldGuard
     maven { url = 'https://maven.enginehub.org/repo/' }
     // BentoBox. Its POMs declare themselves as -SNAPSHOT versions, which Gradle rejects; take the jar alone.
     exclusiveContent {
@@ -49,31 +47,25 @@ repositories {
         }
         filter { includeGroup 'world.bentobox' }
     }
-    // Builds GitHub projects on demand: Lands API, DecentHolograms, ItemsAdder API, Slimefun,
-    // LitMinions API, CMI API and CMILib
+    // Lands API, DecentHolograms, ItemsAdder API, Slimefun, LitMinions API, CMI API, CMILib
     maven { url = 'https://jitpack.io' }
-    // BG-Software: SuperiorSkyblock2 API, WildStacker API
+    // SuperiorSkyblock2 API, WildStacker API
     maven { url = 'https://repo.bg-software.com/repository/api/' }
     // PlaceholderAPI
     maven { url = 'https://repo.extendedclip.com/releases/' }
-    // MythicMobs (Mythic-Dist)
+    // MythicMobs
     maven { url = 'https://mvn.lumine.io/repository/maven-public/' }
     // FactionsUUID
     maven { url = 'https://ci.ender.zone/plugin/repository/everything/' }
-    // IridiumSkyblock. 4.0.9.1 has been removed from Iridium's nexus; 4.1.5 is the only version still published.
     maven { url = 'https://nexus.iridiumdevelopment.net/repository/maven-releases/' }
-    // Nexo
     maven { url = 'https://repo.nexomc.com/releases' }
-    // Oraxen
     maven { url = 'https://repo.oraxen.com/releases' }
-    // PlayerPoints (Rosewood Development)
+    // PlayerPoints
     maven { url = 'https://repo.rosewooddev.io/repository/public/' }
-    // FancyHolograms. repo.fancyplugins.de no longer resolves; FancyHolograms moved to FancyInnovations.
     maven { url = 'https://repo.fancyinnovations.com/releases' }
-    // Phoenix Development: MMOItems API and MythicLib, which MMOItems' API builds on
+    // MMOItems API, MythicLib
     maven { url = 'https://nexus.phoenixdevt.fr/repository/maven-public/' }
-    // Auxilor: eco, EcoItems, libreforge. Their official repository, although another one listed
-    // here happens to carry the versions used as well.
+    // eco, EcoItems, libreforge
     maven { url = 'https://repo.auxilor.io/repository/maven-public/' }
 }
 
@@ -116,6 +108,7 @@ dependencies {
     compileOnly 'com.github.Slimefun:Slimefun4:RC-37'
     compileOnly 'com.github.MilkBowl:VaultAPI:1.7.1'
     compileOnly 'world.bentobox:bentobox:1.23.1'
+    // 4.1.5: the only version still published
     compileOnly 'com.iridium:IridiumSkyblock:4.1.5'
     // 2.3.1 bundled an unrelocated old bStats that shadowed bstats-bukkit at compile time
     compileOnly 'com.github.decentsoftware-eu:decentholograms:2.10.2'
