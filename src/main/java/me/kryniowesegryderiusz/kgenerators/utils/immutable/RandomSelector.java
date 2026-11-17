@@ -3,7 +3,7 @@ package me.kryniowesegryderiusz.kgenerators.utils.immutable;
 import static java.util.Objects.requireNonNull;
 import static java.util.Spliterator.IMMUTABLE;
 import static java.util.Spliterator.ORDERED;
-import static me.kryniowesegryderiusz.kgenerators.utils.immutable.Preconditions.checkArgument;
+import static com.google.common.base.Preconditions.checkArgument;
 
 import java.util.Collection;
 import java.util.Iterator;
