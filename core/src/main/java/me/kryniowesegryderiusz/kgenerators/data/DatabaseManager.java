@@ -4,7 +4,7 @@ import me.kryniowesegryderiusz.kgenerators.utils.Sched;
 import java.io.File;
 import java.util.ArrayList;
 
-import javax.annotation.Nullable;
+import org.jetbrains.annotations.Nullable;
 
 import lombok.Getter;
 import me.kryniowesegryderiusz.kgenerators.Main;

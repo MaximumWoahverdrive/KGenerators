@@ -2,7 +2,7 @@ package me.kryniowesegryderiusz.kgenerators.api.objects;
 
 import java.util.Map;
 
-import javax.annotation.Nullable;
+import org.jetbrains.annotations.Nullable;
 
 import org.bukkit.inventory.ItemStack;
 

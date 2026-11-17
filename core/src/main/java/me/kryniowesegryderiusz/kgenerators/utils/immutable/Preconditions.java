@@ -19,7 +19,7 @@ package me.kryniowesegryderiusz.kgenerators.utils.immutable;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
 
-import javax.annotation.Nullable;
+import org.jetbrains.annotations.Nullable;
 
 /**
  *

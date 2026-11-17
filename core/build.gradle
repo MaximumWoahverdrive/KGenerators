@@ -24,7 +24,7 @@ dependencies {
     compileOnly 'com.intellectualsites.plotsquared:plotsquared-core:7.6.0'
     compileOnly('com.intellectualsites.plotsquared:plotsquared-bukkit:7.6.0') { exclude module: 'plotsquared-core' }
 
-    compileOnly 'com.google.code.findbugs:jsr305:3.0.2'
+    compileOnly 'org.jetbrains:annotations:26.1.0'
     compileOnly 'com.bgsoftware:SuperiorSkyblockAPI:2024.1'
     compileOnly 'com.bgsoftware:WildStackerAPI:2022.6'
     compileOnly 'com.github.Slimefun:Slimefun4:RC-37'

@@ -14,7 +14,6 @@ import java.util.function.ToIntFunction;
 import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 
-import javax.annotation.concurrent.ThreadSafe;
 
 /**
  * A tool to randomly select elements from collections.
@@ -39,9 +38,10 @@ import javax.annotation.concurrent.ThreadSafe;
  *
  *
  * @author Olivier Grégoire
+ * <p>Thread-safe.
+ *
  * @param <T>
  */
-@ThreadSafe
 public final class RandomSelector<T> {
 
   /**

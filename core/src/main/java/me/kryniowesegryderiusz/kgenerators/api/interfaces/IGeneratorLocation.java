@@ -1,6 +1,6 @@
 package me.kryniowesegryderiusz.kgenerators.api.interfaces;
 
-import javax.annotation.Nullable;
+import org.jetbrains.annotations.Nullable;
 
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
