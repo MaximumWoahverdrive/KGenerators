@@ -1,0 +1,39 @@
+# KGenerators Regenerated documentation
+
+These pages are mirrored from the original KGenerators documentation by Kryniowesegryderiusz
+(`kzone.gitbook.io/docs`, retrieved 2026-11-17), so that they stay available with the project.
+They describe the original plugin; KGenerators Regenerated keeps its commands, permissions and
+configuration files, so they apply unchanged unless a page says otherwise.
+
+- [Commands & Permissions](commands-and-permissions.md)
+- [Configuration files](configuration-files.md)
+  - [Configuring ItemStack](configuration-files/configuring-itemstack.md)
+  - [Configuring Block](configuration-files/configuring-block.md)
+  - [Limits](configuration-files/limits.md)
+  - [Optional settings](configuration-files/optional-settings.md)
+- [Converting databases](converting-databases.md)
+- [Addons](addons.md)
+  - [SuperiorSkyblock2ForceHook](addons/superiorskyblock2forcehook.md)
+- [Supported plugins](supported-plugins.md)
+  - [Bentobox](supported-plugins/bentobox.md)
+  - [EcoItems](supported-plugins/ecoitems.md)
+  - [FactionsUUID](supported-plugins/factionsuuid.md)
+  - [FancyHolograms](supported-plugins/fancyholograms.md)
+  - [IridiumSkyblock](supported-plugins/iridiumskyblock.md)
+  - [ItemsAdder](supported-plugins/itemsadder.md)
+  - [JetsMinions](supported-plugins/jetsminions.md)
+  - [Lands](supported-plugins/lands.md)
+  - [LitMinions](supported-plugins/litminions.md)
+  - [Minions-Revamped](supported-plugins/minions-revamped.md)
+  - [MMOItems](supported-plugins/mmoitems.md)
+  - [MythicMobs](supported-plugins/mythicmobs.md)
+  - [Nexo](supported-plugins/nexo.md)
+  - [Oraxen](supported-plugins/oraxen.md)
+  - [PlotSquared](supported-plugins/plotsquared.md)
+  - [SlimeFun](supported-plugins/slimefun.md)
+  - [SuperiorSkyblock2](supported-plugins/superiorskyblock2.md)
+  - [PlaceholderAPI](supported-plugins/placeholderapi.md)
+  - [PlayerPoints](supported-plugins/playerpoints.md)
+  - [WildStacker](supported-plugins/wildstacker.md)
+  - [WorldGuard](supported-plugins/worldguard.md)
+- [Developers API](developers-api.md)
