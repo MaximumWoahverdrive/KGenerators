@@ -5,7 +5,31 @@ authors: [Kryniowesegryderiusz, MaximumWoahverdrive]
 website: https://github.com/MaximumWoahverdrive/KGenerators
 description: KGenerators Regenerated - create your custom generators
 loadbefore: [SuperiorSkyblock2]
-softdepend: [ItemsAdder, PlaceholderAPI]
+# Plugins KGenerators hooks into, so they load first. SuperiorSkyblock2 is in loadbefore instead.
+softdepend:
+  - BentoBox
+  - CMI
+  - DecentHolograms
+  - EcoItems
+  - FactionsUUID
+  - FancyHolograms
+  - IridiumSkyblock
+  - ItemsAdder
+  - JetsMinions
+  - Lands
+  - LitMinions
+  - MMOItems
+  - MythicMobs
+  - Nexo
+  - Oraxen
+  - PlaceholderAPI
+  - PlayerPoints
+  - PlotSquared
+  - Slimefun
+  - Vault
+  - WildStacker
+  - WorldEdit
+  - WorldGuard
 api-version: '1.19'
 folia-supported: true
 commands:
