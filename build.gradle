@@ -1,3 +1,5 @@
+import xyz.jpenilla.runpaper.task.RunServer
+
 plugins {
     id 'java'
     id 'idea'
@@ -21,7 +23,7 @@ version = "${baseVersion}-${gitDetails.gitHash.take(7)}${isClean ? '' : '+dirty'
 idea {
     module {
         // Dev server data, not project sources.
-        excludeDirs += files('run')
+        excludeDirs += files('runs')
     }
 }
 
@@ -94,8 +96,10 @@ tasks.shadowJar {
 tasks.jar { enabled = false }
 tasks.assemble { dependsOn tasks.shadowJar }
 
+// Every test server gets its own folder under runs/: runs/<version> for Paper, runs/folia-<version> for Folia
 tasks.runServer {
     minecraftVersion(runPaperVersion)
+    runDirectory = layout.projectDirectory.dir("runs/${runPaperVersion}")
     // Minecraft 26 needs Java 25; the plugin itself is built for Java 8.
     javaLauncher = javaToolchains.launcherFor { languageVersion = JavaLanguageVersion.of(25) }
 }
@@ -104,6 +108,7 @@ tasks.runServer {
 runPaper.folia.registerTask()
 tasks.named('runFolia') {
     minecraftVersion(runPaperVersion)
+    runDirectory = layout.projectDirectory.dir("runs/folia-${runPaperVersion}")
     // Minecraft 26 needs Java 25; the plugin itself is built for Java 8.
     javaLauncher = javaToolchains.launcherFor { languageVersion = JavaLanguageVersion.of(25) }
 }
@@ -116,3 +121,16 @@ tasks.register('printReleaseMetadata') {
     }
 }
 
+// Old-version test servers, one per API era the version adapters cover: runPaper1_8_8, runPaper1_12_2, ...
+// Each runs on the Java that version shipped with.
+def testServers = ['1.8.8': 8, '1.12.2': 8, '1.13.2': 8, '1.16.5': 11, '1.20.6': 21, '1.21.11': 21]
+testServers.each { mc, jdk ->
+    tasks.register("runPaper${mc.replace('.', '_')}", RunServer) {
+        group = 'run paper'
+        description = "Run a Paper ${mc} server for plugin testing."
+        minecraftVersion(mc)
+        pluginJars.from(tasks.named("shadowJar").flatMap { it.archiveFile })
+        runDirectory = layout.projectDirectory.dir("runs/${mc}")
+        javaLauncher = javaToolchains.launcherFor { languageVersion = JavaLanguageVersion.of(jdk) }
+    }
+}

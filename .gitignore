@@ -21,4 +21,4 @@ dependency-reduced-pom.xml
 # Gradle
 .gradle/
 build/
-run/
+runs/
